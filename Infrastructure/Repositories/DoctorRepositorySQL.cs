@@ -25,7 +25,9 @@ namespace Infrastructure.Repositories
 
         public IEnumerable<Doctor> GetAll()
         {
-            return dbContext.Doctors;
+            return dbContext.Doctors
+                .Include(d => d.Specialization)
+                .Include(d => d.Status);
         }
         public Doctor GetItem(int id)
         {

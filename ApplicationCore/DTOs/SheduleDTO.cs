@@ -30,9 +30,9 @@ namespace Application.DTOs
 
         public TimeOnly? EndTime { get; set; }
 
-        public DateTime? newBeginTime { get; set; }
+        public TimeOnly? newBeginTime { get; set; }
 
-        public DateTime? newEndTime { get; set; }
+        public TimeOnly? newEndTime { get; set; }
 
     }
 }

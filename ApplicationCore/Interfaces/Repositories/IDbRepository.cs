@@ -28,6 +28,6 @@ namespace Application.Interfaces.Repositories
         IRepository<Gender> Genders { get; }
 
         IReportRepository Reports { get; }
-        int Save();
+        void Save();
     }
 }

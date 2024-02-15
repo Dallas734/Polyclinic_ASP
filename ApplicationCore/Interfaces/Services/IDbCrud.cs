@@ -10,7 +10,6 @@ namespace Application.Interfaces.Services
 {
     public interface IDbCrud
     {
-        List<UserDTO> usersDTOs { get; }
         List<AddressDTO> addressDTOs { get; }
         void AddAddress(AddressDTO addressDTO);
 
@@ -30,7 +29,7 @@ namespace Application.Interfaces.Services
 
         List<DoctorDTO> doctorDTOs { get; }
         void AddDoctor(DoctorDTO doctorDTO);
-        void DeleteDoctor(DoctorDTO doctorDTO);
+        void DeleteDoctor(int id);
         void UpdateDoctor(DoctorDTO doctorDTO);
 
         List<PatientDTO> patientDTOs { get; }
@@ -61,6 +60,6 @@ namespace Application.Interfaces.Services
 
         void UpdateShedule(SheduleDTO shedule);
 
-        bool Save();
+        void Save();
     }
 }

@@ -189,9 +189,9 @@ namespace Infrastructure.Repositories
                 return reportRepository;
             }
         }
-        public int Save()
+        public async void Save()
         {
-            return dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
         }
     }
 }

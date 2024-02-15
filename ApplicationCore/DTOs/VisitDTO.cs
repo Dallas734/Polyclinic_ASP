@@ -13,8 +13,8 @@ namespace Application.DTOs
         public Talon()
         {
         }
-        public TimeSpan Time { get; set; }
-        public DateTime Date { get; set; }
+        public TimeOnly? Time { get; set; }
+        public DateOnly Date { get; set; }
         public string Status { get; set; }
 
         public PatientDTO Patient { get; set; }

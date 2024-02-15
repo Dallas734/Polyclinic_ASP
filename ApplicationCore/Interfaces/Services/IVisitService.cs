@@ -13,7 +13,7 @@ namespace Application.Interfaces.Services
 
         //List<Talon> GetTalons(DoctorDTO doctor, DateTime date);
 
-        List<VisitDTO> GetFutureVisitsOnPatientAndDate(PatientDTO patient, DateTime date);
+        List<VisitDTO> GetFutureVisitsOnPatientAndDate(PatientDTO patient, DateOnly date);
 
     }
 }
