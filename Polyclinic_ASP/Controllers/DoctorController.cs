@@ -1,6 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+﻿using Domain.DomainModels;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Polyclinic_ASP.Controllers
 {
@@ -8,6 +7,12 @@ namespace Polyclinic_ASP.Controllers
     [ApiController]
     public class DoctorController : ControllerBase
     {
+        private PolyclinicKurContext _context;
+
+        public DoctorController(PolyclinicKurContext context) 
+        {
+            _context = context;
+        }
         // GET: api/<DoctorController>
         [HttpGet]
         public IEnumerable<string> Get()

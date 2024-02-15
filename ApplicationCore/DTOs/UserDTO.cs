@@ -9,13 +9,13 @@ namespace Application.DTOs
 {
     public class UserDTO
     {
-        public UserDTO(User user)
+        /*public UserDTO(User user)
         {
             Id = user.Id;
             Login = user.Login;
             Password = user.Password;
             RoleId = user.RoleId;
-        }
+        }*/
         public int Id { get; set; }
 
         public string Login { get; set; }

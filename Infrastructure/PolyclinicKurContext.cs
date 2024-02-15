@@ -13,11 +13,6 @@ public partial class PolyclinicKurContext : DbContext
         Configuration = configuration;
     }
 
-    public PolyclinicKurContext(DbContextOptions<PolyclinicKurContext> options)
-        : base(options)
-    {
-    }
-
     public virtual DbSet<Address> Addresses { get; set; }
 
     public virtual DbSet<Area> Areas { get; set; }

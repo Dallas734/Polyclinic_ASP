@@ -1,8 +1,15 @@
+using Domain.DomainModels;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddDbContext<PolyclinicKurContext>();
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().ConfigureApiBehaviorOptions(opt =>
+{
+    // Отключение автоматической генерации отклика HTTP 400
+    opt.SuppressModelStateInvalidFilter = true;
+});
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
