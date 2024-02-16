@@ -11,11 +11,11 @@ namespace Infrastructure.Services
 {
     public class PatientService : IPatientService
     {
-        IDbRepository dbContext;
+        IDbRepository repos;
 
         public PatientService(IDbRepository repository)
         {
-            dbContext = repository;
+            repos = repository;
         }
 
         public int GetPatientArea(int patient_id)
@@ -24,12 +24,15 @@ namespace Infrastructure.Services
         }
         public List<PatientDTO> GetPatientsOnArea(int area_id)
         {
-            return dbContext.Patients.GetAll().Join(dbContext.Addresses.GetAll().Where(a => a.AreaId == area_id), p => p.AddressId, a => a.Id, (p, a) => p).Select(i => new PatientDTO(i)).ToList();
+            return repos.Patients.GetAll()
+                .Where(i => i.AreaId == area_id)
+                .Select(i => new PatientDTO(i))
+                .ToList();
         }
 
         public List<VisitDTO> GetPatientCard(PatientDTO patient)
         {
-            return dbContext.Visits.GetAll().Where(i => i.PatientId == patient.Id && i.VisitStatusId == 2).Select(i => new VisitDTO(i)).ToList();
+            return repos.Visits.GetAll().Where(i => i.PatientId == patient.Id && i.VisitStatusId == 2).Select(i => new VisitDTO(i)).ToList();
         }
     }
 }

@@ -25,7 +25,10 @@ namespace Infrastructure.Repositories
 
         public IEnumerable<Visit> GetAll()
         {
-            return dbContext.Visits;
+            return dbContext.Visits
+                .Include(v => v.Doctor)
+                .Include(v => v.Diagnosis)
+                .Include(v => v.Procedure);
         }
         public Visit GetItem(int id)
         {

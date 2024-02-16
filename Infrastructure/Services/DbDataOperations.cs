@@ -20,24 +20,6 @@ namespace BLL
             dbRepos = dbRepositorySQL;
         }
 
-        public List<AddressDTO> addressDTOs 
-        { 
-            get 
-            {
-                return dbRepos.Addresses.GetAll().Select(i => new AddressDTO(i)).ToList();
-            } 
-        }
-
-        public void AddAddress(AddressDTO addressDTO)
-        {
-            dbRepos.Addresses.Create(new Address()
-            {
-                Id = addressDTO.Id,
-                AreaId = addressDTO.AreaId,
-                Name = addressDTO.Name
-            });
-        }
-
         public List<AreaDTO> areaDTOs 
         {
             get
@@ -171,9 +153,10 @@ namespace BLL
                 Surname = patientDTO.Surname,
                 GenderId = patientDTO.GenderId,
                 DateOfBirth = patientDTO.DateOfBirth,
-                AddressId = patientDTO.AddressId,
+                Address = patientDTO.Address,
                 Polis = patientDTO.Polis,
                 WorkPlace = patientDTO.WorkPlace,
+                AreaId = patientDTO.AreaId,
             });
         }
 
@@ -185,17 +168,18 @@ namespace BLL
             p.Surname = patientDTO.Surname;
             p.GenderId = patientDTO.GenderId;
             p.DateOfBirth = patientDTO.DateOfBirth;
-            p.AddressId = patientDTO.AddressId;
+            p.Address = patientDTO.Address;
             p.Polis = patientDTO.Polis;
             p.WorkPlace = patientDTO.WorkPlace;
+            p.AreaId = patientDTO.AreaId;
 
             dbRepos.Patients.Update(p);
             //dbRepos.Save();
         }
 
-        public void DeletePatient(PatientDTO patientDTO)
+        public void DeletePatient(int id)
         {
-            dbRepos.Patients.Delete(patientDTO.Id);
+            dbRepos.Patients.Delete(id);
         }
 
         public List<ProcedureDTO> procedureDTOs 
@@ -282,9 +266,9 @@ namespace BLL
             });
         }
 
-        public void DeleteVisit(VisitDTO visit)
+        public void DeleteVisit(int id)
         {
-            dbRepos.Visits.Delete(visit.Id);
+            dbRepos.Visits.Delete(id);
         }
         public List<GenderDTO> genderDTOs
         {
@@ -301,6 +285,10 @@ namespace BLL
             v.DiagnosisId = visit.DiagnosisId;
             v.Recipe = visit.Recipe;
             v.VisitStatusId = visit.VisitStatusId;
+            v.DateT = visit.DateT;
+            v.TimeT = visit.TimeT;
+            v.DoctorId = visit.DoctorId;
+            v.PatientId = visit.PatientId;
 
             dbRepos.Visits.Update(v);
             //dbRepos.Save();
@@ -317,9 +305,9 @@ namespace BLL
         }
 
 
-        public void Save()
+        public async Task Save()
         {
-            dbRepos.Save();
+            await Task.Run(() => dbRepos.Save());
         }
     }
 }

@@ -11,9 +11,11 @@ namespace Polyclinic_ASP.Controllers
     public class DoctorController : ControllerBase
     {
         private IDbCrud _dbCrud;
-        public DoctorController(IDbCrud dbCrud) 
+        private IDoctorService _doctorService;
+        public DoctorController(IDbCrud dbCrud, IDoctorService doctorService) 
         {
             _dbCrud = dbCrud;
+            _doctorService = doctorService;
         }
 
         // GET: api/<DoctorController>
@@ -23,13 +25,13 @@ namespace Polyclinic_ASP.Controllers
             try
             {
                 var doctors = await Task.Run(() => _dbCrud.doctorDTOs);
-                if (doctors == null) return NotFound();
+                //if (doctors.Count == 0) return NotFound();
 
                 return Ok(doctors);
             }
-            catch (NullReferenceException)
+            catch (Exception e)
             {
-                return BadRequest();
+                return BadRequest(e.Message);
             }
         }
 
@@ -37,7 +39,7 @@ namespace Polyclinic_ASP.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<DoctorDTO>> GetDoctor(int id)
         {
-            var doctor = await Task.Run(() => _dbCrud.doctorDTOs.Where(i => i.Id == id));
+            var doctor = await Task.Run(() => _dbCrud.doctorDTOs.FirstOrDefault(i => i.Id == id));
 
             if (doctor == null)
             {
@@ -47,20 +49,51 @@ namespace Polyclinic_ASP.Controllers
             return Ok(doctor);
         }
 
+        //  GET api/<DoctorController>/DoctorsOnWork
+        [HttpGet("DoctorsOnWork")]
+        public async Task<ActionResult<IEnumerable<DoctorDTO>>> GetDoctorsOnWork()
+        {
+            try
+            {
+                var doctors = await Task.Run(() => _doctorService.GetDoctorsOnWork());
+
+                return Ok(doctors);
+            }
+            catch(Exception e)
+            {
+               return BadRequest(e.Message);
+            }
+        }
+
+        [HttpGet("byAreaAndSpec")]
+        public async Task<ActionResult<IEnumerable<DoctorDTO>>> GetDoctorsByAreaAndSpec(int areaId, int specId)
+        {
+            try
+            {
+                var doctors = await Task.Run(() => _doctorService.GetDoctorsOnAreaAndSpecialization(areaId, specId));
+
+                return Ok(doctors);
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
         // POST api/<DoctorController>
         [HttpPost]
         public async Task<ActionResult<DoctorDTO>> PostDoctor(DoctorDTO doctor)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest();
+                return BadRequest(ModelState.Values.SelectMany(e => e.Errors.Select(e => e.ErrorMessage)));
             }
 
             try
             {
-                if (doctor.Area_id == 0) doctor.Area_id = null; 
-                await Task.Run(() => _dbCrud.AddDoctor(doctor));
-                _dbCrud.Save();
+                if (doctor.Area_id == 0) doctor.Area_id = null;
+                _dbCrud.AddDoctor(doctor);
+                await _dbCrud.Save();
             }
             catch (Exception)
             {
@@ -74,18 +107,23 @@ namespace Polyclinic_ASP.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutDoctor(int id, DoctorDTO doctor)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState.Values.SelectMany(e => e.Errors.Select(e => e.ErrorMessage)));
+            }
+
             if (id !=  doctor.Id)
             {
-                return BadRequest();  
+                return BadRequest("Mismatched id");  
             }
 
             try
             {
                 if (doctor.Area_id == 0) doctor.Area_id = null;
-                await Task.Run(() => _dbCrud.UpdateDoctor(doctor));
-                _dbCrud.Save();
+                _dbCrud.UpdateDoctor(doctor);
+                await _dbCrud.Save();
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 if (!_dbCrud.doctorDTOs.Any(i => i.Id == id))
                 {
@@ -93,7 +131,7 @@ namespace Polyclinic_ASP.Controllers
                 }
                 else
                 {
-                    BadRequest();
+                    BadRequest(e.Message);
                 }
             }
 
@@ -107,11 +145,11 @@ namespace Polyclinic_ASP.Controllers
             var doctor = await Task.Run(() => _dbCrud.doctorDTOs.Find(i => i.Id == id));
             if (doctor == null)
             {
-                return NotFound(id);
+                return NotFound($"Not found id {id}");
             }
 
-            await Task.Run(() => _dbCrud.DeleteDoctor(id));
-            _dbCrud.Save();
+            _dbCrud.DeleteDoctor(id);
+            await _dbCrud.Save();
 
             return Ok();
         }

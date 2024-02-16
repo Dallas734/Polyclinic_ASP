@@ -16,9 +16,6 @@ namespace Application.DTOs
         public TimeOnly? Time { get; set; }
         public DateOnly Date { get; set; }
         public string Status { get; set; }
-
-        public PatientDTO Patient { get; set; }
-
         public VisitDTO Visit { get; set; }
     }
 
@@ -37,9 +34,9 @@ namespace Application.DTOs
             TimeT = v.TimeT;
             DoctorId = v.DoctorId;
             VisitStatusId = v.VisitStatusId;
-            Doctor = new DoctorDTO(v.Doctor);
-            Diagnosis = new DiagnosisDTO(v.Diagnosis);
-            Procedure = new ProcedureDTO(v.Procedure);
+            //Doctor = new DoctorDTO(v.Doctor);
+            //Diagnosis = new DiagnosisDTO(v.Diagnosis);
+            //Procedure = new ProcedureDTO(v.Procedure);
         }
         public int Id { get; set; }
 
@@ -47,7 +44,7 @@ namespace Application.DTOs
 
         public int? DiagnosisId { get; set; }
 
-        public string Recipe { get; set; }
+        public string? Recipe { get; set; }
 
         public int? ProcedureId { get; set; }
 
@@ -59,10 +56,10 @@ namespace Application.DTOs
 
         public int VisitStatusId { get; set; }
 
-        public DoctorDTO Doctor { get; set; }
+        //public DoctorDTO? Doctor { get; set; }
 
-        public DiagnosisDTO Diagnosis { get; set; }
+        //public DiagnosisDTO? Diagnosis { get; set; }
 
-        public ProcedureDTO Procedure { get; set; }
+        //public ProcedureDTO? Procedure { get; set; }
     }
 }

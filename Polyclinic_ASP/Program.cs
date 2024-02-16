@@ -1,8 +1,11 @@
 using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
 using BLL;
+using BLL.Services;
 using Domain.DomainModels;
+using Infrastructure;
 using Infrastructure.Repositories;
+using Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +14,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<PolyclinicKurContext>();
 builder.Services.AddTransient<IDbRepository, DbRepositorySQL>();
 builder.Services.AddTransient<IDbCrud, DbDataOperations>();
+builder.Services.AddTransient<IDoctorService, DoctorService>();
+builder.Services.AddTransient<IPatientService, PatientService>();
+builder.Services.AddTransient<IVisitService, VisitService>();
 
 /*string connection = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<PolyclinicKurContext>(options => options.UseSqlServer(connection));

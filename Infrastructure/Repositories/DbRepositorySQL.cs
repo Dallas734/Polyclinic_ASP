@@ -19,7 +19,6 @@ namespace Infrastructure.Repositories
         private PatientRepositorySQL patientRepository;
         private DayRepositorySQL dayRepository;
         private AreaRepositorySQL areaRepository;
-        private AddressRepositorySQL addressRepository;
         private ProcedureRepositorySQL procedureRepository;
         private DiagnosisRepositorySQL diagnosisRepository;
         private SpecializationRepositorySQL specializationRepository;
@@ -88,16 +87,6 @@ namespace Infrastructure.Repositories
                 if (areaRepository == null)
                     areaRepository = new AreaRepositorySQL(dbContext);
                 return areaRepository;
-            }
-        }
-
-        public IRepository<Address> Addresses
-        {
-            get
-            {
-                if (addressRepository == null)
-                    addressRepository = new AddressRepositorySQL(dbContext);
-                return addressRepository;
             }
         }
 
@@ -189,7 +178,7 @@ namespace Infrastructure.Repositories
                 return reportRepository;
             }
         }
-        public async void Save()
+        public async Task Save()
         {
             await dbContext.SaveChangesAsync();
         }

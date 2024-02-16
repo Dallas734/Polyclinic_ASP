@@ -15,17 +15,19 @@ public partial class Patient
 
     public DateOnly DateOfBirth { get; set; }
 
-    public int? AddressId { get; set; }
-
     public string Polis { get; set; } = null!;
 
     public string WorkPlace { get; set; } = null!;
 
-    public int? GenderId { get; set; }
+    public int GenderId { get; set; }
 
-    public virtual Address? Address { get; set; }
+    public string? Address { get; set; }
 
-    public virtual Gender? Gender { get; set; }
+    public int? AreaId { get; set; }
+
+    public virtual Area? Area { get; set; }
+
+    public virtual Gender Gender { get; set; } = null!;
 
     public virtual ICollection<Visit> Visits { get; set; } = new List<Visit>();
 }

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,7 +24,8 @@ namespace Application.DTOs
             FullName = p.LastName + " " + p.FirstName + " " + p.Surname;
             GenderId = p.GenderId;
             DateOfBirth = p.DateOfBirth;
-            AddressId = (int)p.AddressId;
+            Address = p.Address;
+            AreaId = p.AreaId;
             Polis = p.Polis;
             WorkPlace = p.WorkPlace;
         }
@@ -36,17 +38,20 @@ namespace Application.DTOs
 
         public string Surname { get; set; }
 
-        public string FullName { get; set; }
+        public string? FullName { get; set; }
 
         public DateOnly DateOfBirth { get; set; }
 
-        public int AddressId { get; set; }
+        public string? Address { get; set; }
 
+        public int? AreaId { get; set; }
+
+        [MaxLength(16)]
         public string Polis { get; set; }
 
         public string WorkPlace { get; set; }
 
-        public int? GenderId { get; set; }
+        public int GenderId { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged(string prop = "")

@@ -1,19 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using Domain.DomainModels;
 using Microsoft.Extensions.Configuration;
 
-namespace Domain.DomainModels;
+namespace Infrastructure;
 
 public partial class PolyclinicKurContext : DbContext
 {
-    protected readonly IConfiguration Configuration;
+    private readonly IConfiguration _configuration;
     public PolyclinicKurContext(IConfiguration configuration)
     {
-        Configuration = configuration;
+        _configuration = configuration;
     }
-
-    public virtual DbSet<Address> Addresses { get; set; }
 
     public virtual DbSet<Area> Areas { get; set; }
 
@@ -48,23 +47,10 @@ public partial class PolyclinicKurContext : DbContext
     public virtual DbSet<VisitStatus> VisitStatuses { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+        => optionsBuilder.UseSqlServer(_configuration.GetConnectionString("DefaultConnection"));
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Address>(entity =>
-        {
-            entity.ToTable("Address");
-
-            entity.Property(e => e.AreaId).HasColumnName("Area_id");
-            entity.Property(e => e.Name).HasMaxLength(256);
-
-            entity.HasOne(d => d.Area).WithMany(p => p.Addresses)
-                .HasForeignKey(d => d.AreaId)
-                .OnDelete(DeleteBehavior.SetNull)
-                .HasConstraintName("area_fk");
-        });
-
         modelBuilder.Entity<Area>(entity =>
         {
             entity.ToTable("Area");
@@ -172,7 +158,8 @@ public partial class PolyclinicKurContext : DbContext
         {
             entity.ToTable("Patient");
 
-            entity.Property(e => e.AddressId).HasColumnName("Address_id");
+            entity.Property(e => e.Address).HasMaxLength(256);
+            entity.Property(e => e.AreaId).HasColumnName("Area_id");
             entity.Property(e => e.FirstName).HasMaxLength(256);
             entity.Property(e => e.GenderId).HasColumnName("Gender_id");
             entity.Property(e => e.LastName).HasMaxLength(256);
@@ -180,13 +167,14 @@ public partial class PolyclinicKurContext : DbContext
             entity.Property(e => e.Surname).HasMaxLength(256);
             entity.Property(e => e.WorkPlace).HasMaxLength(256);
 
-            entity.HasOne(d => d.Address).WithMany(p => p.Patients)
-                .HasForeignKey(d => d.AddressId)
+            entity.HasOne(d => d.Area).WithMany(p => p.Patients)
+                .HasForeignKey(d => d.AreaId)
                 .OnDelete(DeleteBehavior.SetNull)
-                .HasConstraintName("FK_Patient_Addres");
+                .HasConstraintName("FK_Patient_Area");
 
             entity.HasOne(d => d.Gender).WithMany(p => p.Patients)
                 .HasForeignKey(d => d.GenderId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Patient_Gender");
         });
 

@@ -36,11 +36,11 @@ namespace Application.DTOs
         public string FirstName { get; set; }
         public string Surname { get; set; }
 
-        public string FullName { get; set; }
+        public string? FullName { get; set; }
 
         public DateOnly DateOfBirth { get; set; }
 
-        public SpecializationDTO SpecializationDTO { get; set; }
+        public SpecializationDTO? SpecializationDTO { get; set; }
 
         public int Status_id { get; set; }
 

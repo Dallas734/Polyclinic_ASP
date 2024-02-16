@@ -14,7 +14,6 @@ namespace Application.Interfaces.Repositories
         IRepository<Shedule> Shedules { get; }
         IRepository<Day> Days { get; }
         IRepository<Patient> Patients { get; }
-        IRepository<Address> Addresses { get; }
         IRepository<Area> Areas { get; }
         IRepository<Diagnosis> Diagnosises { get; }
         IRepository<Procedure> Procedures { get; }
@@ -28,6 +27,6 @@ namespace Application.Interfaces.Repositories
         IRepository<Gender> Genders { get; }
 
         IReportRepository Reports { get; }
-        void Save();
+        Task Save();
     }
 }

@@ -16,11 +16,11 @@ namespace BLL.Services
             
         }
 
-        IDbRepository dbContext;
+        IDbRepository repos;
 
         public VisitService(IDbRepository repository)
         {
-            dbContext = repository;
+            repos = repository;
         }
 
         public bool CheckVisitAvailable(VisitDTO visit)
@@ -28,7 +28,7 @@ namespace BLL.Services
             return true; 
         }
 
-        public List<Talon> GetTalons(DoctorDTO doctor, DateOnly date)
+        public List<Talon> GetTalons(int doctorId, DateOnly date)
         {
             List<Talon> talons = new List<Talon>();
             TimeOnly? beginTime = new TimeOnly();
@@ -38,8 +38,8 @@ namespace BLL.Services
             if (num == 0)
                 num = 7;
 
-            beginTime = dbContext.Shedules.GetAll().Where(i => i.DoctorId == doctor.Id && i.DayId == num).FirstOrDefault().BeginTime;
-            endTime = dbContext.Shedules.GetAll().Where(i => i.DoctorId == doctor.Id && i.DayId == num).FirstOrDefault().EndTime;
+            beginTime = repos.Shedules.GetAll().Where(i => i.DoctorId == doctorId && i.DayId == num).FirstOrDefault().BeginTime;
+            endTime = repos.Shedules.GetAll().Where(i => i.DoctorId == doctorId && i.DayId == num).FirstOrDefault().EndTime;
 
             if (beginTime != endTime)
             {
@@ -48,9 +48,9 @@ namespace BLL.Services
                     Talon talon = new Talon();
                     talon.Time = beginTime;
                     talon.Date = date;
-                    if (dbContext.Visits.GetAll().Where(i => i.TimeT == talon.Time && i.DateT == date && i.VisitStatusId == 1 && i.DoctorId == doctor.Id).FirstOrDefault() != null)
+                    if (repos.Visits.GetAll().Where(i => i.TimeT == talon.Time && i.DateT == date && i.VisitStatusId == 1 && i.DoctorId == doctorId).FirstOrDefault() != null)
                     {
-                        VisitDTO visitDTO = new VisitDTO(dbContext.Visits.GetAll().Where(i => i.TimeT == talon.Time && i.DateT == date && i.VisitStatusId == 1 && i.DoctorId == doctor.Id).FirstOrDefault());
+                        VisitDTO visitDTO = new VisitDTO(repos.Visits.GetAll().Where(i => i.TimeT == talon.Time && i.DateT == date && i.VisitStatusId == 1 && i.DoctorId == doctorId).FirstOrDefault());
                         talon.Visit = visitDTO;
                         talon.Status = "Ожидает";
                     }
@@ -65,7 +65,7 @@ namespace BLL.Services
         
         public List<VisitDTO> GetFutureVisitsOnPatientAndDate(PatientDTO patient, DateOnly date)
         {
-            return dbContext.Visits.GetList().Where(
+            return repos.Visits.GetList().Where(
                           i => i.PatientId == patient.Id && i.DateT == date && i.VisitStatusId == 1).Select(i => new VisitDTO(i)).ToList();
         }
 

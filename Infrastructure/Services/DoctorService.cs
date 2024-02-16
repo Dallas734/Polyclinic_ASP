@@ -11,19 +11,25 @@ namespace Infrastructure.Services
 {
     public class DoctorService : IDoctorService
     {
-        IDbRepository dbContext;
+        IDbRepository repos;
 
         public DoctorService(IDbRepository repository)
         {
-            dbContext = repository;
+            repos = repository;
         }
-        public List<DoctorDTO> GetDoctorsOnWork(List<DoctorDTO> doctors)
+        public List<DoctorDTO> GetDoctorsOnWork()
         {
-            return doctors.Where(i => i.Status_id == 1).ToList();
+            return repos.Doctors.GetAll()
+                .Where(i => i.StatusId == 1)
+                .Select(i => new DoctorDTO(i))
+                .ToList();
         }
         public List<DoctorDTO> GetDoctorsOnAreaAndSpecialization(int area_id, int spec_id)
         {
-            return dbContext.Doctors.GetAll().Where(i => i.SpecializationId == spec_id && i.AreaId == area_id).Select(i => new DoctorDTO(i)).ToList();
+            return repos.Doctors.GetAll()
+                .Where(i => (i.SpecializationId == spec_id && i.AreaId == area_id) || 
+                (i.SpecializationId == spec_id && i.AreaId == null))
+                .Select(i => new DoctorDTO(i)).ToList();
         }
     }
 }
