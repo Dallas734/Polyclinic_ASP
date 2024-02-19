@@ -26,6 +26,17 @@ builder.Services.AddControllers().ConfigureApiBehaviorOptions(opt =>
     // Отключение автоматической генерации отклика HTTP 400
     opt.SuppressModelStateInvalidFilter = true;
 });
+
+builder.Services.AddCors((options) =>
+{
+    options.AddDefaultPolicy(builder =>
+    {
+        builder.WithOrigins("https://http://localhost:3000/")
+        .AllowAnyHeader()
+        .AllowAnyMethod();
+    });
+});
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

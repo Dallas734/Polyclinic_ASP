@@ -91,7 +91,7 @@ namespace Polyclinic_ASP.Controllers
 
             try
             {
-                if (doctor.Area_id == 0) doctor.Area_id = null;
+                if (doctor.AreaId == 0) doctor.AreaId = null;
                 _dbCrud.AddDoctor(doctor);
                 await _dbCrud.Save();
             }
@@ -119,7 +119,7 @@ namespace Polyclinic_ASP.Controllers
 
             try
             {
-                if (doctor.Area_id == 0) doctor.Area_id = null;
+                if (doctor.AreaId == 0) doctor.AreaId = null;
                 _dbCrud.UpdateDoctor(doctor);
                 await _dbCrud.Save();
             }

@@ -15,22 +15,24 @@ namespace Application.DTOs
         public DoctorDTO(Doctor d)
         {
             Id = d.Id;
-            Specialization_id = d.SpecializationId;
+            SpecializationId = d.SpecializationId;
             LastName = d.LastName;
             FirstName = d.FirstName;
             Surname = d.Surname;
-            Gender_id = d.GenderId;
+            GenderId = d.GenderId;
             DateOfBirth = d.DateOfBirth;
-            Status_id = d.StatusId;
-            Area_id = d.AreaId;
-            Category_id = d.CategoryId;
+            StatusId = d.StatusId;
+            AreaId = d.AreaId;
+            CategoryId = d.CategoryId;
             FullName = d.LastName + " " + d.FirstName + " " + d.Surname;
-            SpecializationDTO = new SpecializationDTO(d.Specialization);
+            SpecializationName = d.Specialization.Name;
+            StatusName = d.Status.Name;
+            CategoryName = d.Category.Name;
+            GenderName = d.Gender.Name;
+
         }
 
         public int Id { get; set; }
-
-        public int Specialization_id { get; set; }
 
         public string LastName { get; set; }
         public string FirstName { get; set; }
@@ -40,14 +42,22 @@ namespace Application.DTOs
 
         public DateOnly DateOfBirth { get; set; }
 
-        public SpecializationDTO? SpecializationDTO { get; set; }
+        public int SpecializationId { get; set; }
 
-        public int Status_id { get; set; }
+        public string? SpecializationName { get; set; }
 
-        public int? Area_id { get; set; }
+        public int StatusId { get; set; }
 
-        public int Category_id { get; set; }
+        public string? StatusName { get; set; }
 
-        public int Gender_id { get; set; }
+        public int? AreaId { get; set; }
+
+        public int CategoryId { get; set; }
+
+        public string? CategoryName { get; set; }
+
+        public int GenderId { get; set; }
+
+        public string? GenderName { get; set; }
     }
 }

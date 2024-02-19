@@ -103,15 +103,15 @@ namespace BLL
             dbRepos.Doctors.Create(new Doctor()
             {
                 Id = doctorDTO.Id,
-                SpecializationId= doctorDTO.Specialization_id,
+                SpecializationId= doctorDTO.SpecializationId,
                 LastName = doctorDTO.LastName,
                 FirstName = doctorDTO.FirstName,
                 Surname = doctorDTO.Surname,
                 DateOfBirth = doctorDTO.DateOfBirth,
-                StatusId = doctorDTO.Status_id,
-                AreaId = doctorDTO.Area_id,
-                CategoryId = doctorDTO.Category_id,
-                GenderId = doctorDTO.Gender_id,
+                StatusId = doctorDTO.StatusId,
+                AreaId = doctorDTO.AreaId,
+                CategoryId = doctorDTO.CategoryId,
+                GenderId = doctorDTO.GenderId,
             });
         }
 
@@ -122,15 +122,15 @@ namespace BLL
         public void UpdateDoctor(DoctorDTO doctorDTO)
         {
             Doctor d = dbRepos.Doctors.GetItem(doctorDTO.Id);
-            d.SpecializationId = doctorDTO.Specialization_id;
-            d.CategoryId = doctorDTO.Category_id;
-            d.StatusId = doctorDTO.Status_id;
-            d.AreaId = doctorDTO.Area_id;
+            d.SpecializationId = doctorDTO.SpecializationId;
+            d.CategoryId = doctorDTO.CategoryId;
+            d.StatusId = doctorDTO.StatusId;
+            d.AreaId = doctorDTO.AreaId;
             d.LastName = doctorDTO.LastName;
             d.FirstName = doctorDTO.FirstName;
             d.Surname = doctorDTO.Surname;
             d.DateOfBirth = doctorDTO.DateOfBirth;
-            d.GenderId = doctorDTO.Gender_id;
+            d.GenderId = doctorDTO.GenderId;
 
             dbRepos.Doctors.Update(d);
             //dbRepos.Save();

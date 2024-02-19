@@ -27,7 +27,9 @@ namespace Infrastructure.Repositories
         {
             return dbContext.Doctors
                 .Include(d => d.Specialization)
-                .Include(d => d.Status);
+                .Include(d => d.Status)
+                .Include(d => d.Category)
+                .Include(d => d.Gender);
         }
         public Doctor GetItem(int id)
         {
