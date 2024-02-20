@@ -2,26 +2,11 @@ import { error } from "console";
 import React, { useState, useEffect } from "react";
 import Table from 'react-bootstrap/Table';
 import './Table.css';
+import DoctorObj from "./DoctorObj";
+import ModalDoctor from "./ModalDoctor";
 
 interface PropsType {
 
-}
-
-interface DoctorObj {
-    id?: number
-    firstName: string,
-    lastName: string,
-    surname: string,
-    dateOfBirth: string,
-    specializationId: number,
-    specializationName?: string,
-    statusId: number,
-    statusName?: string,
-    areaId?: number,
-    categoryId: number,
-    categoryName?: string,
-    genderId: number,
-    genderName?: string
 }
 
 const Doctor: React.FC<PropsType> = () => {
@@ -37,6 +22,7 @@ const Doctor: React.FC<PropsType> = () => {
     const [statusId, setStatusId] = useState<number>(1);
     const [categoryId, setCategoryId] = useState<number>(1);
     const [genderId, setGenderId] = useState<number>(1);
+    const [modalIsShow, setShowModal] = useState<boolean>(false);
 
     const removeDoctor = (removeId: number | undefined) => setDoctors(doctors.filter(({ id }) => id !== removeId));
     const updateDoctor = (doctor: DoctorObj) => setDoctors(doctors.map(o => {
@@ -140,9 +126,18 @@ const Doctor: React.FC<PropsType> = () => {
             }, error => console.log(error));
     }
 
+    const showModal = (value: boolean) => {
+        setShowModal(value);
+        return value;
+    }
+
     return (
         <React.Fragment>
+            {<ModalDoctor updateDoctor={updateDoctor} addDoctor={addDoctor} method="POST" modalIsShow={modalIsShow} showModal={showModal}/>}
+            <div>
             <h3>Список врачей</h3>
+            <button onClick={() => setShowModal(true)}>Добавить</button>
+            </div>
             <Table bordered hover>
                 <thead>
                     <tr>

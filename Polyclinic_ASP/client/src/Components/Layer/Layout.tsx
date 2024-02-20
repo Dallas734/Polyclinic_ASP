@@ -4,7 +4,7 @@ import {Navbar, NavbarBrand, NavItem, NavLink } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.css';
 
-const Layout: React.FC = () =>{
+const Layout: React.FC = () => {
     return (
     <>
     <Navbar className="navbar-expand-sm navbar-toggleable-sm ng-white border-bottom box-shadow mb-3" container light>
