@@ -43,9 +43,10 @@ namespace Infrastructure.Repositories
         {
             return dbContext.VisitStatuses.Find(id);
         }
-        public void Create(VisitStatus status)
+        public int Create(VisitStatus status)
         {
             dbContext.VisitStatuses.Add(status);
+            return status.Id;
         }
         public void Load()
         {

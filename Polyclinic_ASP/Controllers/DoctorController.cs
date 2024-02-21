@@ -84,6 +84,7 @@ namespace Polyclinic_ASP.Controllers
         [HttpPost]
         public async Task<ActionResult<DoctorDTO>> PostDoctor(DoctorDTO doctor)
         {
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState.Values.SelectMany(e => e.Errors.Select(e => e.ErrorMessage)));
@@ -94,9 +95,9 @@ namespace Polyclinic_ASP.Controllers
                 doctor.SpecializationName = _dbCrud.specializationDTOs.Find(i => i.Id == doctor.SpecializationId).Name;
                 doctor.CategoryName = _dbCrud.categoryDTOs.Find(i => i.Id == doctor.CategoryId).Name;
                 doctor.StatusName = _dbCrud.statusDTOs.Find(i => i.Id == doctor.StatusId).Name;
-                doctor.GenderName = _dbCrud.genderDTOs.Find(i => i.Id == doctor.GenderId).Name;
+                doctor.GenderName = _dbCrud.genderDTOs.Find(i => i.Id == doctor.GenderId).Name; 
                 if (doctor.AreaId == 0) doctor.AreaId = null;
-                _dbCrud.AddDoctor(doctor);
+                doctor.Id = _dbCrud.AddDoctor(doctor);
                 await _dbCrud.Save();
             }
             catch (Exception e)
@@ -123,6 +124,10 @@ namespace Polyclinic_ASP.Controllers
 
             try
             {
+                doctor.SpecializationName = _dbCrud.specializationDTOs.Find(i => i.Id == doctor.SpecializationId).Name;
+                doctor.CategoryName = _dbCrud.categoryDTOs.Find(i => i.Id == doctor.CategoryId).Name;
+                doctor.StatusName = _dbCrud.statusDTOs.Find(i => i.Id == doctor.StatusId).Name;
+                doctor.GenderName = _dbCrud.genderDTOs.Find(i => i.Id == doctor.GenderId).Name;
                 if (doctor.AreaId == 0) doctor.AreaId = null;
                 _dbCrud.UpdateDoctor(doctor);
                 await _dbCrud.Save();

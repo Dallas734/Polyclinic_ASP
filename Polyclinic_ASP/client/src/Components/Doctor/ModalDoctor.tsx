@@ -6,6 +6,7 @@ import DoctorObj from "./DoctorObj";
 import {Input, Select, Modal, Button, Form} from "antd";
 
 interface PropsType {
+    editingDoctor: DoctorObj | undefined
     addDoctor: (doctor: DoctorObj) => void,
     updateDoctor: (doctor: DoctorObj) => void,
     method: string,
@@ -18,7 +19,7 @@ interface DirectoryEntity{
     name: string
 }
 
-const ModalDoctor: React.FC<PropsType> = ({addDoctor, updateDoctor, method, modalIsShow, showModal}) => {
+const ModalDoctor: React.FC<PropsType> = ({editingDoctor, addDoctor, updateDoctor, method, modalIsShow, showModal}) => {
 
     const [specializations, setSpec] = useState<Array<DirectoryEntity>>([]);
     const [genders, setGenders] = useState<Array<DirectoryEntity>>([]);
@@ -36,7 +37,8 @@ const ModalDoctor: React.FC<PropsType> = ({addDoctor, updateDoctor, method, moda
     const [categoryId, setCategoryId] = useState<number>(1);
     const [genderId, setGenderId] = useState<number>(1);
 
-    const [data, setData] = useState([]);
+    const [isEdit, setIsEdit] = useState<boolean>(false);
+
     //const [show, setShow] = React.useState<boolean>(false);
 
 
@@ -65,6 +67,25 @@ const ModalDoctor: React.FC<PropsType> = ({addDoctor, updateDoctor, method, moda
         .then((data: Array<DirectoryEntity>) => setStatuses(data));
     }, [])
 
+    useEffect(() => {
+        if (editingDoctor !== undefined && Object.keys(editingDoctor).length !== 0) {
+            setIsEdit(true);
+            setLastName(editingDoctor.lastName);
+            setFirstName(editingDoctor.firstName);
+            setSurname(editingDoctor.surname);
+            setDateOfBirth((editingDoctor.dateOfBirth != undefined? 
+                new Date(editingDoctor.dateOfBirth) : new Date()).toISOString().split('T')[0]);
+            setSpecializationId(editingDoctor.specializationId);
+            setAreaId(editingDoctor.areaId);
+        }
+        return () => {
+            setLastName("");
+            setFirstName("");
+            setSurname("");
+            setDateOfBirth(new Date().toISOString().split('T')[0]);
+        }
+    }, [editingDoctor]);
+
     const editDoctor = async (id: number | undefined) => {
         const editDoctor = {
             firstName,
@@ -91,6 +112,10 @@ const ModalDoctor: React.FC<PropsType> = ({addDoctor, updateDoctor, method, moda
                 setFirstName("");
                 setLastName("");
                 setSurname("");
+                setSpecializationId(1);
+                setStatusId(1);
+                setCategoryId(1);
+                setGenderId(1);
             },
             error => console.log(error));
     }
@@ -127,13 +152,57 @@ const ModalDoctor: React.FC<PropsType> = ({addDoctor, updateDoctor, method, moda
                     setSurname("");
                 }, error => console.log(error));
         }
-        createDoctor();
+
+        const editDoctor = async (id: number | undefined) =>{
+            const doctor = {
+                id,
+                firstName,
+                lastName,
+                surname,
+                dateOfBirth,
+                specializationId,
+                areaId,
+                statusId,
+                categoryId,
+                genderId
+            }
+            //if (doctor.areaId === "") doctor.areaId = null;
+            const requestOptions = {
+                method: 'PUT',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(doctor)
+            }
+
+            const response = await fetch(`api/doctor/${id}`, requestOptions);
+                await response.json()
+                .then((data) => {
+                    if (response.ok) {
+                        updateDoctor(data);
+                        setFirstName("");
+                        setLastName("");
+                        setSurname("");
+                    }
+                },
+                    (error) => console.log(error)
+                );
+        }
+
+        if (isEdit) 
+        {
+            if (editingDoctor !== undefined){
+                console.log(editingDoctor.id);
+                editDoctor(editingDoctor.id);
+            }
+            setIsEdit(false);
+        }
+        else 
+            createDoctor();
     }
 
     return (
         <Modal
             open={modalIsShow}
-            title = "Изменить данные врача"
+            title = "Форма врача"
             onCancel={() => showModal(false)}
             footer={[
                 <Button key="submitBtn" form="doctorForm" type="primary" htmlType="submit">Сохранить</Button>,

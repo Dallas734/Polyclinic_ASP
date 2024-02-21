@@ -11,7 +11,7 @@ namespace Application.Interfaces.Repositories
         List<T> GetList();
         IEnumerable<T> GetAll();
         T GetItem(int id);
-        void Create(T item);
+        int Create(T item);
         void Update(T item);
         void Delete(int id);
         void Load();

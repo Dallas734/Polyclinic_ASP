@@ -41,9 +41,10 @@ namespace Infrastructure.Repositories
         {
             return dbContext.Categories.Find(id); 
         }
-        public void Create(Category category)
+        public int Create(Category category)
         { 
             dbContext.Categories.Add(category);
+            return category.Id;
         }
         public void Load()
         {

@@ -30,9 +30,10 @@ namespace Infrastructure.Repositories
         {
             return dbContext.Shedules.Find(id);
         }
-        public void Create(Shedule item)
+        public int Create(Shedule item)
         {
             dbContext.Shedules.Add(item);
+            return item.Id;
         }
         public void Update(Shedule item)
         {

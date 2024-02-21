@@ -34,9 +34,10 @@ namespace Infrastructure.Repositories
         {
             return dbContext.Visits.Find(id);
         }
-        public void Create(Visit item)
+        public int Create(Visit item)
         {
             dbContext.Visits.Add(item);
+            return item.Id;
         }
         public void Update(Visit item)
         {

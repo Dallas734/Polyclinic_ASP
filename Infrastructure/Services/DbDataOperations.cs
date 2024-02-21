@@ -98,9 +98,9 @@ namespace BLL
                 return dbRepos.Doctors.GetAll().Select(i => new DoctorDTO(i)).ToList();
             }
         }
-        public void AddDoctor(DoctorDTO doctorDTO)
+        public int AddDoctor(DoctorDTO doctorDTO)
         {
-            dbRepos.Doctors.Create(new Doctor()
+            return dbRepos.Doctors.Create(new Doctor()
             {
                 Id = doctorDTO.Id,
                 SpecializationId= doctorDTO.SpecializationId,

@@ -38,6 +38,10 @@ const Doctor: React.FC<PropsType> = () => {
     const [genderId, setGenderId] = useState<number>(1);
     const [modalIsShow, setShowModal] = useState<boolean>(false);
 
+    const [editingDoctor, setEditingDoctor] = useState<DoctorObj>();
+
+    const [isAdd, setIsAdd] = useState(false);
+
     const removeDoctor = (removeId: number | undefined) => setDoctors(doctors.filter(({ id }) => id !== removeId));
     const updateDoctor = (doctor: DoctorObj) => setDoctors(doctors.map(o => {
         if (o.id === doctor.id)
@@ -103,6 +107,7 @@ const Doctor: React.FC<PropsType> = () => {
         return await fetch(`api/Doctor/${id}`, requestOptions)
             .then(response => response.json())
             .then(data => {
+                //console.log(data);
                 updateDoctor(data);
                 setFirstName("");
                 setLastName("");
@@ -144,24 +149,36 @@ const Doctor: React.FC<PropsType> = () => {
         setShowModal(value);
     }
 
+    const handleAddBtn = (value: boolean) => {
+        setEditingDoctor(undefined);
+        setShowModal(true);
+        setIsAdd(true);
+    }
+
+    const handleEditBtn = (obj: DoctorObj) => {
+        setEditingDoctor(obj);
+        setShowModal(true);
+    }
+
     const columns: TableProps<DoctorObj>['columns'] = [
         { title: 'Фамилия', dataIndex: 'lastName', key: 'lastName' },
         { title: 'Имя', dataIndex: 'firstName', key: 'firstName' },
         { title: 'Отчество', dataIndex: 'surname', key: 'surname'},
         { title: 'Пол', dataIndex: 'genderName', key: 'genderName'},
         { title: 'Дата рождения', dataIndex: 'dateOfBirth', key: 'dateOfBirth' },
+        { title: 'Специализация', dataIndex: 'specializationName', key: 'specializationName' },
         { title: 'Категория', dataIndex: 'categoryName', key: 'categoryName' },
         { title: 'Участок', dataIndex: 'areaId', key: 'areaId'},
         { title: 'Статус', dataIndex: 'statusName', key: 'statusName'},
         { key: 'x', render: (row: DoctorObj) =>  <Button key="deleteBtn" type="primary" onClick={() => deleteDoctor(row.id)} danger>Удалить</Button> },
-        { key: 'e', render: () => <Button key="editBtn" type="primary" style={{background: "green", borderColor: "green"}} onClick={() => editDoctor(100)}>Изменить</Button>}
+        { key: 'e', render: (row: DoctorObj) => <Button key="editBtn" type="primary" style={{background: "green", borderColor: "green"}} onClick={() => handleEditBtn(row)}>Изменить</Button>}
     ]
     return (
         <React.Fragment>
-            {<ModalDoctor updateDoctor={updateDoctor} addDoctor={addDoctor} method="POST" modalIsShow={modalIsShow} showModal={showModal}/>}
+            {<ModalDoctor editingDoctor={editingDoctor} updateDoctor={updateDoctor} addDoctor={addDoctor} method="POST" modalIsShow={modalIsShow} showModal={showModal}/>}
             <div>
             <h3>Список врачей</h3>
-            <Button key="addBtn" type="primary" onClick={() => setShowModal(true)}>Добавить</Button>
+            <Button key="addBtn" type="primary" onClick={() => handleAddBtn(true)}>Добавить</Button>
             </div>
             <Table key="doctorTable" dataSource={doctors} columns={columns} pagination={{ pageSize: 50 }} scroll={{ y: 450}} bordered />
         </React.Fragment>

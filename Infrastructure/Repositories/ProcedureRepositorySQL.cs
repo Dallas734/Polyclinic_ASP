@@ -41,9 +41,10 @@ namespace Infrastructure.Repositories
         { 
             return dbContext.Procedures.Find(id); 
         }
-        public void Create(Procedure procedure)
+        public int Create(Procedure procedure)
         {
             dbContext.Procedures.Add(procedure);
+            return procedure.Id;
         }
         public void Load()
         {

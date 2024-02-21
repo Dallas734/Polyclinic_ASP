@@ -41,9 +41,10 @@ namespace Infrastructure.Repositories
         {
             return dbContext.Specializations.Find(id); 
         }
-        public void Create(Specialization specialization)
+        public int Create(Specialization specialization)
         {
             dbContext.Specializations.Add(specialization);
+            return specialization.Id;
         }
         public void Load()
         {

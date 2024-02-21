@@ -25,7 +25,7 @@ namespace Application.Interfaces.Services
         void DeleteDiagnosis(DiagnosisDTO diagnosisDTO);
 
         List<DoctorDTO> doctorDTOs { get; }
-        void AddDoctor(DoctorDTO doctorDTO);
+        int AddDoctor(DoctorDTO doctorDTO);
         void DeleteDoctor(int id);
         void UpdateDoctor(DoctorDTO doctorDTO);
 

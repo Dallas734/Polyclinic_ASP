@@ -41,9 +41,10 @@ namespace Infrastructure.Repositories
         { 
             return dbContext.Diagnoses.Find(id);
         }
-        public void Create(Diagnosis diagnosis)
+        public int Create(Diagnosis diagnosis)
         {
             dbContext.Diagnoses.Add(diagnosis);
+            return diagnosis.Id;
         }
         public void Load()
         {

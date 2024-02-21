@@ -41,9 +41,10 @@ namespace Infrastructure.Repositories
         { 
             return dbContext.Days.Find(id); 
         }
-        public void Create(Day day) 
+        public int Create(Day day) 
         {
             dbContext.Days.Add(day);
+            return day.Id;
         }
 
         public void Load()

@@ -43,9 +43,10 @@ namespace Infrastructure.Repositories
         {
             return dbContext.Areas.Find(id); 
         }
-        public void Create(Area area) 
+        public int Create(Area area) 
         { 
             dbContext.Areas.Add(area);
+            return area.Id;
         }
         public void Load()
         {

@@ -29,9 +29,11 @@ namespace Infrastructure.Repositories
         {
             return dbContext.Patients.Find(id);
         }
-        public void Create(Patient item)
+        public int Create(Patient item)
         {
             dbContext.Patients.Add(item);
+            dbContext.SaveChanges();
+            return item.Id;
         }
         public void Update(Patient item)
         {

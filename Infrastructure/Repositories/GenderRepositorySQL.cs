@@ -41,9 +41,10 @@ namespace Infrastructure.Repositories
         {
             return dbContext.Genders.Find(id);
         }
-        public void Create(Gender gender)
+        public int Create(Gender gender)
         {
             dbContext.Genders.Add(gender);
+            return gender.Id;
         }
 
         public void Load()

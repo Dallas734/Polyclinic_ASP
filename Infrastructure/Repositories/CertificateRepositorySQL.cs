@@ -43,9 +43,10 @@ namespace Infrastructure.Repositories
         {
             return dbContext.Certificates.Find(id);
         }
-        public void Create(Certificate certificate)
+        public int Create(Certificate certificate)
         {
             dbContext.Certificates.Add(certificate);
+            return certificate.Id;
         }
         public void Load()
         {
