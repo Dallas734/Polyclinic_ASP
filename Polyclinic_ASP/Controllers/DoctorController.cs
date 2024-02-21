@@ -91,13 +91,17 @@ namespace Polyclinic_ASP.Controllers
 
             try
             {
+                doctor.SpecializationName = _dbCrud.specializationDTOs.Find(i => i.Id == doctor.SpecializationId).Name;
+                doctor.CategoryName = _dbCrud.categoryDTOs.Find(i => i.Id == doctor.CategoryId).Name;
+                doctor.StatusName = _dbCrud.statusDTOs.Find(i => i.Id == doctor.StatusId).Name;
+                doctor.GenderName = _dbCrud.genderDTOs.Find(i => i.Id == doctor.GenderId).Name;
                 if (doctor.AreaId == 0) doctor.AreaId = null;
                 _dbCrud.AddDoctor(doctor);
                 await _dbCrud.Save();
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return BadRequest();
+                return BadRequest(e.Message);
             }
 
             return CreatedAtAction("GetDoctor", new { id = doctor.Id }, doctor);

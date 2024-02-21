@@ -1,12 +1,26 @@
 import { error } from "console";
 import React, { useState, useEffect } from "react";
-import Table from 'react-bootstrap/Table';
-import './Table.css';
+//import Table from 'react-bootstrap/Table';
+//import './Table.css';
 import DoctorObj from "./DoctorObj";
 import ModalDoctor from "./ModalDoctor";
+import {Button, Table} from "antd";
+import type { TableProps } from "antd";
 
 interface PropsType {
 
+}
+
+interface DataType {
+    lastName: string,
+    firstName: string,
+    surname: string,
+    genderName: string,
+    dateOfBirth: string,
+    specializationName: string,
+    categoryName: string,
+    areaId: number,
+    statusName: string
 }
 
 const Doctor: React.FC<PropsType> = () => {
@@ -128,48 +142,28 @@ const Doctor: React.FC<PropsType> = () => {
 
     const showModal = (value: boolean) => {
         setShowModal(value);
-        return value;
     }
 
+    const columns: TableProps<DoctorObj>['columns'] = [
+        { title: 'Фамилия', dataIndex: 'lastName', key: 'lastName' },
+        { title: 'Имя', dataIndex: 'firstName', key: 'firstName' },
+        { title: 'Отчество', dataIndex: 'surname', key: 'surname'},
+        { title: 'Пол', dataIndex: 'genderName', key: 'genderName'},
+        { title: 'Дата рождения', dataIndex: 'dateOfBirth', key: 'dateOfBirth' },
+        { title: 'Категория', dataIndex: 'categoryName', key: 'categoryName' },
+        { title: 'Участок', dataIndex: 'areaId', key: 'areaId'},
+        { title: 'Статус', dataIndex: 'statusName', key: 'statusName'},
+        { key: 'x', render: (row: DoctorObj) =>  <Button key="deleteBtn" type="primary" onClick={() => deleteDoctor(row.id)} danger>Удалить</Button> },
+        { key: 'e', render: () => <Button key="editBtn" type="primary" style={{background: "green", borderColor: "green"}} onClick={() => editDoctor(100)}>Изменить</Button>}
+    ]
     return (
         <React.Fragment>
             {<ModalDoctor updateDoctor={updateDoctor} addDoctor={addDoctor} method="POST" modalIsShow={modalIsShow} showModal={showModal}/>}
             <div>
             <h3>Список врачей</h3>
-            <button onClick={() => setShowModal(true)}>Добавить</button>
+            <Button key="addBtn" type="primary" onClick={() => setShowModal(true)}>Добавить</Button>
             </div>
-            <Table bordered hover>
-                <thead>
-                    <tr>
-                        <th>Фамилия</th>
-                        <th>Имя</th>
-                        <th>Отчество</th>
-                        <th>Пол</th>
-                        <th>Дата рождения</th>
-                        <th>Специализация</th>
-                        <th>Категория</th>
-                        <th>Участок</th>
-                        <th>Статус</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {doctors.map((row, id) => (
-                        <tr key={id}>
-                            <td>{row.lastName}</td>
-                            <td>{row.firstName}</td>
-                            <td>{row.surname}</td>
-                            <td>{row.genderName}</td>
-                            <td>{new Date(row.dateOfBirth).toLocaleDateString()}</td>
-                            <td>{row.specializationName}</td>
-                            <td>{row.categoryName}</td>
-                            <td>{row.areaId == null ? null : row.areaId}</td>
-                            <td>{row.statusName}</td>
-                            <td><button onClick={() => deleteDoctor(row.id)}>Удалить</button></td>
-                            <td><button onClick={() => editDoctor(row.id)}>Изменить</button></td>
-                        </tr>
-                    ))}
-                </tbody>
-            </Table>
+            <Table key="doctorTable" dataSource={doctors} columns={columns} pagination={{ pageSize: 50 }} scroll={{ y: 450}} bordered />
         </React.Fragment>
     );
 }
