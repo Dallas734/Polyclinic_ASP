@@ -3,6 +3,8 @@ import DoctorObj from "./DoctorObj";
 import ModalDoctor from "./ModalDoctor";
 import {Button, Table} from "antd";
 import type { TableProps } from "antd";
+import { ColumnFilterItem } from "antd/es/table/interface";
+import DirectoryEntity from "../DirectoryEntity/DirectoryEntity";
 
 interface PropsType {
 
@@ -11,6 +13,11 @@ interface PropsType {
 const Doctor: React.FC<PropsType> = () => {
 
     const [doctors, setDoctors] = useState<Array<DoctorObj>>([]);
+    const [areas, setAreas] = useState<Array<DirectoryEntity>>([]);
+    const [statuses, setStatuses] = useState<Array<DirectoryEntity>>([]);
+    const [genders, setGenders] = useState<Array<DirectoryEntity>>([]);
+    const [specializations, setSpec] = useState<Array<DirectoryEntity>>([]);
+    const [categories,  setCategories] = useState<Array<DirectoryEntity>>([]);
     const [modalIsShow, setShowModal] = useState<boolean>(false);
     const [editingDoctor, setEditingDoctor] = useState<DoctorObj>();
 
@@ -37,6 +44,29 @@ const Doctor: React.FC<PropsType> = () => {
                     setDoctors(data);
                 }, error => console.log(error));
         }
+
+        fetch('api/area', {method: 'GET'})
+        .then(response => response.json())
+        .then((data: Array<DirectoryEntity>) => {
+            setAreas(data);
+        });
+
+        fetch('api/status', {method: 'GET'})
+        .then(response => response.json())
+        .then((data: Array<DirectoryEntity>) => setStatuses(data));
+
+        fetch('api/gender', {method: 'GET'})
+       .then(response => response.json())
+       .then((data: Array<DirectoryEntity>) => setGenders(data));
+
+       fetch('api/category', {method: 'GET'})
+       .then(response => response.json())
+       .then((data: Array<DirectoryEntity>) => setCategories(data));
+
+       fetch('api/specialization', {method: 'GET'})
+       .then(response => response.json())
+       .then((data: Array<DirectoryEntity>) => setSpec(data));
+
         getDoctors();
     }, [])
 
@@ -71,16 +101,26 @@ const Doctor: React.FC<PropsType> = () => {
         setShowModal(true);
     }
 
+    const createFilterArray = (elements: Array<DirectoryEntity>): Array<ColumnFilterItem> =>
+    {
+        return elements.map<ColumnFilterItem>(a => ({text: a.name, value: a.id}));
+    }
+    
     const columns: TableProps<DoctorObj>['columns'] = [
         { title: 'Фамилия', dataIndex: 'lastName', key: 'lastName' },
         { title: 'Имя', dataIndex: 'firstName', key: 'firstName' },
         { title: 'Отчество', dataIndex: 'surname', key: 'surname'},
-        { title: 'Пол', dataIndex: 'genderName', key: 'genderName'},
-        { title: 'Дата рождения', dataIndex: 'dateOfBirth', key: 'dateOfBirth' },
-        { title: 'Специализация', dataIndex: 'specializationName', key: 'specializationName' },
-        { title: 'Категория', dataIndex: 'categoryName', key: 'categoryName' },
-        { title: 'Участок', dataIndex: 'areaId', key: 'areaId'},
-        { title: 'Статус', dataIndex: 'statusName', key: 'statusName'},
+        { title: 'Пол', dataIndex: 'genderName', key: 'genderName',
+            filters: createFilterArray(genders), onFilter: (value, record) => record.genderId === value},
+        { title: 'Дата рождения', dataIndex: 'dateOfBirth', key: 'dateOfBirth'},
+        { title: 'Специализация', dataIndex: 'specializationName', key: 'specializationName',
+            filters: createFilterArray(specializations), onFilter: (value, record) => record.specializationId === value },
+        { title: 'Категория', dataIndex: 'categoryName', key: 'categoryName',
+            filters: createFilterArray(categories), onFilter: (value, record) => record.categoryId === value },
+        { title: 'Участок', dataIndex: 'areaId', key: 'areaId',
+            filters: areas.map<ColumnFilterItem>(a => ({text: a.id, value: a.id})), onFilter: (value, record) => record.areaId === value},
+        { title: 'Статус', dataIndex: 'statusName', key: 'statusName',
+            filters: createFilterArray(statuses), onFilter: (value, record) => record.statusId === value},
         { key: 'x', render: (row: DoctorObj) =>  <Button key="deleteBtn" type="primary" onClick={() => deleteDoctor(row.id)} danger>Удалить</Button> },
         { key: 'e', render: (row: DoctorObj) => <Button key="editBtn" type="primary" style={{background: "green", borderColor: "green"}} onClick={() => handleEditBtn(row)}>Изменить</Button>}
     ]

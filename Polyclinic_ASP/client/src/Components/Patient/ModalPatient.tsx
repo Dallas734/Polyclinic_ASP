@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from "react";
 import PatientObj from "./PatientObj";
 import {Input, Select, Modal, Button, Form} from "antd";
+import DirectoryEntity from "../DirectoryEntity/DirectoryEntity";
 
 interface PropsType {
     editingPatient: PatientObj | undefined
@@ -9,11 +10,6 @@ interface PropsType {
     method: string,
     modalIsShow: boolean,
     showModal: (value: boolean) => void
-}
-
-interface DirectoryEntity{
-    id: number, 
-    name: string
 }
 
 const ModalDoctor: React.FC<PropsType> = ({editingPatient, addPatient, updatePatient, method, modalIsShow, showModal}) => {
