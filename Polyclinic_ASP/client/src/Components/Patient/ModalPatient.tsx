@@ -1,11 +1,11 @@
 import React, {useState, useEffect} from "react";
-import DoctorObj from "./DoctorObj";
+import PatientObj from "./PatientObj";
 import {Input, Select, Modal, Button, Form} from "antd";
 
 interface PropsType {
-    editingDoctor: DoctorObj | undefined
-    addDoctor: (doctor: DoctorObj) => void,
-    updateDoctor: (doctor: DoctorObj) => void,
+    editingPatient: PatientObj | undefined
+    addPatient: (doctor: PatientObj) => void,
+    updatePatient: (doctor: PatientObj) => void,
     method: string,
     modalIsShow: boolean,
     showModal: (value: boolean) => void
@@ -16,41 +16,28 @@ interface DirectoryEntity{
     name: string
 }
 
-const ModalDoctor: React.FC<PropsType> = ({editingDoctor, addDoctor, updateDoctor, method, modalIsShow, showModal}) => {
+const ModalDoctor: React.FC<PropsType> = ({editingPatient, addPatient, updatePatient, method, modalIsShow, showModal}) => {
 
-    const [specializations, setSpec] = useState<Array<DirectoryEntity>>([]);
     const [genders, setGenders] = useState<Array<DirectoryEntity>>([]);
-    const [categories, setCategories] = useState<Array<DirectoryEntity>>([]);
     const [areas, setAreas] = useState<Array<DirectoryEntity>>([]);
-    const [statuses, setStatuses] = useState<Array<DirectoryEntity>>([]);
 
     const [lastName, setLastName] = useState<string>("");
     const [firstName, setFirstName] = useState<string>("");
     const [surname, setSurname] = useState<string>("");
     const [dateOfBirth, setDateOfBirth] = useState<string>(new Date().toISOString().split('T')[0]);
-    const [specializationId, setSpecializationId] = useState<number>(1);
+    const [address, setAddress] = useState<string | undefined>("");
     const [areaId, setAreaId] = useState<number>();
-    const [statusId, setStatusId] = useState<number>(1);
-    const [categoryId, setCategoryId] = useState<number>(1);
+    const [polis, setPolis] = useState<string>("");
+    const [workPlace, setWorkPlace] = useState<string>("");
     const [genderId, setGenderId] = useState<number>(1);
 
     const [isEdit, setIsEdit] = useState<boolean>(false);
 
-    //const [show, setShow] = React.useState<boolean>(false);
-
-
     useEffect(() => {
-       fetch('api/specialization', {method: 'GET'})
-       .then(response => response.json())
-       .then((data: Array<DirectoryEntity>) => setSpec(data));
 
        fetch('api/gender', {method: 'GET'})
        .then(response => response.json())
        .then((data: Array<DirectoryEntity>) => setGenders(data));
-
-       fetch('api/category', {method: 'GET'})
-       .then(response => response.json())
-       .then((data: Array<DirectoryEntity>) => setCategories(data));
        
         fetch('api/area', {method: 'GET'})
         .then(response => response.json())
@@ -58,52 +45,46 @@ const ModalDoctor: React.FC<PropsType> = ({editingDoctor, addDoctor, updateDocto
             setAreas(data);
             setAreaId(data[0].id);
         });
-
-        fetch('api/status', {method: 'GET'})
-        .then(response => response.json())
-        .then((data: Array<DirectoryEntity>) => setStatuses(data));
     }, [])
 
     useEffect(() => {
-        if (editingDoctor !== undefined && Object.keys(editingDoctor).length !== 0) {
+        if (editingPatient !== undefined && Object.keys(editingPatient).length !== 0) {
             setIsEdit(true);
-            setLastName(editingDoctor.lastName);
-            setFirstName(editingDoctor.firstName);
-            setSurname(editingDoctor.surname);
-            setDateOfBirth((editingDoctor.dateOfBirth !== undefined? 
-                new Date(editingDoctor.dateOfBirth) : new Date()).toISOString().split('T')[0]);
-            setSpecializationId(editingDoctor.specializationId);
-            setAreaId(editingDoctor.areaId);
-            setStatusId(editingDoctor.statusId);
-            setCategoryId(editingDoctor.categoryId);
-            setGenderId(editingDoctor.genderId);
+            setLastName(editingPatient.lastName);
+            setFirstName(editingPatient.firstName);
+            setSurname(editingPatient.surname);
+            setDateOfBirth((editingPatient.dateOfBirth !== undefined? 
+                new Date(editingPatient.dateOfBirth) : new Date()).toISOString().split('T')[0]);
+            setAddress(editingPatient.address);
+            setAreaId(editingPatient.areaId);
+            setPolis(editingPatient.polis);
+            setWorkPlace(editingPatient.workPlace);
+            setGenderId(editingPatient.genderId);
         }
         return () => {
             setLastName("");
             setFirstName("");
             setSurname("");
             setDateOfBirth(new Date().toISOString().split('T')[0]);
-            setSpecializationId(1);
-            setStatusId(1);
-            setCategoryId(1);
+            setAddress("");
+            setPolis("");
+            setWorkPlace("");
             setGenderId(1);
             setIsEdit(false);
         }
-    }, [editingDoctor]);
-    
+    }, [editingPatient]);
+
     const handleSubmit = (e: Event) => {
-        //e.preventDefault();
-        //console.log('Сработало');
         const createDoctor = async () => {
-            const doctor: DoctorObj = {
+            const doctor: PatientObj = {
                 firstName,
                 lastName,
                 surname,
                 dateOfBirth,
-                specializationId,
+                address,
                 areaId,
-                statusId,
-                categoryId,
+                polis,
+                workPlace,
                 genderId
             };
             
@@ -113,42 +94,42 @@ const ModalDoctor: React.FC<PropsType> = ({editingDoctor, addDoctor, updateDocto
                 body: JSON.stringify(doctor)
             }
 
-            return await fetch(`api/Doctor`, requestOptions)
+            return await fetch(`api/Patient`, requestOptions)
                 .then(response => response.json())
                 .then(data => {
                     console.log(data);
-                    addDoctor(data);
+                    addPatient(data);
                     setFirstName("");
                     setLastName("");
                     setSurname("");
                 }, error => console.log(error));
         }
 
-        const editDoctor = async (id: number | undefined) =>{
-            const doctor: DoctorObj = {
+        const editPatient = async (id: number | undefined) =>{
+            const patient = {
                 id,
                 firstName,
                 lastName,
                 surname,
                 dateOfBirth,
-                specializationId,
+                address,
                 areaId,
-                statusId,
-                categoryId,
+                polis,
+                workPlace,
                 genderId
             }
-
+            console.log(patient);
             const requestOptions = {
                 method: 'PUT',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(doctor)
+                body: JSON.stringify(patient)
             }
 
-            const response = await fetch(`api/doctor/${id}`, requestOptions);
+            const response = await fetch(`api/patient/${id}`, requestOptions);
                 await response.json()
                 .then((data) => {
                     if (response.ok) {
-                        updateDoctor(data);
+                        updatePatient(data);
                         setFirstName("");
                         setLastName("");
                         setSurname("");
@@ -160,9 +141,9 @@ const ModalDoctor: React.FC<PropsType> = ({editingDoctor, addDoctor, updateDocto
 
         if (isEdit) 
         {
-            if (editingDoctor !== undefined){
-                console.log(editingDoctor.id);
-                editDoctor(editingDoctor.id);
+            if (editingPatient !== undefined){
+                console.log(editingPatient.id);
+                editPatient(editingPatient.id);
             }
         }
         else 
@@ -172,14 +153,14 @@ const ModalDoctor: React.FC<PropsType> = ({editingDoctor, addDoctor, updateDocto
     return (
         <Modal
             open={modalIsShow}
-            title = "Форма врача"
+            title = "Форма пациента"
             onCancel={() => showModal(false)}
             footer={[
-                <Button key="submitBtn" form="doctorForm" type="primary" htmlType="submit">Сохранить</Button>,
+                <Button key="submitBtn" form="patientForm" type="primary" htmlType="submit">Сохранить</Button>,
                 <Button key="closeBtn" onClick={() => showModal(false)} danger>Закрыть</Button>
             ]}
         >
-            <Form id="doctorForm" onFinish={handleSubmit}>
+            <Form id="patientForm" onFinish={handleSubmit}>
                 <label>Фамилия</label>
                 <Input key="lastName" type="text" name="lastName" placeholder="Введите Фамилию" value={lastName} onChange={(e) => setLastName(e.target.value)}/><br/>
                 <label>Имя</label>
@@ -196,18 +177,8 @@ const ModalDoctor: React.FC<PropsType> = ({editingDoctor, addDoctor, updateDocto
                 </Select><br/>
                 <label>Дата рождения</label><br/>
                 <Input key="dateOfBirth" type="date" name="dateOfBirth" value={dateOfBirth} onChange={(e) => setDateOfBirth(e.target.value)}/><br/>
-                <label>Специализация</label><br/>
-                <Select key="selectSpecialization" value={specializationId} onChange={value => setSpecializationId(value)} style={{width: '50%'}}>
-                    {specializations.map((s, k) => {
-                        return <Select.Option value={s.id} key={k}>{s.name}</Select.Option>
-                    })}
-                </Select><br/>
-                <label>Категория</label><br/>
-                <Select key="selectCategory" value={categoryId} onChange={value => setCategoryId(value)} style={{width: '50%'}}>
-                    {categories.map((s, k) => {
-                        return <Select.Option value={s.id} key={k}>{s.name}</Select.Option>
-                    })}
-                </Select><br/>
+                <label>Адрес</label><br/>
+                <Input key="address" type="text" name="address" placeholder="Введите адрес" value={address} onChange={(e) => setAddress(e.target.value)}/><br/>
                 <label>Участок</label><br/>
                 <Select key="selectArea" defaultValue={0} value={areaId} onChange={value => setAreaId(value)} style={{width: '50%'}}>
                     {areas.map((s, k) => {
@@ -215,12 +186,10 @@ const ModalDoctor: React.FC<PropsType> = ({editingDoctor, addDoctor, updateDocto
                     })}
                     <Select.Option value={null} key="0">"Отсутствует"</Select.Option>
                 </Select><br/>
-                <label>Статус</label><br/>
-                <Select key="selectStatus" value={statusId} onChange={value => setStatusId(value)} style={{width: '50%'}}>
-                    {statuses.map((s, k) => {
-                        return <Select.Option value={s.id} key={k}>{s.name}</Select.Option>
-                    })}
-                </Select><br/>            
+                <label>Полис</label><br/>
+                <Input key="polis" type="text" name="polis" placeholder="Введите полис" width='auto' value={polis} onChange={(e) => setPolis(e.target.value)}/><br/>
+                <label>Место работы</label><br/>
+                <Input key="workPlace" type="text" name="workPlace" placeholder="Введите место работы" value={workPlace} onChange={(e) => setWorkPlace(e.target.value)}/><br/>    
             </Form>
         </Modal>
 

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Application.DTOs
 {
-    public class PatientDTO : INotifyPropertyChanged
+    public class PatientDTO
     {
         public PatientDTO()
         {
@@ -23,6 +23,7 @@ namespace Application.DTOs
             Surname = p.Surname;
             FullName = p.LastName + " " + p.FirstName + " " + p.Surname;
             GenderId = p.GenderId;
+            GenderName = p.Gender.Name;
             DateOfBirth = p.DateOfBirth;
             Address = p.Address;
             AreaId = p.AreaId;
@@ -53,11 +54,6 @@ namespace Application.DTOs
 
         public int GenderId { get; set; }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        public void OnPropertyChanged(string prop = "")
-        {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(prop));
-        }
+        public string? GenderName { get; set; }
     }
 }

@@ -30,7 +30,7 @@ namespace Application.Interfaces.Services
         void UpdateDoctor(DoctorDTO doctorDTO);
 
         List<PatientDTO> patientDTOs { get; }
-        void AddPatient(PatientDTO patientDTO);
+        int AddPatient(PatientDTO patientDTO);
         void DeletePatient(int id);
 
         void UpdatePatient(PatientDTO patientDTO);

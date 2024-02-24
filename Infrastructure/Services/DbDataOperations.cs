@@ -143,9 +143,9 @@ namespace BLL
                 return dbRepos.Patients.GetAll().Select(i => new PatientDTO(i)).ToList();
             }
         }
-        public void AddPatient(PatientDTO patientDTO)
+        public int AddPatient(PatientDTO patientDTO)
         {
-            dbRepos.Patients.Create(new Patient()
+            return dbRepos.Patients.Create(new Patient()
             {
                 Id = patientDTO.Id,
                 LastName = patientDTO.LastName,
