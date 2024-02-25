@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import DoctorObj from "./DoctorObj";
 import ModalDoctor from "./ModalDoctor";
-import {Button, Table} from "antd";
+import {Button, Table, Input} from "antd";
 import type { TableProps } from "antd";
+import { SearchOutlined } from "@ant-design/icons"; 
 import { ColumnFilterItem } from "antd/es/table/interface";
 import DirectoryEntity from "../DirectoryEntity/DirectoryEntity";
 
@@ -107,9 +108,61 @@ const Doctor: React.FC<PropsType> = () => {
     }
     
     const columns: TableProps<DoctorObj>['columns'] = [
-        { title: 'Фамилия', dataIndex: 'lastName', key: 'lastName' },
-        { title: 'Имя', dataIndex: 'firstName', key: 'firstName' },
-        { title: 'Отчество', dataIndex: 'surname', key: 'surname'},
+        { title: 'Фамилия', dataIndex: 'lastName', key: 'lastName', 
+            filterDropdown: ({setSelectedKeys, selectedKeys, confirm, clearFilters}) => (
+            <>
+            <Input autoFocus placeholder="Введите Фамилию"
+                value={selectedKeys[0]}
+                onChange={e => setSelectedKeys(e.target.value?[e.target.value]:[])}
+                onPressEnter={() => confirm()}
+                onBlur={() => confirm()}
+                >               
+            </Input>
+            <Button onClick={() => confirm()} type="primary">Поиск</Button>
+            <Button onClick={() => {
+                clearFilters? clearFilters() : setSelectedKeys([]);
+                confirm();
+            }} type="primary" danger>Сброс фильтра</Button>
+            </>
+            ),
+            filterIcon: () => <SearchOutlined />,
+            onFilter: (value, record) => record.lastName.toLowerCase().includes(value.toString().toLowerCase())},
+        { title: 'Имя', dataIndex: 'firstName', key: 'firstName',
+            filterDropdown: ({setSelectedKeys, selectedKeys, confirm, clearFilters}) => (
+                <>
+                <Input autoFocus placeholder="Введите Имя"
+                    value={selectedKeys[0]}
+                    onChange={e => {setSelectedKeys(e.target.value?[e.target.value]:[])}}
+                    onPressEnter={() => confirm()}
+                    >               
+                </Input>
+                <Button onClick={() => confirm()} type="primary">Поиск</Button>
+                <Button onClick={() => {
+                    clearFilters? clearFilters() : setSelectedKeys([]);
+                    confirm();
+                }} type="primary" danger>Сброс фильтра</Button>
+                </>
+                ),
+                filterIcon: () => <SearchOutlined />,
+                onFilter: (value, record) => record.firstName.toLowerCase().includes(value.toString().toLowerCase()) },
+        { title: 'Отчество', dataIndex: 'surname', key: 'surname', 
+            filterDropdown: ({setSelectedKeys, selectedKeys, confirm, clearFilters}) => (
+                <>
+                <Input autoFocus placeholder="Введите Отчество"
+                    value={selectedKeys[0]}
+                    onChange={e => setSelectedKeys(e.target.value?[e.target.value]:[])}
+                    onPressEnter={() => confirm()}
+                    >               
+                </Input>
+                <Button onClick={() => confirm()} type="primary">Поиск</Button>
+                <Button onClick={() => {
+                    clearFilters? clearFilters() : setSelectedKeys([]);
+                    confirm();
+                }} type="primary" danger>Сброс фильтра</Button>
+                </>
+                ),
+                filterIcon: () => <SearchOutlined />,
+                onFilter: (value, record) => record.surname.toLowerCase().includes(value.toString().toLowerCase())},
         { title: 'Пол', dataIndex: 'genderName', key: 'genderName',
             filters: createFilterArray(genders), onFilter: (value, record) => record.genderId === value},
         { title: 'Дата рождения', dataIndex: 'dateOfBirth', key: 'dateOfBirth'},
@@ -131,7 +184,7 @@ const Doctor: React.FC<PropsType> = () => {
             <h3>Список врачей</h3>
             <Button key="addBtn" type="primary" onClick={() => handleAddBtn(true)}>Добавить</Button>
             </div>
-            <Table key="doctorTable" dataSource={doctors} columns={columns} pagination={{ pageSize: 50 }} scroll={{ y: 450}} bordered />
+            <Table key="doctorTable" dataSource={doctors} columns={columns} pagination={{ pageSize: 10 }} scroll={{ y: 450}} bordered />
         </React.Fragment>
     );
 }
