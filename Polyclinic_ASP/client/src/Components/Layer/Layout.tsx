@@ -23,7 +23,7 @@ const Layout: React.FC = () => {
                     <NavLink tag={Link} to='/addVisits'>Записать пациента</NavLink>
                 </NavItem>
                 <NavItem>
-                        <NavLink tag={Link} to='/logoff'>Выход</NavLink>
+                    <NavLink tag={Link} to='/logoff'>Выход</NavLink>
                 </NavItem>
             </ul>
     </Navbar>

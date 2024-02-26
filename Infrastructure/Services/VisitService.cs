@@ -28,9 +28,9 @@ namespace BLL.Services
             return true; 
         }
 
-        public List<Talon> GetTalons(int doctorId, DateOnly date)
+        public List<VisitDTO> GetTalons(int doctorId, DateOnly date)
         {
-            List<Talon> talons = new List<Talon>();
+            List<VisitDTO> talons = new List<VisitDTO>();
             TimeOnly? beginTime = new TimeOnly();
             TimeOnly? endTime = new TimeOnly();
 
@@ -38,24 +38,28 @@ namespace BLL.Services
             if (num == 0)
                 num = 7;
 
-            beginTime = repos.Shedules.GetAll().Where(i => i.DoctorId == doctorId && i.DayId == num).FirstOrDefault().BeginTime;
-            endTime = repos.Shedules.GetAll().Where(i => i.DoctorId == doctorId && i.DayId == num).FirstOrDefault().EndTime;
+            if (repos.Shedules.GetAll().Where(i => i.DoctorId == doctorId && i.DayId == num).FirstOrDefault() != null)
+            {
+                beginTime = repos.Shedules.GetAll().Where(i => i.DoctorId == doctorId && i.DayId == num).FirstOrDefault().BeginTime;
+                endTime = repos.Shedules.GetAll().Where(i => i.DoctorId == doctorId && i.DayId == num).FirstOrDefault().EndTime;
+            }
 
             if (beginTime != endTime)
             {
                 while (beginTime <= endTime)
                 {
-                    Talon talon = new Talon();
-                    talon.Time = beginTime;
-                    talon.Date = date;
-                    if (repos.Visits.GetAll().Where(i => i.TimeT == talon.Time && i.DateT == date && i.VisitStatusId == 1 && i.DoctorId == doctorId).FirstOrDefault() != null)
+                    VisitDTO visit = new VisitDTO();
+                    visit.TimeT = beginTime;
+                    visit.DateT = date;
+                    if (repos.Visits.GetAll().Where(i => i.TimeT == visit.TimeT && i.DateT == date && i.VisitStatusId == 1 && i.DoctorId == doctorId).FirstOrDefault() != null)
                     {
-                        VisitDTO visitDTO = new VisitDTO(repos.Visits.GetAll().Where(i => i.TimeT == talon.Time && i.DateT == date && i.VisitStatusId == 1 && i.DoctorId == doctorId).FirstOrDefault());
-                        talon.Visit = visitDTO;
-                        talon.Status = "Ожидает";
+                        visit = new VisitDTO(repos.Visits.GetAll().Where(i => i.TimeT == visit.TimeT && i.DateT == date && i.VisitStatusId == 1 && i.DoctorId == doctorId).FirstOrDefault());
+                        //visit.TimeT = beginTime;
+                        //visit.DateT = date;
+                        visit.VisitStatusName = "Ожидает";
                     }
 
-                    talons.Add(talon);
+                    talons.Add(visit);
                     beginTime = new TimeOnly(beginTime.Value.Ticks + TimeSpan.FromMinutes(30).Ticks);
                 }
             }

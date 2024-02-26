@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
-import PatientObj from "./PatientObj";
+import PatientObj from "../Entities/PatientObj";
 import {Input, Select, Modal, Button, Form} from "antd";
-import DirectoryEntity from "../DirectoryEntity/DirectoryEntity";
+import DirectoryEntity from "../Entities/DirectoryEntity";
 
 interface PropsType {
     editingPatient: PatientObj | undefined

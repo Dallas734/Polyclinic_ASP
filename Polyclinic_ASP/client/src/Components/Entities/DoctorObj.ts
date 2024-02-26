@@ -3,6 +3,7 @@ interface DoctorObj {
     firstName: string,
     lastName: string,
     surname: string,
+    fullName?: string,
     dateOfBirth: string,
     specializationId: number,
     specializationName?: string,

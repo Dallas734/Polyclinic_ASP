@@ -4,6 +4,7 @@ import Doctor from './Components/Doctor/Doctor';
 import Patient from './Components/Patient/Patient';
 import 'bootstrap/dist/css/bootstrap.css';
 import Layout from './Components/Layer/Layout';
+import TalonsTable from './Components/TalonsTable/TalonsTable';
 
 function App() {
   return (
@@ -11,16 +12,20 @@ function App() {
       <Routes>
         <Route path='/' element={<Layout />}>
           <Route path='/doctors' element={
-          <div>
-            <Doctor />
-          </div>
+            <div>
+              <Doctor />
+            </div>
           }/>
           <Route path='/patients' element={
             <div>
               <Patient />
             </div>
           }/>
-          <Route path='/addVisits'/>
+          <Route path='/addVisits' element={
+            <div>
+              <TalonsTable />
+            </div>
+          }/>
         </Route>
       </Routes>
     </BrowserRouter>

@@ -28,7 +28,8 @@ namespace Infrastructure.Repositories
             return dbContext.Visits
                 .Include(v => v.Doctor)
                 .Include(v => v.Diagnosis)
-                .Include(v => v.Procedure);
+                .Include(v => v.Procedure)
+                .Include(v => v.VisitStatus);
         }
         public Visit GetItem(int id)
         {

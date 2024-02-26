@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import DoctorObj from "./DoctorObj";
+import DoctorObj from "../Entities/DoctorObj";
 import ModalDoctor from "./ModalDoctor";
 import {Button, Table, Input} from "antd";
 import type { TableProps } from "antd";
 import { SearchOutlined } from "@ant-design/icons"; 
 import { ColumnFilterItem } from "antd/es/table/interface";
-import DirectoryEntity from "../DirectoryEntity/DirectoryEntity";
+import DirectoryEntity from "../Entities/DirectoryEntity";
 
 interface PropsType {
 
@@ -179,7 +179,7 @@ const Doctor: React.FC<PropsType> = () => {
     ]
     return (
         <React.Fragment>
-            {<ModalDoctor editingDoctor={editingDoctor} updateDoctor={updateDoctor} addDoctor={addDoctor} method="POST" modalIsShow={modalIsShow} showModal={showModal}/>}
+            <ModalDoctor editingDoctor={editingDoctor} updateDoctor={updateDoctor} addDoctor={addDoctor} method="POST" modalIsShow={modalIsShow} showModal={showModal}/>
             <div>
             <h3>Список врачей</h3>
             <Button key="addBtn" type="primary" onClick={() => handleAddBtn(true)}>Добавить</Button>

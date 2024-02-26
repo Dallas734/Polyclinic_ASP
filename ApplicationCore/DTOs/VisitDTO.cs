@@ -40,7 +40,7 @@ namespace Application.DTOs
         }
         public int Id { get; set; }
 
-        public int PatientId { get; set; }
+        public int? PatientId { get; set; }
 
         public int? DiagnosisId { get; set; }
 
@@ -48,13 +48,15 @@ namespace Application.DTOs
 
         public int? ProcedureId { get; set; }
 
-        public DateOnly DateT { get; set; }
+        public DateOnly? DateT { get; set; }
 
-        public TimeOnly TimeT { get; set; }
+        public TimeOnly? TimeT { get; set; }
 
         public int? DoctorId { get; set; }
 
-        public int VisitStatusId { get; set; }
+        public int? VisitStatusId { get; set; }
+
+        public string? VisitStatusName { get; set; }
 
         //public DoctorDTO? Doctor { get; set; }
 

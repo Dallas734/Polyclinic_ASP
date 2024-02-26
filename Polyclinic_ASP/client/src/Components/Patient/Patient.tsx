@@ -1,9 +1,9 @@
 import React, {useState, useEffect} from "react";
 import {Button, Input, Table} from "antd";
 import type { TableProps } from "antd";
-import PatientObj from "./PatientObj";
+import PatientObj from "../Entities/PatientObj";
 import ModalPatient from "./ModalPatient";
-import DirectoryEntity from "../DirectoryEntity/DirectoryEntity";
+import DirectoryEntity from "../Entities/DirectoryEntity";
 import { ColumnFilterItem } from "antd/es/table/interface";
 import { SearchOutlined } from "@ant-design/icons"; 
 

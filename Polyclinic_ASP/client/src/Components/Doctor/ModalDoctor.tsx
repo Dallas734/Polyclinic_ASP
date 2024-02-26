@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
-import DoctorObj from "./DoctorObj";
+import DoctorObj from "../Entities/DoctorObj";
 import {Input, Select, Modal, Button, Form} from "antd";
-import DirectoryEntity from "../DirectoryEntity/DirectoryEntity";
+import DirectoryEntity from "../Entities/DirectoryEntity";
 
 interface PropsType {
     editingDoctor: DoctorObj | undefined

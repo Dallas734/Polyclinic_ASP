@@ -11,7 +11,7 @@ namespace Application.Interfaces.Services
     {
         bool CheckVisitAvailable(VisitDTO visit);
 
-        List<Talon> GetTalons(int doctorId, DateOnly date);
+        List<VisitDTO> GetTalons(int doctorId, DateOnly date);
 
         List<VisitDTO> GetFutureVisitsOnPatientAndDate(PatientDTO patient, DateOnly date);
 
