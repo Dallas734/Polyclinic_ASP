@@ -11,3 +11,25 @@ li {
 .red {
     background-color: red;
 }
+
+.gray {
+    background-color: gray;
+}
+
+.div1 {
+    float: left;
+    width: 65%;
+}
+
+.div2 {
+    float: left;
+    position: relative;
+    margin: 1%;
+    border: 1px solid green;
+    width: 30%;
+    border-radius: 10px;
+}
+
+.button {
+    margin-left: 5%;
+}

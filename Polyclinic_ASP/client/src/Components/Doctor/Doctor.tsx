@@ -110,56 +110,57 @@ const Doctor: React.FC<PropsType> = () => {
     const columns: TableProps<DoctorObj>['columns'] = [
         { title: 'Фамилия', dataIndex: 'lastName', key: 'lastName', 
             filterDropdown: ({setSelectedKeys, selectedKeys, confirm, clearFilters}) => (
-            <>
-            <Input autoFocus placeholder="Введите Фамилию"
-                value={selectedKeys[0]}
-                onChange={e => setSelectedKeys(e.target.value?[e.target.value]:[])}
-                onPressEnter={() => confirm()}
-                onBlur={() => confirm()}
-                >               
-            </Input>
-            <Button onClick={() => confirm()} type="primary">Поиск</Button>
-            <Button onClick={() => {
-                clearFilters? clearFilters() : setSelectedKeys([]);
-                confirm();
-            }} type="primary" danger>Сброс фильтра</Button>
-            </>
+            <React.Fragment>
+                <Input autoFocus placeholder="Введите Фамилию"
+                    value={selectedKeys[0]}
+                    onChange={e => setSelectedKeys(e.target.value?[e.target.value]:[])}
+                    onPressEnter={() => confirm()}
+                    onBlur={() => confirm()}
+                    >               
+                </Input>
+                <Button onClick={() => confirm()} type="primary" key="searchButton">Поиск</Button>
+                <Button onClick={() => {
+                    clearFilters? clearFilters() : setSelectedKeys([]);
+                    confirm();
+                }} type="primary" danger key="dropFilter">Сброс фильтра</Button>
+            </React.Fragment>
             ),
             filterIcon: () => <SearchOutlined />,
             onFilter: (value, record) => record.lastName.toLowerCase().includes(value.toString().toLowerCase())},
         { title: 'Имя', dataIndex: 'firstName', key: 'firstName',
             filterDropdown: ({setSelectedKeys, selectedKeys, confirm, clearFilters}) => (
-                <>
-                <Input autoFocus placeholder="Введите Имя"
-                    value={selectedKeys[0]}
-                    onChange={e => {setSelectedKeys(e.target.value?[e.target.value]:[])}}
-                    onPressEnter={() => confirm()}
-                    >               
-                </Input>
-                <Button onClick={() => confirm()} type="primary">Поиск</Button>
-                <Button onClick={() => {
-                    clearFilters? clearFilters() : setSelectedKeys([]);
-                    confirm();
-                }} type="primary" danger>Сброс фильтра</Button>
-                </>
+                <React.Fragment>
+                    <Input autoFocus placeholder="Введите Имя"
+                        value={selectedKeys[0]}
+                        onChange={e => {setSelectedKeys(e.target.value?[e.target.value]:[])}}
+                        onPressEnter={() => confirm()}
+                        onBlur={() => confirm()}
+                        key="nameInput">               
+                    </Input>
+                    <Button onClick={() => confirm()} type="primary">Поиск</Button>
+                    <Button onClick={() => {
+                        clearFilters? clearFilters() : setSelectedKeys([]);
+                        confirm();
+                    }} type="primary" danger>Сброс фильтра</Button>
+                </React.Fragment>
                 ),
                 filterIcon: () => <SearchOutlined />,
                 onFilter: (value, record) => record.firstName.toLowerCase().includes(value.toString().toLowerCase()) },
         { title: 'Отчество', dataIndex: 'surname', key: 'surname', 
             filterDropdown: ({setSelectedKeys, selectedKeys, confirm, clearFilters}) => (
-                <>
-                <Input autoFocus placeholder="Введите Отчество"
-                    value={selectedKeys[0]}
-                    onChange={e => setSelectedKeys(e.target.value?[e.target.value]:[])}
-                    onPressEnter={() => confirm()}
-                    >               
-                </Input>
-                <Button onClick={() => confirm()} type="primary">Поиск</Button>
-                <Button onClick={() => {
-                    clearFilters? clearFilters() : setSelectedKeys([]);
-                    confirm();
-                }} type="primary" danger>Сброс фильтра</Button>
-                </>
+                <React.Fragment>
+                    <Input autoFocus placeholder="Введите Отчество"
+                        value={selectedKeys[0]}
+                        onChange={e => setSelectedKeys(e.target.value?[e.target.value]:[])}
+                        onPressEnter={() => confirm()}
+                        onBlur={() => confirm()}>               
+                    </Input>
+                    <Button onClick={() => confirm()} type="primary">Поиск</Button>
+                    <Button onClick={() => {
+                        clearFilters? clearFilters() : setSelectedKeys([]);
+                        confirm();
+                    }} type="primary" danger>Сброс фильтра</Button>
+                </React.Fragment>
                 ),
                 filterIcon: () => <SearchOutlined />,
                 onFilter: (value, record) => record.surname.toLowerCase().includes(value.toString().toLowerCase())},

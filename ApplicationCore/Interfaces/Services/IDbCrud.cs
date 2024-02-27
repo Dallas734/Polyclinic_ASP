@@ -45,7 +45,7 @@ namespace Application.Interfaces.Services
         void AddStatus(StatusDTO statusDTO);
 
         List<VisitDTO> visitDTOs { get; }
-        void AddVisit(VisitDTO visitDTO);
+        int AddVisit(VisitDTO visitDTO);
         void DeleteVisit(int id);
 
         void UpdateVisit(VisitDTO visitDTO);

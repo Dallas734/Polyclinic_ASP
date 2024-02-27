@@ -57,6 +57,7 @@ namespace BLL.Services
                         //visit.TimeT = beginTime;
                         //visit.DateT = date;
                         visit.VisitStatusName = "Ожидает";
+                        //visit.DoctorFullName = new DoctorDTO(repos.Doctors.GetAll().Where(i => i.Id == doctorId).FirstOrDefault()).FullName;
                     }
 
                     talons.Add(visit);

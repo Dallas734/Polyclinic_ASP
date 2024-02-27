@@ -237,9 +237,9 @@ namespace BLL
             }
         }
 
-        public void AddVisit(VisitDTO visit)
+        public int AddVisit(VisitDTO visit)
         {
-            dbRepos.Visits.Create(new Visit()
+            return dbRepos.Visits.Create(new Visit()
             {
                 DateT = visit.DateT, 
                 TimeT = visit.TimeT, 

@@ -27,6 +27,7 @@ namespace Infrastructure.Repositories
         {
             return dbContext.Visits
                 .Include(v => v.Doctor)
+                .Include(v => v.Patient)
                 .Include(v => v.Diagnosis)
                 .Include(v => v.Procedure)
                 .Include(v => v.VisitStatus);
@@ -38,6 +39,7 @@ namespace Infrastructure.Repositories
         public int Create(Visit item)
         {
             dbContext.Visits.Add(item);
+            dbContext.SaveChanges();
             return item.Id;
         }
         public void Update(Visit item)
