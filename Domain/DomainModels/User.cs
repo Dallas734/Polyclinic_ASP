@@ -9,6 +9,6 @@ namespace Domain.DomainModels
 {
     public class User : IdentityUser
     {
-        public int DoctorId {  get; set; }
+        public int? DoctorId { get; set; }
     }
 }

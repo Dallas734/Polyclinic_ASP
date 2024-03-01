@@ -12,8 +12,11 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddIdentity<User, IdentityRole>()
+builder.Services.AddIdentityApiEndpoints<User>()
     .AddEntityFrameworkStores<PolyclinicKurContext>();
+builder.Services.AddAuthorization();
+builder.Services.AddAuthentication();
+
 builder.Services.AddDbContext<PolyclinicKurContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("Polyclinic_ASP")));
 builder.Services.AddTransient<IDbRepository, DbRepositorySQL>();
 builder.Services.AddTransient<IDbCrud, DbDataOperations>();
@@ -54,6 +57,16 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.MapIdentityApi<User>();
+
+app.MapPost("/logout", async (SignInManager<User> signInManager) =>
+{
+
+    await signInManager.SignOutAsync();
+    return Results.Ok();
+
+}).RequireAuthorization();
 
 app.UseAuthentication();
 app.UseAuthorization();
