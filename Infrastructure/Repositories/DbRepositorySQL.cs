@@ -13,21 +13,21 @@ namespace Infrastructure.Repositories
     {
         private PolyclinicKurContext dbContext;
 
-        private DoctorRepositorySQL doctorRepository;
-        private VisitRepositorySQL visitRepository;
-        private SheduleRepositorySQL sheduleRepository;
-        private PatientRepositorySQL patientRepository;
-        private DayRepositorySQL dayRepository;
-        private AreaRepositorySQL areaRepository;
-        private ProcedureRepositorySQL procedureRepository;
-        private DiagnosisRepositorySQL diagnosisRepository;
-        private SpecializationRepositorySQL specializationRepository;
-        private StatusRepositorySQL statusRepository;
-        private CategoryRepositorySQL categoryRepository;
-        private CertificateRepositorySQL certificateRepository;
-        private VisitStatusRepositorySQL visitStatusRepository;
-        private GenderRepositorySQL genderRepository;  
-        private ReportRepositorySQL reportRepository;
+        private DoctorRepositorySQL? doctorRepository;
+        private VisitRepositorySQL? visitRepository;
+        private SheduleRepositorySQL? sheduleRepository;
+        private PatientRepositorySQL? patientRepository;
+        private DayRepositorySQL? dayRepository;
+        private AreaRepositorySQL? areaRepository;
+        private ProcedureRepositorySQL? procedureRepository;
+        private DiagnosisRepositorySQL? diagnosisRepository;
+        private SpecializationRepositorySQL? specializationRepository;
+        private StatusRepositorySQL? statusRepository;
+        private CategoryRepositorySQL? categoryRepository;
+        private CertificateRepositorySQL? certificateRepository;
+        private VisitStatusRepositorySQL? visitStatusRepository;
+        private GenderRepositorySQL? genderRepository;  
+        private ReportRepositorySQL? reportRepository;
         public DbRepositorySQL(PolyclinicKurContext dbContext)
         {
             this.dbContext = dbContext;

@@ -92,10 +92,10 @@ namespace Polyclinic_ASP.Controllers
 
             try
             {
-                doctor.SpecializationName = _dbCrud.specializationDTOs.Find(i => i.Id == doctor.SpecializationId).Name;
-                doctor.CategoryName = _dbCrud.categoryDTOs.Find(i => i.Id == doctor.CategoryId).Name;
-                doctor.StatusName = _dbCrud.statusDTOs.Find(i => i.Id == doctor.StatusId).Name;
-                doctor.GenderName = _dbCrud.genderDTOs.Find(i => i.Id == doctor.GenderId).Name; 
+                doctor.SpecializationName = _dbCrud.specializationDTOs.Find(i => i.Id == doctor.SpecializationId)?.Name;
+                doctor.CategoryName = _dbCrud.categoryDTOs.Find(i => i.Id == doctor.CategoryId)?.Name;
+                doctor.StatusName = _dbCrud.statusDTOs.Find(i => i.Id == doctor.StatusId)?.Name;
+                doctor.GenderName = _dbCrud.genderDTOs.Find(i => i.Id == doctor.GenderId)?.Name; 
                 if (doctor.AreaId == 0) doctor.AreaId = null;
                 doctor.Id = _dbCrud.AddDoctor(doctor);
                 await _dbCrud.Save();
@@ -124,10 +124,10 @@ namespace Polyclinic_ASP.Controllers
 
             try
             {
-                doctor.SpecializationName = _dbCrud.specializationDTOs.Find(i => i.Id == doctor.SpecializationId).Name;
-                doctor.CategoryName = _dbCrud.categoryDTOs.Find(i => i.Id == doctor.CategoryId).Name;
-                doctor.StatusName = _dbCrud.statusDTOs.Find(i => i.Id == doctor.StatusId).Name;
-                doctor.GenderName = _dbCrud.genderDTOs.Find(i => i.Id == doctor.GenderId).Name;
+                doctor.SpecializationName = _dbCrud.specializationDTOs.Find(i => i.Id == doctor.SpecializationId)?.Name;
+                doctor.CategoryName = _dbCrud.categoryDTOs.Find(i => i.Id == doctor.CategoryId)?.Name;
+                doctor.StatusName = _dbCrud.statusDTOs.Find(i => i.Id == doctor.StatusId)?.Name;
+                doctor.GenderName = _dbCrud.genderDTOs.Find(i => i.Id == doctor.GenderId)?.Name;
                 if (doctor.AreaId == 0) doctor.AreaId = null;
                 _dbCrud.UpdateDoctor(doctor);
                 await _dbCrud.Save();
