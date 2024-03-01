@@ -31,11 +31,11 @@ const ModalDoctor: React.FC<PropsType> = ({editingPatient, addPatient, updatePat
 
     useEffect(() => {
 
-       fetch('api/gender', {method: 'GET'})
+       fetch('api/Genders', {method: 'GET'})
        .then(response => response.json())
        .then((data: Array<DirectoryEntity>) => setGenders(data));
        
-        fetch('api/area', {method: 'GET'})
+        fetch('api/Areas', {method: 'GET'})
         .then(response => response.json())
         .then((data: Array<DirectoryEntity>) => {
             setAreas(data);
@@ -90,7 +90,7 @@ const ModalDoctor: React.FC<PropsType> = ({editingPatient, addPatient, updatePat
                 body: JSON.stringify(doctor)
             }
 
-            return await fetch(`api/Patient`, requestOptions)
+            return await fetch(`api/Patients`, requestOptions)
                 .then(response => response.json())
                 .then(data => {
                     console.log(data);
@@ -121,7 +121,7 @@ const ModalDoctor: React.FC<PropsType> = ({editingPatient, addPatient, updatePat
                 body: JSON.stringify(patient)
             }
 
-            const response = await fetch(`api/patient/${id}`, requestOptions);
+            const response = await fetch(`api/Patients/${id}`, requestOptions);
                 await response.json()
                 .then((data) => {
                     if (response.ok) {

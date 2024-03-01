@@ -36,26 +36,26 @@ const ModalDoctor: React.FC<PropsType> = ({editingDoctor, addDoctor, updateDocto
 
 
     useEffect(() => {
-       fetch('api/specialization', {method: 'GET'})
+       fetch('api/Specializations', {method: 'GET'})
        .then(response => response.json())
        .then((data: Array<DirectoryEntity>) => setSpec(data));
 
-       fetch('api/gender', {method: 'GET'})
+       fetch('api/Genders', {method: 'GET'})
        .then(response => response.json())
        .then((data: Array<DirectoryEntity>) => setGenders(data));
 
-       fetch('api/category', {method: 'GET'})
+       fetch('api/Categories', {method: 'GET'})
        .then(response => response.json())
        .then((data: Array<DirectoryEntity>) => setCategories(data));
        
-        fetch('api/area', {method: 'GET'})
+        fetch('api/Areas', {method: 'GET'})
         .then(response => response.json())
         .then((data: Array<DirectoryEntity>) => {
             setAreas(data);
             setAreaId(data[0].id);
         });
 
-        fetch('api/status', {method: 'GET'})
+        fetch('api/Statuses', {method: 'GET'})
         .then(response => response.json())
         .then((data: Array<DirectoryEntity>) => setStatuses(data));
     }, [])
@@ -109,7 +109,7 @@ const ModalDoctor: React.FC<PropsType> = ({editingDoctor, addDoctor, updateDocto
                 body: JSON.stringify(doctor)
             }
 
-            return await fetch(`api/Doctor`, requestOptions)
+            return await fetch(`api/Doctors`, requestOptions)
                 .then(response => response.json())
                 .then(data => {
                     console.log(data);
@@ -140,7 +140,7 @@ const ModalDoctor: React.FC<PropsType> = ({editingDoctor, addDoctor, updateDocto
                 body: JSON.stringify(doctor)
             }
 
-            const response = await fetch(`api/doctor/${id}`, requestOptions);
+            const response = await fetch(`api/Doctors/${id}`, requestOptions);
                 await response.json()
                 .then((data) => {
                     if (response.ok) {

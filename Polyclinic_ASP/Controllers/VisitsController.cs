@@ -9,11 +9,11 @@ namespace Polyclinic_ASP.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class VisitController : ControllerBase
+    public class VisitsController : ControllerBase
     {
         private IDbCrud _dbCrud;
         private IVisitService _visitService;
-        public VisitController(IDbCrud dbCrud, IVisitService visitService)
+        public VisitsController(IDbCrud dbCrud, IVisitService visitService)
         {
             _dbCrud = dbCrud;
             _visitService = visitService;

@@ -36,19 +36,19 @@ const Patient: React.FC<PropsType> = () => {
                 body: undefined
             };
 
-            return await fetch('api/Patient', requestOptions)
+            return await fetch('api/Patients', requestOptions)
                 .then(response => response.json())
                 .then(data => {
                     setPatients(data);
                 }, error => console.log(error));
         }
-        fetch('api/area', {method: 'GET'})
+        fetch('api/Areas', {method: 'GET'})
         .then(response => response.json())
         .then((data: Array<DirectoryEntity>) => {
             setAreas(data);
         });
 
-        fetch('api/gender', {method: 'GET'})
+        fetch('api/Genders', {method: 'GET'})
        .then(response => response.json())
        .then((data: Array<DirectoryEntity>) => setGenders(data));
 
@@ -63,7 +63,7 @@ const Patient: React.FC<PropsType> = () => {
             body: undefined
         }
 
-        return await fetch(`api/Patient/${id}`, requestOptions)
+        return await fetch(`api/Patients/${id}`, requestOptions)
             .then(response => {
                 if (response.ok) 
                 {

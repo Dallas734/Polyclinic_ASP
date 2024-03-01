@@ -6,12 +6,15 @@ using Domain.DomainModels;
 using Infrastructure;
 using Infrastructure.Repositories;
 using Infrastructure.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddDbContext<PolyclinicKurContext>();
+builder.Services.AddIdentity<User, IdentityRole>()
+    .AddEntityFrameworkStores<PolyclinicKurContext>();
+builder.Services.AddDbContext<PolyclinicKurContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("Polyclinic_ASP")));
 builder.Services.AddTransient<IDbRepository, DbRepositorySQL>();
 builder.Services.AddTransient<IDbCrud, DbDataOperations>();
 builder.Services.AddTransient<IDoctorService, DoctorService>();
@@ -52,6 +55,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

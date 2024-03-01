@@ -8,22 +8,24 @@ namespace Polyclinic_ASP.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CategoryController : ControllerBase
+    public class StatusesController : ControllerBase
     {
         private IDbCrud _dbCrud;
 
-        public CategoryController(IDbCrud dbCrud)
+        public StatusesController(IDbCrud dbCrud)
         {
             _dbCrud = dbCrud;
         }
-        // GET: api/<CategoryController>
+
+
+        // GET: api/<StatusController>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CategoryDTO>>> GetCategories()
+        public async Task<ActionResult<IEnumerable<StatusDTO>>> GetStatuses()
         {
             try
             {
-                var categories = await Task.Run(() => _dbCrud.categoryDTOs);
-                return Ok(categories);
+                var statuses = await Task.Run(() => _dbCrud.statusDTOs);
+                return Ok(statuses);
             }
             catch (Exception e)
             {

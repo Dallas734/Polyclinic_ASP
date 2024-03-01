@@ -39,32 +39,32 @@ const Doctor: React.FC<PropsType> = () => {
                 body: undefined
             };
 
-            return await fetch('api/Doctor', requestOptions)
+            return await fetch('api/Doctors', requestOptions)
                 .then(response => response.json())
                 .then(data => {
                     setDoctors(data);
                 }, error => console.log(error));
         }
 
-        fetch('api/area', {method: 'GET'})
+        fetch('api/Areas', {method: 'GET'})
         .then(response => response.json())
         .then((data: Array<DirectoryEntity>) => {
             setAreas(data);
         });
 
-        fetch('api/status', {method: 'GET'})
+        fetch('api/Statuses', {method: 'GET'})
         .then(response => response.json())
         .then((data: Array<DirectoryEntity>) => setStatuses(data));
 
-        fetch('api/gender', {method: 'GET'})
+        fetch('api/Genders', {method: 'GET'})
        .then(response => response.json())
        .then((data: Array<DirectoryEntity>) => setGenders(data));
 
-       fetch('api/category', {method: 'GET'})
+       fetch('api/Categories', {method: 'GET'})
        .then(response => response.json())
        .then((data: Array<DirectoryEntity>) => setCategories(data));
 
-       fetch('api/specialization', {method: 'GET'})
+       fetch('api/Specializations', {method: 'GET'})
        .then(response => response.json())
        .then((data: Array<DirectoryEntity>) => setSpec(data));
 
@@ -79,7 +79,7 @@ const Doctor: React.FC<PropsType> = () => {
             body: undefined
         }
 
-        return await fetch(`api/Doctor/${id}`, requestOptions)
+        return await fetch(`api/Doctors/${id}`, requestOptions)
             .then(response => {
                 if (response.ok) 
                 {

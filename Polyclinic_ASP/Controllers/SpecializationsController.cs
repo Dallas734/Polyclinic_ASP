@@ -2,30 +2,26 @@
 using Application.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace Polyclinic_ASP.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class StatusController : ControllerBase
+    public class SpecializationsController : ControllerBase
     {
         private IDbCrud _dbCrud;
 
-        public StatusController(IDbCrud dbCrud)
+        public SpecializationsController(IDbCrud dbCrud)
         {
             _dbCrud = dbCrud;
         }
-
-
-        // GET: api/<StatusController>
+        // GET: api/<SpecializationController>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<StatusDTO>>> GetStatuses()
+        public async Task<ActionResult<IEnumerable<SpecializationDTO>>> GetSpecs()
         {
             try
             {
-                var statuses = await Task.Run(() => _dbCrud.statusDTOs);
-                return Ok(statuses);
+                var specs = await Task.Run(() => _dbCrud.specializationDTOs);
+                return Ok(specs);
             }
             catch (Exception e)
             {

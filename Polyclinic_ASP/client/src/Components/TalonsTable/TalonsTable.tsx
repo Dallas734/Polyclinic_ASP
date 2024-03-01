@@ -54,18 +54,18 @@ const TalonsTable: React.FC<PropsType> = () => {
     //const previousValues = useRef({areaId, specId});
 
     useEffect(() => {
-        fetch('api/Area', {method: 'GET'})
+        fetch('api/Areas', {method: 'GET'})
         .then(response => response.json())
         .then((data: Array<DirectoryEntity>) => setAreas(data));
 
-        fetch('api/Specialization', {method: 'GET'})
+        fetch('api/Specializations', {method: 'GET'})
         .then(response => response.json())
         .then((data: Array<DirectoryEntity>) => setSpecs(data));
     }, [])
 
     useEffect(() => {
         setDoctorId(undefined);
-        fetch(`api/Doctor/byAreaAndSpec?areaId=${areaId}&specId=${specId}`)
+        fetch(`api/Doctors/byAreaAndSpec?areaId=${areaId}&specId=${specId}`)
         .then(response => response.json())
         .then((data: Array<DoctorObj>) => setDoctors(data));
 
@@ -74,7 +74,7 @@ const TalonsTable: React.FC<PropsType> = () => {
     }, [areaId, specId])
 
     useEffect(() => {
-        fetch(`api/Patient/byArea?areaId=${areaId}`)
+        fetch(`api/Patients/byArea?areaId=${areaId}`)
         .then(response => response.json())
         .then((data: Array<PatientObj>) => setPatients(data));
 
@@ -83,7 +83,7 @@ const TalonsTable: React.FC<PropsType> = () => {
     }, [areaId])
 
     useEffect(() => {
-        fetch(`api/Visit/Talons?doctorId=${doctorId}&date=${selectedDate}`, {method: 'GET'})
+        fetch(`api/Visits/Talons?doctorId=${doctorId}&date=${selectedDate}`, {method: 'GET'})
         .then(response => response.json())
         .then((data: Array<VisitObj>) => setTalons(data));
 
@@ -114,7 +114,7 @@ const TalonsTable: React.FC<PropsType> = () => {
             body: JSON.stringify(visit)
         }
 
-        return await fetch(`api/Visit`, requestOptions)
+        return await fetch(`api/Visits`, requestOptions)
                 .then(response => response.json())
                 .then(data => {
                     setSelectedTalon(data);
@@ -129,7 +129,7 @@ const TalonsTable: React.FC<PropsType> = () => {
             body: undefined
         }
 
-        return await fetch(`api/Visit/${selectedTalon?.id}`, requestOptions)
+        return await fetch(`api/Visits/${selectedTalon?.id}`, requestOptions)
             .then(response => {
                 if (response.ok) 
                 {

@@ -2,27 +2,28 @@
 using Application.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 
+// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+
 namespace Polyclinic_ASP.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AreaController : ControllerBase
+    public class GendersController : ControllerBase
     {
         private IDbCrud _dbCrud;
 
-        public AreaController(IDbCrud dbCrud)
+        public GendersController(IDbCrud dbCrud)
         {
             _dbCrud = dbCrud;
         }
-
-        // GET: api/<AreaController>
+        // GET: api/<GenderController>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<AreaDTO>>> GetAreas()
+        public async Task<ActionResult<IEnumerable<CategoryDTO>>> GetGenders()
         {
             try
             {
-                var areas = await Task.Run(() => _dbCrud.areaDTOs);
-                return Ok(areas);
+                var genders = await Task.Run(() => _dbCrud.genderDTOs);
+                return Ok(genders);
             }
             catch (Exception e)
             {
