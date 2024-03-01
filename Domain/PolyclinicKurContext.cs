@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
 using Domain.DomainModels;
+using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure;
+namespace Domain;
 
 public partial class PolyclinicKurContext : DbContext
 {
