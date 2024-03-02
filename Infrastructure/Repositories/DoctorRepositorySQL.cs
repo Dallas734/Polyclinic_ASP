@@ -47,7 +47,7 @@ namespace Infrastructure.Repositories
         }
         public void Delete(int id)
         {
-            Doctor doctor = dbContext.Doctors.Find(id);
+            Doctor? doctor = dbContext.Doctors.Find(id);
             if (doctor != null)
             {
                 dbContext.Doctors.Remove(doctor);

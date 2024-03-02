@@ -14,6 +14,12 @@ const Layout: React.FC = () => {
                     <NavLink tag={Link} to='/'>Главная</NavLink>
                 </NavItem>
                 <NavItem>
+                    <NavLink tag={Link} to='/register'>Регистрация</NavLink>
+                </NavItem>
+                <NavItem>
+                    <NavLink tag={Link} to='/login'>Вход</NavLink>
+                </NavItem>
+                <NavItem>
                     <NavLink tag={Link} to='/doctors'>Доктора</NavLink>
                 </NavItem>
                 <NavItem>

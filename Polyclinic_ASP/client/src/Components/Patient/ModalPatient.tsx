@@ -72,7 +72,7 @@ const ModalDoctor: React.FC<PropsType> = ({editingPatient, addPatient, updatePat
 
     const handleSubmit = (e: Event) => {
         const createDoctor = async () => {
-            const doctor: PatientObj = {
+            const patient: PatientObj = {
                 firstName,
                 lastName,
                 surname,
@@ -87,7 +87,7 @@ const ModalDoctor: React.FC<PropsType> = ({editingPatient, addPatient, updatePat
             const requestOptions: RequestInit = {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(doctor)
+                body: JSON.stringify(patient)
             }
 
             return await fetch(`api/Patients`, requestOptions)
@@ -102,7 +102,7 @@ const ModalDoctor: React.FC<PropsType> = ({editingPatient, addPatient, updatePat
         }
 
         const editPatient = async (id: number | undefined) =>{
-            const patient = {
+            const patient : PatientObj= {
                 id,
                 firstName,
                 lastName,

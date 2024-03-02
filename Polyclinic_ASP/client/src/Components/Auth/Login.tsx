@@ -1,12 +1,20 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Input, Button } from "antd";
+import { Input, Button, Form } from "antd";
+import { Link } from "react-router-dom";
+
+
+interface loginModel {
+    email: string,
+    password: string,
+    rememberMe: boolean
+}
 
 function Login() {
     // state variables for email and passwords
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
-    const [rememberme, setRememberme] = useState<boolean>(false);
+    const [rememberMe, setRememberme] = useState<boolean>(false);
     // state variable for error messages
     const [error, setError] = useState<string>("");
     const navigate = useNavigate();
@@ -16,7 +24,7 @@ function Login() {
         const { name, value } = e.target;
         if (name === "email") setEmail(value);
         if (name === "password") setPassword(value);
-        if (name === "rememberme") setRememberme(e.target.checked);
+        if (name === "rememberMe") setRememberme(e.target.checked);
     };
 
     const handleRegisterClick = () => {
@@ -25,7 +33,7 @@ function Login() {
 
     // handle submit event for the form
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+        //e.preventDefault();
         // validate email and passwords
         if (!email || !password) {
             setError("Please fill in all fields.");
@@ -33,22 +41,18 @@ function Login() {
             // clear error message
             setError("");
             // post data to the /register api
+            const model : loginModel = {
+                email,
+                password,
+                rememberMe
+            }
 
-            var loginurl = "";
-            if (rememberme === true)
-                loginurl = "/login?useCookies=true";
-            else
-                loginurl = "/login?useSessionCookies=true";
-
-            fetch(loginurl, {
+            fetch("api/login", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({
-                    email: email,
-                    password: password,
-                }),
+                body: JSON.stringify(model),
             })
 
                 .then((data) => {
@@ -73,7 +77,7 @@ function Login() {
     return (
         <div className="containerbox">
             <h3>Login</h3>
-            <form onSubmit={handleSubmit}>
+            <Form onFinish={handleSubmit}>
                 <div>
                     <label className="forminput" htmlFor="email">Email:</label>
                 </div>
@@ -101,9 +105,9 @@ function Login() {
                 <div>
                     <Input
                         type="checkbox"
-                        id="rememberme"
-                        name="rememberme"
-                        checked={rememberme}
+                        id="rememberMe"
+                        name="rememberMe"
+                        checked={rememberMe}
                         onChange={handleChange} /><span>Remember Me</span>
                 </div>
                 <div>
@@ -112,8 +116,9 @@ function Login() {
                 <div>
                     <Button key="regBtn" onClick={() => handleRegisterClick()} type="primary">Register</Button>
                 </div>
-            </form>
+            </Form>
             {error && <p className="error">{error}</p>}
+            <Link to="/register">На страницу входа</Link>
         </div>
     );
 }

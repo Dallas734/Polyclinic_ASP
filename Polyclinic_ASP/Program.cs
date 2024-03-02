@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddIdentityApiEndpoints<User>()
+builder.Services.AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<PolyclinicKurContext>();
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication();
@@ -58,15 +58,14 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapIdentityApi<User>();
+/*app.MapIdentityApi<User>();
 
 app.MapPost("/logout", async (SignInManager<User> signInManager) =>
 {
-
     await signInManager.SignOutAsync();
     return Results.Ok();
 
-}).RequireAuthorization();
+}).RequireAuthorization();*/
 
 app.UseAuthentication();
 app.UseAuthorization();

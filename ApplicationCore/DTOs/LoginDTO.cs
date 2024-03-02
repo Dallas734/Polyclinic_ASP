@@ -10,13 +10,14 @@ namespace Application.DTOs
     public class LoginDTO
     {
         [Required]
+        [DataType(DataType.EmailAddress)]
         [Display(Name = "Email")]
-        public string Email { get; set; }
+        public string Email { get; set; } = null!;
 
         [Required]
         [DataType(DataType.Password)]
         [Display(Name = "Пароль")]
-        public string Password { get; set; }
+        public string Password { get; set; } = null!;
 
         [Display(Name = "Запомнить?")]
         public bool RememberMe { get; set; } = false;

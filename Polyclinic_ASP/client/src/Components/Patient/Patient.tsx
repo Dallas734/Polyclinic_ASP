@@ -173,7 +173,7 @@ const Patient: React.FC<PropsType> = () => {
                 onFilter: (value, record) => record.polis.toLowerCase().includes(value.toString().toLowerCase()) },
         { title: 'Участок', dataIndex: 'areaId', key: 'areaId',
             filters: areas.map<ColumnFilterItem>(a => ({text: a.id, value: a.id})), onFilter: (value, record) => record.areaId === value},
-        { title: 'Адрес', dataIndex: 'addressName', key: 'addressName',
+        { title: 'Адрес', dataIndex: 'address', key: 'address',
             filterDropdown: ({setSelectedKeys, selectedKeys, confirm, clearFilters}) => (
                 <>
                 <Input autoFocus placeholder="Введите Адрес"

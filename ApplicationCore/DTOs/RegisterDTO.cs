@@ -11,20 +11,21 @@ namespace Application.DTOs
     {
         [Required]
         [Display(Name = "Email")]
-        public string Email { get; set; }
+        public string Email { get; set; } = null!;
 
         [Required]
         [DataType(DataType.Password)]
-        [Display(Name = "Пароль")]
-        public string Password { get; set; }
+        public string Password { get; set; } = null!;
 
         [Required]
         [Compare("Password", ErrorMessage = "Пароли не совпадают")]
         [DataType(DataType.Password)]
-        [Display(Name = "Подтвердить пароль")]
-        public string PasswordConfirm { get; set; }
+        public string PasswordConfirm { get; set; } = null!;
 
-        [Display(Name = "Уникальный код")]
-        public int? DoctorId { get; set; }
+        [Range(0, int.MaxValue, ErrorMessage = "Пожалуйста введите корректный номер")]
+        public int? DoctorId { get; set; } = null;
+
+        [Required]
+        public string Role { get; set; } = null!;
     }
 }

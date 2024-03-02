@@ -1,140 +1,176 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Input, Button, Form } from "antd";
+import React, { useState } from "react";
+import { Input, Button, Form, Radio } from "antd";
+import { Link } from "react-router-dom";
+import RegModel from "../Entities/RegModel";
+import "./ContainerStyle.css";
 
+interface responseModel {
+    message: string,
+    error: Array<string>
+} 
+interface PropsType {
 
-function Register() {
+}
+
+const Register: React.FC<PropsType> = () => {
     // state variables for email and passwords
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
-    const [confirmPassword, setConfirmPassword] = useState<string>("");
+    const [passwordConfirm, setConfirmPassword] = useState<string>("");
     const [doctorId, setDoctorId] = useState<number>();
-    //const [roleId, setRoleId] = useState<number>();
-    const navigate = useNavigate();
+    const [role, setRole] = useState<string>("");
 
     // state variable for error messages
-    const [error, setError] = useState("");
-
-    const handleLoginClick = () => {
-        navigate("/login");
-    }
-
-
-    // handle change events for input fields
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        if (name === "email") setEmail(value);
-        if (name === "password") setPassword(value);
-        if (name === "confirmPassword") setConfirmPassword(value);
-        if (name === "doctorId") setDoctorId(Number(value));
-        //if (name === "roleId") setRoleId(Number(value));
-    };
+    const [error, setError] = useState<string>("");
 
     // handle submit event for the form
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         //e.preventDefault();
         // validate email and passwords
-        if (!email || !password || !confirmPassword) {
-            setError("Пожалуйста, заполните все обязательные поля.");
-        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-            setError("Пожалуйста, введите корректный адрес электронной почты.");
-        } else if (password !== confirmPassword) {
-            setError("Пароли не совпадают.");
-        } else {
-            setError("");
-            fetch("/register", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    email,
-                    password,
-                    doctorId
-                }),
-            })
-                .then((data) => {
-                    console.log(data);
-                    if (data.ok)
-                        setError("Регистрация прошла успешно.");
-                    else
-                        setError("Ошибка регистрации.");
-
-                })
-                .catch((error) => {
-                    // handle network error
-                    console.error(error);
-                    setError("Ошибка регистрации.");
-                });
+        setError("");
+        const model : RegModel = {
+            email,
+            password,
+            passwordConfirm,
+            doctorId,
+            role
         }
+        console.log(model);
+
+        fetch("api/register", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(model),
+        })
+        .then((response) => {
+            if (response.ok)
+                setError("Регистрация прошла успешно.");
+            return response.json();
+        })
+        .then((data : responseModel) => {
+            if (data.error !== undefined)
+            {
+                console.log(data.error);
+                setError("Регистрация завершилась неудачно " + data.error);
+            }
+        })
+        .catch((error) => {
+            // Сетевая ошибка
+            console.error(error);
+        });
     };
+
+    const layout = {
+        labelCol: { span: 8 },
+        wrapperCol: { span: 16 },
+      };
 
     return (
         <div className="containerbox">
-            <h3>Регистрация</h3>
-
-            <Form onFinish={handleSubmit}>
-                <div>
-                    <label htmlFor="roleId">Роль:</label>
-                </div><div>
-                    <Input
-                        id="role"
-                        name="role"
-                        value={email}
-                        onChange={handleChange}
-                    />
-                </div>
-                <div>
-                    <label htmlFor="doctorId">Уникальный код:</label>
-                </div><div>
-                    <Input
-                        id="doctorId"
-                        name="doctorId"
-                        value={doctorId}
-                        onChange={handleChange}
-                    />
-                </div>
-                <div>
-                    <label htmlFor="email">Email:</label>
-                </div><div>
-                    <Input
-                        type="email"
-                        id="email"
-                        name="email"
-                        value={email}
-                        onChange={handleChange}
-                    />
-                </div>
-                <div>
-                    <label htmlFor="password">Пароль:</label></div><div>
-                    <Input
-                        type="password"
-                        id="password"
-                        name="password"
-                        value={password}
-                        onChange={(e) => handleChange(e)}
-                    />
-                </div>
-                <div>
-                    <label htmlFor="confirmPassword">Повторите пароль:</label></div><div>
-                    <Input
-                        type="password"
-                        id="confirmPassword"
-                        name="confirmPassword"
-                        value={confirmPassword}
-                        onChange={(e) => handleChange(e)}
-                    />
-                </div>
-                <div>
+            
+            <Form onFinish={handleSubmit} {...layout}>
+                <h3>Регистрация</h3>
+                <Form.Item
+                    name="roleId"
+                    label="Роль"
+                    hasFeedback
+                    rules = {[{
+                        required: true,
+                        message:  "Выберите роль"
+                    }]}
+                    wrapperCol={{ span: 16 }}>
+                    <Radio.Group onChange={(e) => setRole(e.target.value)} value={role} >
+                        <Radio value={"Registrator"}>Регистратор</Radio>
+                        <Radio value={"Doctor"}>Врач</Radio>
+                    </Radio.Group>
+                </Form.Item>
+                <Form.Item
+                    name="doctorId"
+                    label="Уникальный номер"
+                    hasFeedback
+                    rules = {[
+                        {
+                            required: true,
+                            message: "Введите уникальный номер"
+                        },
+                        () => ({
+                            validator(_, value) {
+                                if (Number(value) === parseInt(value, 10))
+                                    return Promise.resolve();
+                                return Promise.reject(new Error("Введите корректный уникальный номер"));
+                            }
+                        })
+                    ]}
+                >
+                    <Input name="doctorId" onChange={(e) => setDoctorId(Number(e.target.value))}/>
+                </Form.Item>
+                <Form.Item
+                    name="email"
+                    label="Email"
+                    hasFeedback
+                    rules={[
+                        {
+                            required: true, 
+                            message: "Введите Email"
+                        },
+                        {
+                            type: "email",
+                            message: "Введите корректный Email"
+                        }
+                    ]}
+                >
+                    <Input name="email" onChange={(e) => setEmail(e.target.value)}/>
+                </Form.Item>
+                <Form.Item
+                    name="password"
+                    label="Пароль"
+                    hasFeedback
+                    rules={[
+                        {
+                            required: true, 
+                            message: "Введите пароль"
+                        },
+                        () => ({
+                            validator(_, value) {
+                                if (/^.*(?=.{6,})(?=.*[a-zA-Z])(?=.*\d)(?=.*[!#$%&? _"]).*$/.test(value))
+                                    return Promise.resolve();
+                                return Promise.reject(new Error("Пароль должен должен состоять минимум из 6 символов, содержать только латинские символы, содержать заглавные, строчные буквы, цифры и специальные символы"));
+                            }
+                        })
+                    ]}    
+                >
+                    <Input.Password name="password" onChange={(e) => setPassword(e.target.value)}/>
+                </Form.Item>
+                <Form.Item
+                    name="confirmPassword"
+                    label="Повторите пароль"
+                    dependencies={['password']}
+                    hasFeedback 
+                    rules={[
+                        {
+                            required: true, 
+                            message: "Повторите пароль"
+                        },
+                        ({getFieldValue}) => ({
+                            validator(_, value) {
+                                if (!value || getFieldValue('password') === value) {
+                                    return Promise.resolve();
+                                }
+                                return Promise.reject(new Error('Пароли не совпадают'))
+                            }
+                        })
+                    ]}   
+                >
+                    <Input.Password name="confirmPassword" onChange={(e) => setConfirmPassword(e.target.value)}/>
+                </Form.Item>
+                <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
                     <Button htmlType="submit" type="primary">Регистрация</Button>
-
-                </div>
-                <div>
-                    <Button onClick={() => handleLoginClick()} type="primary">На страницу входа</Button>
-                </div>
-            </Form>
-
-            {error && <p className="error">{error}</p>}
+                    {error && <p>{error}</p>}<br/>
+                    <Link to="/login">На страницу входа</Link>
+                </Form.Item>
+            </Form><br/>
         </div>
     );
 }

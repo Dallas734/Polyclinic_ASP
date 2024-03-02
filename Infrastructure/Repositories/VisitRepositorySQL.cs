@@ -48,7 +48,7 @@ namespace Infrastructure.Repositories
         }
         public void Delete(int id)
         {
-            Visit visit = dbContext.Visits.Find(id);
+            Visit? visit = dbContext.Visits.Find(id);
             if (visit != null)
             {
                 dbContext.Visits.Remove(visit);
