@@ -5,11 +5,15 @@ import Patient from './Components/Patient/Patient';
 import 'bootstrap/dist/css/bootstrap.css';
 import Layout from './Components/Layer/Layout';
 import TalonsTable from './Components/TalonsTable/TalonsTable';
+import Register from './Components/Auth/Register';
+import Login from './Components/Auth/Login';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path='/register' element={<Register />}/>
+        <Route path='/login' element={<Login />}/>
         <Route path='/' element={<Layout />}>
           <Route path='/doctors' element={
             <div>

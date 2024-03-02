@@ -1,13 +1,15 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Input, Button } from "antd";
+import { Input, Button, Form } from "antd";
 
 
 function Register() {
     // state variables for email and passwords
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
+    const [email, setEmail] = useState<string>("");
+    const [password, setPassword] = useState<string>("");
+    const [confirmPassword, setConfirmPassword] = useState<string>("");
+    const [doctorId, setDoctorId] = useState<number>();
+    //const [roleId, setRoleId] = useState<number>();
     const navigate = useNavigate();
 
     // state variable for error messages
@@ -24,59 +26,78 @@ function Register() {
         if (name === "email") setEmail(value);
         if (name === "password") setPassword(value);
         if (name === "confirmPassword") setConfirmPassword(value);
+        if (name === "doctorId") setDoctorId(Number(value));
+        //if (name === "roleId") setRoleId(Number(value));
     };
 
     // handle submit event for the form
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+        //e.preventDefault();
         // validate email and passwords
         if (!email || !password || !confirmPassword) {
-            setError("Please fill in all fields.");
+            setError("Пожалуйста, заполните все обязательные поля.");
         } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-            setError("Please enter a valid email address.");
+            setError("Пожалуйста, введите корректный адрес электронной почты.");
         } else if (password !== confirmPassword) {
-            setError("Passwords do not match.");
+            setError("Пароли не совпадают.");
         } else {
-            // clear error message
             setError("");
-            // post data to the /register api
             fetch("/register", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    email: email,
-                    password: password,
+                    email,
+                    password,
+                    doctorId
                 }),
             })
-                //.then((response) => response.json())
                 .then((data) => {
-                    // handle success or error from the server
                     console.log(data);
                     if (data.ok)
-                        setError("Successful register.");
+                        setError("Регистрация прошла успешно.");
                     else
-                        setError("Error registering.");
+                        setError("Ошибка регистрации.");
 
                 })
                 .catch((error) => {
                     // handle network error
                     console.error(error);
-                    setError("Error registering.");
+                    setError("Ошибка регистрации.");
                 });
         }
     };
 
     return (
         <div className="containerbox">
-            <h3>Register</h3>
+            <h3>Регистрация</h3>
 
-            <form onSubmit={handleSubmit}>
+            <Form onFinish={handleSubmit}>
+                <div>
+                    <label htmlFor="roleId">Роль:</label>
+                </div><div>
+                    <Input
+                        id="role"
+                        name="role"
+                        value={email}
+                        onChange={handleChange}
+                    />
+                </div>
+                <div>
+                    <label htmlFor="doctorId">Уникальный код:</label>
+                </div><div>
+                    <Input
+                        id="doctorId"
+                        name="doctorId"
+                        value={doctorId}
+                        onChange={handleChange}
+                    />
+                </div>
                 <div>
                     <label htmlFor="email">Email:</label>
                 </div><div>
-                    <input
+                    <Input
                         type="email"
                         id="email"
                         name="email"
@@ -85,7 +106,7 @@ function Register() {
                     />
                 </div>
                 <div>
-                    <label htmlFor="password">Password:</label></div><div>
+                    <label htmlFor="password">Пароль:</label></div><div>
                     <Input
                         type="password"
                         id="password"
@@ -95,7 +116,7 @@ function Register() {
                     />
                 </div>
                 <div>
-                    <label htmlFor="confirmPassword">Confirm Password:</label></div><div>
+                    <label htmlFor="confirmPassword">Повторите пароль:</label></div><div>
                     <Input
                         type="password"
                         id="confirmPassword"
@@ -105,13 +126,13 @@ function Register() {
                     />
                 </div>
                 <div>
-                    <Button htmlType="submit" type="primary">Register</Button>
+                    <Button htmlType="submit" type="primary">Регистрация</Button>
 
                 </div>
                 <div>
-                    <Button onClick={() => handleLoginClick()} type="primary">Go to Login</Button>
+                    <Button onClick={() => handleLoginClick()} type="primary">На страницу входа</Button>
                 </div>
-            </form>
+            </Form>
 
             {error && <p className="error">{error}</p>}
         </div>
