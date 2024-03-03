@@ -21,13 +21,16 @@ const Register: React.FC<PropsType> = () => {
     const [role, setRole] = useState<string>("");
 
     // state variable for error messages
-    const [error, setError] = useState<string>("");
+    const [error, setError] = useState<Array<string>>([]);
+
+    const [componentDisabled, setDisabled] = useState<boolean>(false);
+    //const [formItemsRules, setFormItemsRules] = useState([]);
 
     // handle submit event for the form
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         //e.preventDefault();
         // validate email and passwords
-        setError("");
+        setError([]);
         const model : RegModel = {
             email,
             password,
@@ -46,14 +49,18 @@ const Register: React.FC<PropsType> = () => {
         })
         .then((response) => {
             if (response.ok)
-                setError("Регистрация прошла успешно.");
+                setError(["Регистрация прошла успешно."]);
             return response.json();
         })
         .then((data : responseModel) => {
             if (data.error !== undefined)
             {
                 console.log(data.error);
-                setError("Регистрация завершилась неудачно " + data.error);
+                setError(["Регистрация завершилась неудачно "].concat(data.error));
+            }
+            else 
+            {
+                setError([...error, data.message]);
             }
         })
         .catch((error) => {
@@ -61,6 +68,19 @@ const Register: React.FC<PropsType> = () => {
             console.error(error);
         });
     };
+
+    const handleSelectRole = (role:string) => {
+        if (role === "Registrator")
+        {
+            setDisabled(true);
+            setDoctorId(undefined);
+        }
+        else if (role === "Doctor")
+        {
+            setDisabled(false);
+        }
+        setRole(role);
+    }
 
     const layout = {
         labelCol: { span: 8 },
@@ -81,7 +101,7 @@ const Register: React.FC<PropsType> = () => {
                         message:  "Выберите роль"
                     }]}
                     wrapperCol={{ span: 16 }}>
-                    <Radio.Group onChange={(e) => setRole(e.target.value)} value={role} >
+                    <Radio.Group onChange={(e) => handleSelectRole(e.target.value)} value={role} >
                         <Radio value={"Registrator"}>Регистратор</Radio>
                         <Radio value={"Doctor"}>Врач</Radio>
                     </Radio.Group>
@@ -89,22 +109,22 @@ const Register: React.FC<PropsType> = () => {
                 <Form.Item
                     name="doctorId"
                     label="Уникальный номер"
-                    hasFeedback
-                    rules = {[
+                     hasFeedback
+                     rules = {componentDisabled ? [] : [
                         {
-                            required: true,
-                            message: "Введите уникальный номер"
+                            required: true, 
+                            message: "Введите Email"
                         },
-                        () => ({
-                            validator(_, value) {
-                                if (Number(value) === parseInt(value, 10))
-                                    return Promise.resolve();
-                                return Promise.reject(new Error("Введите корректный уникальный номер"));
-                            }
-                        })
+                         () => ({
+                             validator(_, value) {
+                                 if (Number(value) === parseInt(value, 10))
+                                     return Promise.resolve();
+                                 return Promise.reject(new Error("Введите корректный уникальный номер"));
+                             }
+                         })
                     ]}
                 >
-                    <Input name="doctorId" onChange={(e) => setDoctorId(Number(e.target.value))}/>
+                    <Input name="doctorId" onChange={(e) => setDoctorId(Number(e.target.value))} value={doctorId} disabled={componentDisabled}/>
                 </Form.Item>
                 <Form.Item
                     name="email"
@@ -167,7 +187,7 @@ const Register: React.FC<PropsType> = () => {
                 </Form.Item>
                 <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
                     <Button htmlType="submit" type="primary">Регистрация</Button>
-                    {error && <p>{error}</p>}<br/>
+                    {error && error.map((value, key) => (<p key={key}>{value}</p>))}<br/>
                     <Link to="/login">На страницу входа</Link>
                 </Form.Item>
             </Form><br/>

@@ -36,7 +36,7 @@ namespace Polyclinic_ASP.Controllers
                     DoctorId = registerDTO.DoctorId,
                 };
 
-                if (registerDTO != null && dbCrud.doctorDTOs.Find(d => d.Id == registerDTO.DoctorId) == null)
+                if (registerDTO.DoctorId != null && dbCrud.doctorDTOs.Find(d => d.Id == registerDTO.DoctorId) == null)
                 {
                     return StatusCode(StatusCodes.Status500InternalServerError,
                         new { message = "Ошибка", error = "Уникальный код неверен" });
@@ -60,11 +60,7 @@ namespace Polyclinic_ASP.Controllers
                         {
                             ModelState.AddModelError("", item.Description);
                         }
-                        var errorMsg = new
-                        {
-                            message = "Пользователь не добавлен",
-                            error = ModelState.Values.SelectMany(e => e.Errors.Select(er => er.ErrorMessage))
-                        };
+                        var errorMsg = ModelState.Values.SelectMany(e => e.Errors.Select(er => er.ErrorMessage));
                         return StatusCode(StatusCodes.Status500InternalServerError,
                             new { message = "Ошибка", error = errorMsg });
                     }
@@ -78,11 +74,7 @@ namespace Polyclinic_ASP.Controllers
             }
             else
             {
-                var errorMsg = new
-                {
-                    message = "Вход не выполнен",
-                    error = ModelState.Values.SelectMany(e => e.Errors.Select(er => er.ErrorMessage))
-                };
+                var errorMsg = ModelState.Values.SelectMany(e => e.Errors.Select(er => er.ErrorMessage));
                 return Unauthorized(errorMsg);
             }
         }
