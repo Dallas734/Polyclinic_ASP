@@ -10,7 +10,7 @@ namespace Application.DTOs
     public class RegisterDTO
     {
         [Required]
-        [Display(Name = "Email")]
+        [DataType(DataType.EmailAddress)]
         public string Email { get; set; } = null!;
 
         [Required]

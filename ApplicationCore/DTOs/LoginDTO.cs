@@ -11,15 +11,13 @@ namespace Application.DTOs
     {
         [Required]
         [DataType(DataType.EmailAddress)]
-        [Display(Name = "Email")]
         public string Email { get; set; } = null!;
 
         [Required]
         [DataType(DataType.Password)]
-        [Display(Name = "Пароль")]
         public string Password { get; set; } = null!;
 
-        [Display(Name = "Запомнить?")]
+        [Required]
         public bool RememberMe { get; set; } = false;
     }
 }

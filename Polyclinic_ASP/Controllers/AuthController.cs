@@ -89,25 +89,17 @@ namespace Polyclinic_ASP.Controllers
 
                 if (result.Succeeded)
                 {
-                    return Ok(new { message = "Выполнен вход", loginDTO.Email });
+                    return Ok(new { message = "Выполнен вход" + loginDTO.Email });
                 }
                 else
                 {
-                    var errorMsg = new
-                    {
-                        message = "Вход не выполнен",
-                        error = ModelState.Values.SelectMany(e => e.Errors.Select(er => er.ErrorMessage))
-                    };
+                    var errorMsg = ModelState.Values.SelectMany(e => e.Errors.Select(er => er.ErrorMessage));
                     return Unauthorized(errorMsg);
                 }
             }
             else
             {
-                var errorMsg = new
-                {
-                    message = "Вход не выполнен",
-                    error = ModelState.Values.SelectMany(e => e.Errors.Select(er => er.ErrorMessage))
-                };
+                var errorMsg = ModelState.Values.SelectMany(e => e.Errors.Select(er => er.ErrorMessage));
                 return Unauthorized(errorMsg);
             }
         }
