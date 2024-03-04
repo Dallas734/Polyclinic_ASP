@@ -1,11 +1,13 @@
 ﻿using Application.DTOs;
 using Application.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Polyclinic_ASP.Controllers
 {
+    [Authorize(Roles = "Registrator")]
     [Route("api/[controller]")]
     [ApiController]
     public class StatusesController : ControllerBase

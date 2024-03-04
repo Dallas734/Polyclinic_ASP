@@ -1,12 +1,14 @@
 ﻿using Application.DTOs;
 using Application.Interfaces.Services;
 using Domain.DomainModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Polyclinic_ASP.Controllers
 {
+    [Authorize(Roles = "Registrator,Doctor")]
     [ApiController]
     public class AuthController : ControllerBase
     {

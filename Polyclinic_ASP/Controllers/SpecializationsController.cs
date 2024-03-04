@@ -1,9 +1,11 @@
 ﻿using Application.DTOs;
 using Application.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Polyclinic_ASP.Controllers
 {
+    [Authorize(Roles = "Registrator")]
     [Route("api/[controller]")]
     [ApiController]
     public class SpecializationsController : ControllerBase

@@ -1,12 +1,14 @@
 ﻿using Application.DTOs;
 using Application.Interfaces.Services;
 using Domain.DomainModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
 
 namespace Polyclinic_ASP.Controllers
 {
+    [Authorize(Roles = "Registrator,Doctor")]
     [Route("api/[controller]")]
     [ApiController]
     public class VisitsController : ControllerBase
