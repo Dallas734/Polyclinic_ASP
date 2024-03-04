@@ -89,18 +89,27 @@ namespace Polyclinic_ASP.Controllers
 
                 if (result.Succeeded)
                 {
-                    return Ok(new { message = "Выполнен вход" + loginDTO.Email });
+                    User? user = await userManager.GetUserAsync(HttpContext.User);
+                    IEnumerable<string> roles = await userManager.GetRolesAsync(user);
+                    UserDTO responseUser = new UserDTO()
+                    {
+                        Username = user.UserName,
+                        Email = user.UserName,
+                        DoctorId = user.DoctorId,
+                        Roles = roles
+                    };
+                    return Ok(new { message = "Выполнен вход " + loginDTO.Email,  responseUser });
                 }
                 else
                 {
                     var errorMsg = ModelState.Values.SelectMany(e => e.Errors.Select(er => er.ErrorMessage));
-                    return Unauthorized(errorMsg);
+                    return Unauthorized(new { message = errorMsg });
                 }
             }
             else
             {
                 var errorMsg = ModelState.Values.SelectMany(e => e.Errors.Select(er => er.ErrorMessage));
-                return Unauthorized(errorMsg);
+                return Unauthorized(new { message = errorMsg });
             }
         }
 
@@ -115,7 +124,25 @@ namespace Polyclinic_ASP.Controllers
             }
             // Удаление куки
             await signInManager.SignOutAsync();
-            return Ok(new { message = "Выполнен выход", userName = usr.UserName });
+            return Ok(new { message = "Выполнен выход " + usr.UserName });
+        }
+
+        [HttpGet]
+        [Route("api/isauthenticated")]
+        public async Task<IActionResult> IsAuthenticated()
+        {
+            User? user = await userManager.GetUserAsync(HttpContext.User);
+            if (user == null)
+                return Unauthorized(new { message = "Вы Гость. Пожалуйста, выполните вход", responseUser = user });
+            IEnumerable<string> roles = await userManager.GetRolesAsync(user);
+            UserDTO responseUser = new UserDTO()
+            {
+                Username = user.UserName,
+                Email = user.UserName,
+                DoctorId = user.DoctorId,
+                Roles = roles
+            };
+            return Ok(new { message = "Пользователь " + user.UserName, responseUser});
         }
     }
 }

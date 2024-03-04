@@ -1,29 +1,29 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Input, Button, Form, Checkbox } from "antd";
+import { Input, Button, Form, Checkbox} from "antd";
 import { Link } from "react-router-dom";
 import LoginModel from "../Entities/LoginModel";
+import UserObj from "../Entities/UserObj";
 
 interface ResponseModel {
     message: string,
-    error: Array<string>
+    responseUser: UserObj
 } 
 interface PropsType {
-
+    setUser: (value: UserObj) => void 
 }
 
-const Login : React.FC<PropsType> = () => {
-    // state variables for email and passwords
+const Login : React.FC<PropsType> = ({ setUser }) => {
+
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [rememberMe, setRememberme] = useState<boolean>(false);
-    // state variable for error messages
-    const [error, setError] = useState<Array<string>>([]);
+    const [message, setMessage] = useState<Array<string>>([]);
     const navigate = useNavigate();
 
     // handle submit event for the form
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        setError([]);
+        setMessage([]);
         const model : LoginModel =
         {
             email,
@@ -40,9 +40,8 @@ const Login : React.FC<PropsType> = () => {
         })
         .then((response) => {
             // handle success or error from the server
-            console.log(response);
             if (response.ok) {
-                setError(["Вход завершился удачно"]);
+                setMessage(["Вход завершился удачно"]);
                 // Переход куда-то
                 navigate("/");
                 //window.location.href = '/';
@@ -50,14 +49,16 @@ const Login : React.FC<PropsType> = () => {
             return response.json();
         })
         .then((data : ResponseModel) => {
-            if (data.error !== undefined)
+            if (data.responseUser === null)
             {
-                console.log(data.error);
-                setError(["Вход завершился неудачно"].concat(data.error));
+                console.log(data.message);
+                setMessage(["Вход завершился неудачно"].concat(data.message));
             }
             else
             {
-                setError([...error, data.error]);
+                //console.log(data.message);
+                setUser(data.responseUser);
+                setMessage([...message, data.message]);
             }
         })
         .catch((error) => {
@@ -121,7 +122,7 @@ const Login : React.FC<PropsType> = () => {
                 </Form.Item>
                 <Form.Item wrapperCol={{ offset: 5, span: 16 }}>
                     <Button htmlType="submit" type="primary">Вход</Button>
-                    {error && error.map((value, key) => (<p key={key}>{value}</p>))}<br/>
+                    {message && message.map((value, key) => (<p key={key}>{value}</p>))}<br/>
                     <Link to="/register">На страницу регистрации</Link>
                 </Form.Item>
             </Form><br/>

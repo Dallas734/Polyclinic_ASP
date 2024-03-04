@@ -8,8 +8,9 @@ interface responseModel {
     message: string,
     error: Array<string>
 } 
-interface PropsType {
 
+interface PropsType {
+    
 }
 
 const Register: React.FC<PropsType> = () => {

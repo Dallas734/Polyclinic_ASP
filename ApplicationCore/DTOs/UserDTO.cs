@@ -9,19 +9,12 @@ namespace Application.DTOs
 {
     public class UserDTO
     {
-        /*public UserDTO(User user)
-        {
-            Id = user.Id;
-            Login = user.Login;
-            Password = user.Password;
-            RoleId = user.RoleId;
-        }*/
-        //public int Id { get; set; }
+        public string Username { get; set; }
 
         public string Email { get; set; }
 
-        public string Password { get; set; }
-
         public int? DoctorId { get; set; }
+
+        public IEnumerable<string> Roles { get; set; }
     }
 }
