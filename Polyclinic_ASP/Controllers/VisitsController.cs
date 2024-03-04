@@ -8,7 +8,6 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Polyclinic_ASP.Controllers
 {
-    [Authorize(Roles = "Registrator,Doctor")]
     [Route("api/[controller]")]
     [ApiController]
     public class VisitsController : ControllerBase

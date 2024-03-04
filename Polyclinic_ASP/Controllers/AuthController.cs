@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Polyclinic_ASP.Controllers
 {
-    [Authorize(Roles = "Registrator,Doctor")]
     [ApiController]
     public class AuthController : ControllerBase
     {

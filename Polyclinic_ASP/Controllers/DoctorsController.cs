@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Polyclinic_ASP.Controllers
 {
-    [Authorize(Roles = "Registrator")]
     [Route("api/[controller]")]
     [ApiController]
     public class DoctorsController : ControllerBase

@@ -45,9 +45,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/' element={(<><Layout user={user}/>
-          {user ? `Вы авторизованы как ${user.username}` : 'Вы не авторизованы '}
-        </>)}>
+        <Route path='/' element={(<Layout user={user}/>)}>
           <Route path='/register' element={<Register />}/>
           <Route path='/login' element={<Login setUser={setUser}/>}/>
           <Route path='/doctors' element={

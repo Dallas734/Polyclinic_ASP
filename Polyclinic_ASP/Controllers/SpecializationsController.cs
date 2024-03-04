@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Polyclinic_ASP.Controllers
 {
-    [Authorize(Roles = "Registrator")]
     [Route("api/[controller]")]
     [ApiController]
     public class SpecializationsController : ControllerBase

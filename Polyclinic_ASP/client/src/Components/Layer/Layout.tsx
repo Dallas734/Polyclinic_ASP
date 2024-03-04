@@ -1,6 +1,6 @@
 import React from "react";
 import {Outlet} from "react-router-dom";
-import {Navbar, NavbarBrand, NavItem, NavLink } from 'reactstrap';
+import {Navbar, NavbarBrand, NavItem, NavLink, Nav, NavbarText, DropdownMenu, DropdownToggle, UncontrolledDropdown, DropdownItem } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.css';
 import UserObj from "../Entities/UserObj";
@@ -12,22 +12,9 @@ interface PropsType {
 const Layout: React.FC<PropsType> = ({ user }) => {
     return (
     <>
-    <Navbar className="navbar-expand-sm navbar-toggleable-sm ng-white border-bottom box-shadow mb-3" container light>
+    <Navbar className="navbar navbar-expand-lg bg-dark navbar-dark" container>
         <NavbarBrand tag={Link} to="/">Поликлиника</NavbarBrand>
-            <ul className="navbar-nav flex-grow">
-                <NavItem>
-                    <NavLink tag={Link} to='/'>Главная</NavLink>
-                </NavItem>
-                { user === null ? (
-                    <>
-                    <NavItem>
-                        <NavLink tag={Link} to='/register'>Регистрация</NavLink>
-                    </NavItem>
-                    <NavItem>
-                        <NavLink tag={Link} to='/login'>Вход</NavLink>
-                    </NavItem>
-                    </>
-                ) : null }
+            <Nav className="me-auto" navbar>
                 {user?.roles.includes("Registrator") ? (
                     <>
                     <NavItem>
@@ -41,13 +28,19 @@ const Layout: React.FC<PropsType> = ({ user }) => {
                     </NavItem>
                     </>
                 ) : null }
-                { user !== undefined ? (
-                <NavItem>
-                    <NavLink tag={Link} to='/logout'>Выход</NavLink>
-                </NavItem>
-                ) : null}
-            </ul>
-    </Navbar>
+            </Nav>
+            <UncontrolledDropdown nav>
+                <DropdownToggle caret color="dark">
+                    Аккаунт
+                </DropdownToggle>
+                <DropdownMenu dark>
+                    <DropdownItem text>{user ? user.email : 'Не авторизован'}</DropdownItem>
+                    <DropdownItem tag={Link} to='/register' disabled={user ? true : false}>Регистрация</DropdownItem>
+                    <DropdownItem tag={Link} to='/login' disabled={user ? true : false}>Вход</DropdownItem>
+                    <DropdownItem tag={Link} to='/logout' disabled={user ? false : true}>Выход</DropdownItem>
+                </DropdownMenu>
+            </UncontrolledDropdown>
+        </Navbar>
     <Outlet />
     </>
     );

@@ -9,7 +9,6 @@ using System.Numerics;
 
 namespace Polyclinic_ASP.Controllers
 {
-    [Authorize(Roles = "Registrator,Doctor")]
     [Route("api/[controller]")]
     [ApiController]
     public class PatientsController : ControllerBase
