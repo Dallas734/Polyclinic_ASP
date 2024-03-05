@@ -7,10 +7,23 @@ import DoctorObj from "../Entities/DoctorObj";
 import PatientObj from "../Entities/PatientObj";
 import "./TalonsTable.css";
 import { Label } from "reactstrap";
+//import {Calendar, Views, DateLocalizer, momentLocalizer} from 'react-big-calendar';
+import moment from 'moment';
+import 'moment/locale/ru';
+import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 interface PropsType {
 
 }
+
+// interface TableEvent
+// {
+//     id?: number,
+//     title: string,
+//     allDay?: boolean,
+//     start: Date,
+//     end: Date
+// }
 
 const TalonsTable: React.FC<PropsType> = () => {
 
@@ -26,6 +39,10 @@ const TalonsTable: React.FC<PropsType> = () => {
     const [selectedTalon, setSelectedTalon] = useState<VisitObj | undefined>(undefined);
     const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split('T')[0]);
     const [activeIndex, setActiveIndex] = useState<number>();
+    //const [tableEvents, setTableEvents] = useState<Array<TableEvent>>([]);
+
+    moment.locale('ru');
+    //const localaizer = momentLocalizer(moment);
 
     const addTalon = (visit: VisitObj) => setTalons(talons.map(o => {
         if (o.timeT === visit.timeT)
@@ -137,6 +154,15 @@ const TalonsTable: React.FC<PropsType> = () => {
                 }
             }, error => console.log(error));
     }
+
+    // const messages = {
+    //     week: 'Неделя',
+    //     day: 'День',
+    //     month: 'Месяц',
+    //     today: 'Сегодня',
+    //     previous: 'Пред',
+    //     next: 'След'
+    // }
 
     return (
     <React.Fragment>

@@ -1,6 +1,6 @@
 import React from "react";
 import {Outlet} from "react-router-dom";
-import {Navbar, NavbarBrand, NavItem, NavLink, Nav, NavbarText, DropdownMenu, DropdownToggle, UncontrolledDropdown, DropdownItem } from 'reactstrap';
+import {Navbar, NavbarBrand, NavItem, NavLink, Nav, DropdownMenu, DropdownToggle, UncontrolledDropdown, DropdownItem } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.css';
 import UserObj from "../Entities/UserObj";

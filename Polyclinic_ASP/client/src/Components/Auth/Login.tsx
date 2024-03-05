@@ -121,8 +121,8 @@ const Login : React.FC<PropsType> = ({ setUser }) => {
                     <Checkbox value={rememberMe} onChange={(e) => setRememberme(e.target.checked)}>Запомнить?</Checkbox>
                 </Form.Item>
                 <Form.Item wrapperCol={{ offset: 5, span: 16 }}>
+                {message && message.map((value, key) => (<p key={key}>{value}</p>))}<br/>
                     <Button htmlType="submit" type="primary">Вход</Button>
-                    {message && message.map((value, key) => (<p key={key}>{value}</p>))}<br/>
                     <Link to="/register">На страницу регистрации</Link>
                 </Form.Item>
             </Form><br/>

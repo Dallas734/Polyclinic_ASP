@@ -103,6 +103,7 @@ namespace Polyclinic_ASP.Controllers
                 }
                 else
                 {
+                    ModelState.AddModelError("", "Неправильный логин и (или) пароль");
                     var errorMsg = ModelState.Values.SelectMany(e => e.Errors.Select(er => er.ErrorMessage));
                     return Unauthorized(new { message = errorMsg });
                 }
