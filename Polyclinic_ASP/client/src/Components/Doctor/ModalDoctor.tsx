@@ -165,6 +165,11 @@ const ModalDoctor: React.FC<PropsType> = ({editingDoctor, addDoctor, updateDocto
             createDoctor();
     }
 
+    const layout = {
+        labelCol: { span: 8 },
+        wrapperCol: { span: 16 },
+    };
+    
     return (
         <Modal
             open={modalIsShow}
@@ -175,48 +180,165 @@ const ModalDoctor: React.FC<PropsType> = ({editingDoctor, addDoctor, updateDocto
                 <Button key="closeBtn" onClick={() => showModal(false)} danger>Закрыть</Button>
             ]}
         >
-            <Form id="doctorForm" onFinish={handleSubmit}>
-                <label>Фамилия</label>
-                <Input key="lastName" type="text" name="lastName" placeholder="Введите Фамилию" value={lastName} onChange={(e) => setLastName(e.target.value)}/><br/>
-                <label>Имя</label>
-                <Input key="firstName" type="text" name="firstName" placeholder="Введите Имя" value={firstName} onChange={(e) => setFirstName(e.target.value)}/><br/>
-                <label>Отчество</label>
-                <Input key="surname" type="text" name="surname" placeholder="Введите отчество" value={surname} onChange={(e) => setSurname(e.target.value)}/><br/>
-                <label>Пол</label><br/>
-                <Select key="selectGender" value={genderId} onChange={value => setGenderId(value)} style={{width: '50%'}}>
+            <Form id="doctorForm" onFinish={handleSubmit} {...layout}>
+                <Form.Item
+                    name="lastName"
+                    label="Фамилия"
+                    hasFeedback
+                    rules={[
+                        {
+                            required: true, 
+                            message: "Введите Фамилию"
+                        },
+                        () => ({
+                            validator(_, value) {
+                                if (/^[\u0400-\u04FF]+$/.test(value))
+                                    return Promise.resolve();
+                                return Promise.reject(new Error("Введите корректную Фамилию"));
+                            }
+                        })
+                    ]}
+                >
+                    <Input key="lastName" type="text" name="lastName" placeholder="Введите Фамилию" value={lastName} onChange={(e) => setLastName(e.target.value)}/>
+                </Form.Item>
+                <Form.Item
+                    name="firstName"
+                    label="Имя"
+                    hasFeedback
+                    rules={[
+                        {
+                            required: true,
+                            message: "Введите Имя" 
+                        },
+                        () => ({
+                            validator(_, value) {
+                                if (/^[\u0400-\u04FF]+$/.test(value))
+                                    return Promise.resolve();
+                                return Promise.reject(new Error("Введите корректное Имя"));
+                            }
+                        })
+                    ]}
+                >
+                    <Input key="firstName" type="text" name="firstName" placeholder="Введите Имя" value={firstName} onChange={(e) => setFirstName(e.target.value)}/>
+                </Form.Item>
+                <Form.Item
+                    name="surname"
+                    label="Отчество"
+                    hasFeedback
+                    rules={[
+                        {
+                            required: true,
+                            message: "Введите Отчество"
+                        },
+                        () => ({
+                            validator(_, value) {
+                                if (/^[\u0400-\u04FF]+$/.test(value))
+                                    return Promise.resolve();
+                                return Promise.reject(new Error("Введите корректное Отчество"));
+                            }
+                        })
+                    ]}
+                >
+                    <Input key="surname" type="text" name="surname" placeholder="Введите отчество" value={surname} onChange={(e) => setSurname(e.target.value)}/>
+                </Form.Item>
+                <Form.Item
+                    name="selectGender"
+                    label="Пол"
+                    rules={[
+                        {
+                            required: true,
+                            message: "Выберите пол"
+                        }
+                    ]}
+                >
+                    <Select key="selectGender" value={genderId} onChange={value => setGenderId(value)} style={{width: '50%'}}>
                         {
                             genders.map((s, k) => {
                                 return <Select.Option value={s.id} key={k}>{s.name}</Select.Option>
                             })
                         }
-                </Select><br/>
-                <label>Дата рождения</label><br/>
-                <Input key="dateOfBirth" type="date" name="dateOfBirth" value={dateOfBirth} onChange={(e) => setDateOfBirth(e.target.value)}/><br/>
-                <label>Специализация</label><br/>
-                <Select key="selectSpecialization" value={specializationId} onChange={value => setSpecializationId(value)} style={{width: '50%'}}>
-                    {specializations.map((s, k) => {
-                        return <Select.Option value={s.id} key={k}>{s.name}</Select.Option>
-                    })}
-                </Select><br/>
-                <label>Категория</label><br/>
-                <Select key="selectCategory" value={categoryId} onChange={value => setCategoryId(value)} style={{width: '50%'}}>
-                    {categories.map((s, k) => {
-                        return <Select.Option value={s.id} key={k}>{s.name}</Select.Option>
-                    })}
-                </Select><br/>
-                <label>Участок</label><br/>
-                <Select key="selectArea" defaultValue={0} value={areaId} onChange={value => setAreaId(value)} style={{width: '50%'}}>
-                    {areas.map((s, k) => {
-                        return <Select.Option value={s.id} key={k}>{s.id}</Select.Option>
-                    })}
-                    <Select.Option value={null} key="0">"Отсутствует"</Select.Option>
-                </Select><br/>
-                <label>Статус</label><br/>
-                <Select key="selectStatus" value={statusId} onChange={value => setStatusId(value)} style={{width: '50%'}}>
-                    {statuses.map((s, k) => {
-                        return <Select.Option value={s.id} key={k}>{s.name}</Select.Option>
-                    })}
-                </Select><br/>            
+                    </Select>
+                </Form.Item>
+                <Form.Item
+                    name="dateOfBirth"
+                    label="Дата рождения"
+                    rules={[
+                        {
+                            type: "date"
+                        },
+                        {
+                            required: true,
+                            message: "Введите Дату рождения"
+                        }
+                    ]}
+                >
+                    <Input key="dateOfBirth" type="date" name="dateOfBirth" value={dateOfBirth} onChange={(e) => setDateOfBirth(e.target.value)}/>
+                </Form.Item>
+                <Form.Item
+                    name="selectSpecialization"
+                    label="Специализация"
+                    rules={[
+                        {
+                            required: true,
+                            message: "Выберите Специализацию"
+                        }
+                    ]}
+                >
+                    <Select key="selectSpecialization" value={specializationId} onChange={value => setSpecializationId(value)} style={{width: '50%'}}>
+                        {specializations.map((s, k) => {
+                            return <Select.Option value={s.id} key={k}>{s.name}</Select.Option>
+                        })}
+                    </Select>
+                </Form.Item>
+                <Form.Item
+                    name="selectCategory"
+                    label="Категория"
+                    rules={[
+                        {
+                            required: true,
+                            message: "Выберите Категорию"
+                        }
+                    ]}
+                >
+                    <Select key="selectCategory" value={categoryId} onChange={value => setCategoryId(value)} style={{width: '50%'}}>
+                        {categories.map((s, k) => {
+                            return <Select.Option value={s.id} key={k}>{s.name}</Select.Option>
+                        })}
+                    </Select>
+                </Form.Item>
+                <Form.Item
+                    name="selectArea"
+                    label="Участок"
+                    rules={[
+                        {
+                            required: true,
+                            message: "Выберите Участок"
+                        }
+                    ]}
+                >
+                    <Select key="selectArea" defaultValue={0} value={areaId} onChange={value => setAreaId(value)} style={{width: '50%'}}>
+                        {areas.map((s, k) => {
+                            return <Select.Option value={s.id} key={k}>{s.id}</Select.Option>
+                        })}
+                        <Select.Option value={null} key="0">"Отсутствует"</Select.Option>
+                    </Select>
+                </Form.Item>
+                <Form.Item
+                    name="selectStatus"
+                    label="Статус"
+                    rules={[
+                        {
+                            required: true,
+                            message: "Выберите Статус"
+                        }
+                    ]}
+                >
+                    <Select key="selectStatus" value={statusId} onChange={value => setStatusId(value)} style={{width: '50%'}}>
+                        {statuses.map((s, k) => {
+                            return <Select.Option value={s.id} key={k}>{s.name}</Select.Option>
+                        })}
+                    </Select>
+                </Form.Item>            
             </Form>
         </Modal>
 

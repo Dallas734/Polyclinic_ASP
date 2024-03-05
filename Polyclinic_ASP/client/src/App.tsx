@@ -46,6 +46,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path='/' element={(<Layout user={user}/>)}>
+        <Route index element={<h3>Медицинская информационная система (МИС)</h3>}/>
           <Route path='/register' element={<Register />}/>
           <Route path='/login' element={<Login setUser={setUser}/>}/>
           <Route path='/doctors' element={

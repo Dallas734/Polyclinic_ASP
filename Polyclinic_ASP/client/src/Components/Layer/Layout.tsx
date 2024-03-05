@@ -13,7 +13,7 @@ const Layout: React.FC<PropsType> = ({ user }) => {
     return (
     <>
     <Navbar className="navbar navbar-expand-lg bg-dark navbar-dark" container>
-        <NavbarBrand tag={Link} to="/">Поликлиника</NavbarBrand>
+        <NavbarBrand tag={Link} to="/">МИС</NavbarBrand>
             <Nav className="me-auto" navbar>
                 {user?.roles.includes("Registrator") ? (
                     <>
