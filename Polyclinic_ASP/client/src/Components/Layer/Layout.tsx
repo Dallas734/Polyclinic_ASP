@@ -27,6 +27,15 @@ const Layout: React.FC<PropsType> = ({ user }) => {
                         <NavLink tag={Link} to='/addVisits'>Записать пациента</NavLink>
                     </NavItem>
                     </>
+                ) : user?.roles.includes("Doctor") ? (
+                    <>
+                    <NavItem>
+                        <NavLink tag={Link} to='/patientsCard'>Медкарта</NavLink>
+                    </NavItem>
+                    <NavItem>
+                        <NavLink tag={Link} to='/'>Принять пациента</NavLink>
+                    </NavItem>
+                    </>
                 ) : null }
             </Nav>
             <UncontrolledDropdown nav>

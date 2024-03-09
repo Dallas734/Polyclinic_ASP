@@ -27,19 +27,20 @@ namespace Application.DTOs
         {
             Id = v.Id;
             PatientId = v.PatientId;
-            DiagnosisId = v.DiagnosisId;
+            Diagnosis = v.Diagnosis == null ? null : new DiagnosisDTO(v.Diagnosis);
             Recipe = v.Recipe;
-            ProcedureId = v.ProcedureId;
+            Procedure = v.Procedure == null ? null : new ProcedureDTO(v.Procedure); ;
             DateT = v.DateT;
             TimeT = v.TimeT;
             DoctorId = v.DoctorId;
             VisitStatusId = v.VisitStatusId;
-            if (v.Doctor != null) 
+            if (v.Doctor != null)
+            {
                 DoctorFullName = v.Doctor.LastName + " " + v.Doctor.FirstName + " " + v.Doctor.Surname;
+                Specialization = new SpecializationDTO(v.Doctor.Specialization);
+            }
             if (v.Patient != null)
                 PatientFullName = v.Patient.LastName + " " + v.Patient.FirstName + " " + v.Patient.Surname;
-            //Diagnosis = new DiagnosisDTO(v.Diagnosis);
-            //Procedure = new ProcedureDTO(v.Procedure);
         }
         public int Id { get; set; }
 
@@ -47,11 +48,11 @@ namespace Application.DTOs
 
         public string? PatientFullName { get; set; }
 
-        public int? DiagnosisId { get; set; }
+        public DiagnosisDTO? Diagnosis { get; set; }
 
         public string? Recipe { get; set; }
 
-        public int? ProcedureId { get; set; }
+        public ProcedureDTO? Procedure { get; set; }
 
         public DateOnly? DateT { get; set; }
 
@@ -59,16 +60,12 @@ namespace Application.DTOs
 
         public int? DoctorId { get; set; }
 
+        public SpecializationDTO? Specialization { get; set; }
+
         public string? DoctorFullName { get; set; }
 
         public int? VisitStatusId { get; set; }
 
         public string? VisitStatusName { get; set; }
-
-        //public DoctorDTO? Doctor { get; set; }
-
-        //public DiagnosisDTO? Diagnosis { get; set; }
-
-        //public ProcedureDTO? Procedure { get; set; }
     }
 }

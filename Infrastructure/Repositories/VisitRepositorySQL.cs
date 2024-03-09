@@ -27,6 +27,7 @@ namespace Infrastructure.Repositories
         {
             return dbContext.Visits
                 .Include(v => v.Doctor)
+                .Include(v => v.Doctor.Specialization)
                 .Include(v => v.Patient)
                 .Include(v => v.Diagnosis)
                 .Include(v => v.Procedure)

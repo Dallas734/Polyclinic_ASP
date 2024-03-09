@@ -245,8 +245,8 @@ namespace BLL
                 TimeT = visit.TimeT, 
                 DoctorId = visit.DoctorId,
                 PatientId = visit.PatientId,
-                DiagnosisId = visit.DiagnosisId, 
-                ProcedureId = visit.ProcedureId, 
+                DiagnosisId = visit.Diagnosis == null ? null : visit.Diagnosis.Id, 
+                ProcedureId = visit.Procedure == null ? null : visit.Procedure.Id, 
                 VisitStatusId = visit.VisitStatusId
             });
         }
@@ -281,8 +281,8 @@ namespace BLL
         public void UpdateVisit(VisitDTO visit)
         {
             Visit v = dbRepos.Visits.GetItem(visit.Id);
-            v.ProcedureId = visit.ProcedureId;
-            v.DiagnosisId = visit.DiagnosisId;
+            v.ProcedureId = visit.Procedure == null ? null : visit.Procedure.Id;
+            v.DiagnosisId = visit.Diagnosis == null ? null : visit.Diagnosis.Id;
             v.Recipe = visit.Recipe;
             v.VisitStatusId = visit.VisitStatusId;
             v.DateT = visit.DateT;

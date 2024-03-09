@@ -1,12 +1,15 @@
+import DirectoryEntity from "./DirectoryEntity";
+
 interface VisitObj {
     id?: number,
     patientId?: number,
     patientFullName?: string,
-    diagnosisId?: number,
+    diagnosis?: DirectoryEntity,
     recipe?: string,
-    procedureId?: number,
+    procedure?: DirectoryEntity,
     dateT?: string,
     timeT?: string,
+    specialization?: DirectoryEntity,
     doctorId?: number,
     doctorFullName?: string,
     visitStatusId?: number,

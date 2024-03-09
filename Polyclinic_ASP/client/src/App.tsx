@@ -10,6 +10,7 @@ import Login from './Components/Auth/Login';
 import { useState, useEffect } from 'react';
 import UserObj from './Components/Entities/UserObj';
 import Logout from './Components/Auth/Logout';
+import PatientCard from './Components/Patient/PatientCard';
 
 interface ResponseModel {
   message: string,
@@ -64,12 +65,16 @@ function App() {
               <TalonsTable />
             </div>
           }/>
+          <Route path='patientsCard' element={
+            <div>
+              <PatientCard />
+            </div>
+          }/>
           <Route path='/logout' element={<Logout setUser={setUser}/>}></Route>
         </Route>
       </Routes>
     </BrowserRouter>
 
-    // Здесь будет элемент главной страницы с авторизацией
   );
 }
 

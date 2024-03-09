@@ -1,11 +1,13 @@
 ﻿using Application.DTOs;
 using Application.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Polyclinic_ASP.Controllers
 {
     [Route("api/[controller]")]
+    [EnableCors]
     [ApiController]
     public class SpecializationsController : ControllerBase
     {
@@ -17,6 +19,7 @@ namespace Polyclinic_ASP.Controllers
         }
         // GET: api/<SpecializationController>
         [HttpGet]
+        [Authorize(Roles = "Registrator, Doctor")]
         public async Task<ActionResult<IEnumerable<SpecializationDTO>>> GetSpecs()
         {
             try

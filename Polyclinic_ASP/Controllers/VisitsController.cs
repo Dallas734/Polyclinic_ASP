@@ -2,6 +2,7 @@
 using Application.Interfaces.Services;
 using Domain.DomainModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
@@ -9,6 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 namespace Polyclinic_ASP.Controllers
 {
     [Route("api/[controller]")]
+    [EnableCors]
     [ApiController]
     public class VisitsController : ControllerBase
     {
@@ -37,6 +39,7 @@ namespace Polyclinic_ASP.Controllers
 
         // GET api/<VisitController>/5
         [HttpGet("{id}")]
+        [Authorize(Roles = "Registrator, Doctor")]
         public async Task<ActionResult<VisitDTO>> GetVisit(int id)
         {
             var visit = await Task.Run(() => _dbCrud.visitDTOs.FirstOrDefault(i => i.Id == id));
@@ -50,6 +53,7 @@ namespace Polyclinic_ASP.Controllers
         }
 
         [HttpGet("Talons")]
+        [Authorize(Roles = "Registrator, Doctor")]
         public async Task<ActionResult<IEnumerable<Talon>>> GetTalons(int doctorId, DateOnly date)
         {
             try
@@ -66,6 +70,7 @@ namespace Polyclinic_ASP.Controllers
 
         // POST api/<VisitController>
         [HttpPost]
+        [Authorize(Roles = "Registrator")]
         public async Task<ActionResult<VisitDTO>> PostVisit(VisitDTO visit)
         {
             if (!ModelState.IsValid)
@@ -92,6 +97,7 @@ namespace Polyclinic_ASP.Controllers
 
         // PUT api/<VisitController>/5
         [HttpPut("{id}")]
+        [Authorize(Roles = "Registrator, Doctor")]
         public async Task<IActionResult> PutVisit(int id, VisitDTO visit)
         {
             if (!ModelState.IsValid)
@@ -126,6 +132,7 @@ namespace Polyclinic_ASP.Controllers
 
         // DELETE api/<VisitController>/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Registrator")]
         public async Task<IActionResult> Delete(int id)
         {
             var visit = await Task.Run(() => _dbCrud.visitDTOs.Find(i => i.Id == id));

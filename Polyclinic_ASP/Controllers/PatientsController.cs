@@ -2,6 +2,7 @@
 using Application.Interfaces.Services;
 using Domain.DomainModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
@@ -10,6 +11,7 @@ using System.Numerics;
 namespace Polyclinic_ASP.Controllers
 {
     [Route("api/[controller]")]
+    [EnableCors]
     [ApiController]
     public class PatientsController : ControllerBase
     {
@@ -23,6 +25,7 @@ namespace Polyclinic_ASP.Controllers
 
         // GET: api/<PatientController>
         [HttpGet]
+        [Authorize(Roles = "Registrator, Doctor")]
         public async Task<ActionResult<IEnumerable<PatientDTO>>> GetPatients()
         {
             try
@@ -38,6 +41,7 @@ namespace Polyclinic_ASP.Controllers
 
         // GET api/<PatientController>/5
         [HttpGet("{id}")]
+        [Authorize(Roles = "Registrator, Doctor")]
         public async Task<ActionResult<PatientDTO>> GetPatient(int id)
         {
             var patient = await Task.Run(() => _dbCrud.patientDTOs.FirstOrDefault(i => i.Id == id));
@@ -51,6 +55,7 @@ namespace Polyclinic_ASP.Controllers
         }
 
         [HttpGet("byArea")]
+        [Authorize(Roles = "Registrator, Doctor")]
         public async Task<ActionResult<IEnumerable<PatientDTO>>> GetPatientsByArea(int areaId)
         {
             try
@@ -67,6 +72,7 @@ namespace Polyclinic_ASP.Controllers
 
         // POST api/<PatientController>
         [HttpPost]
+        [Authorize(Roles = "Registrator")]
         public async Task<ActionResult<PatientDTO>> PostPatient(PatientDTO patient)
         {
             if (!ModelState.IsValid)
@@ -91,6 +97,7 @@ namespace Polyclinic_ASP.Controllers
 
         // PUT api/<PatientController>/5
         [HttpPut("{id}")]
+        [Authorize(Roles = "Registrator")]
         public async Task<IActionResult> PutPatient(int id, PatientDTO patient)
         {
             if (!ModelState.IsValid)
@@ -127,6 +134,7 @@ namespace Polyclinic_ASP.Controllers
 
         // DELETE api/<PatientController>/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Registrator")]
         public async Task<IActionResult> Delete(int id)
         {
             var patient = await Task.Run(() => _dbCrud.patientDTOs.Find(i => i.Id == id));
@@ -139,6 +147,20 @@ namespace Polyclinic_ASP.Controllers
             await _dbCrud.Save();
 
             return Ok();
+        }
+
+        [HttpGet("card")]
+        [Authorize(Roles="Doctor")]
+        public async Task<ActionResult<IEnumerable<VisitDTO>>> GetPatientCard(int patientId)
+        {
+            var patientCard = await Task.Run(() => _patientService.GetPatientCard(patientId));
+
+            if (patientCard == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(patientCard);
         }
     }
 }

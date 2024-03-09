@@ -8,8 +8,17 @@ using Infrastructure.Repositories;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
+using WebAPI.Data;
 
 var builder = WebApplication.CreateBuilder(args);
+
+
+
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+});
 
 // Add services to the container.
 builder.Services.AddIdentity<User, IdentityRole>()
@@ -38,8 +47,8 @@ builder.Services.AddCors((options) =>
     options.AddDefaultPolicy(builder =>
     {
         builder.WithOrigins("https://http://localhost:3000/")
-        .AllowAnyHeader()
-        .AllowAnyMethod();
+        .AllowAnyMethod()
+        .AllowAnyHeader();
     });
 });
 
@@ -49,12 +58,18 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+using (var scope = app.Services.CreateScope())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    var PolyclinicKurContext = scope.ServiceProvider.GetRequiredService<PolyclinicKurContext>();
+    await PolyclinicContextSeed.SeedAsync(PolyclinicKurContext);
 }
+
+    // Configure the HTTP request pipeline.
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI();
+    }
 
 app.UseHttpsRedirection();
 
@@ -69,7 +84,7 @@ app.MapPost("/logout", async (SignInManager<User> signInManager) =>
 
 app.UseAuthentication();
 app.UseAuthorization();
-
+app.UseCors();
 app.MapControllers();
 
 app.Run();

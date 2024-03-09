@@ -30,9 +30,9 @@ namespace Infrastructure.Services
                 .ToList();
         }
 
-        public List<VisitDTO> GetPatientCard(PatientDTO patient)
+        public List<VisitDTO> GetPatientCard(int patientId)
         {
-            return repos.Visits.GetAll().Where(i => i.PatientId == patient.Id && i.VisitStatusId == 2).Select(i => new VisitDTO(i)).ToList();
+            return repos.Visits.GetAll().Where(i => i.PatientId == patientId && i.VisitStatusId == 2).Select(i => new VisitDTO(i)).ToList();
         }
     }
 }
