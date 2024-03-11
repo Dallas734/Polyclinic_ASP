@@ -33,7 +33,7 @@ const Layout: React.FC<PropsType> = ({ user }) => {
                         <NavLink tag={Link} to='/patientsCard'>Медкарта</NavLink>
                     </NavItem>
                     <NavItem>
-                        <NavLink tag={Link} to='/'>Принять пациента</NavLink>
+                        <NavLink tag={Link} to='/doctorsTalons'>Принять пациента</NavLink>
                     </NavItem>
                     </>
                 ) : null }

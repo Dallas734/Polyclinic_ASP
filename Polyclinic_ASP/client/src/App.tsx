@@ -5,6 +5,7 @@ import Patient from './Components/Patient/Patient';
 import 'bootstrap/dist/css/bootstrap.css';
 import Layout from './Components/Layer/Layout';
 import TalonsTable from './Components/TalonsTable/TalonsTable';
+import DoctorsTalons from './Components/TalonsTable/DoctorsTalons';
 import Register from './Components/Auth/Register';
 import Login from './Components/Auth/Login';
 import { useState, useEffect } from 'react';
@@ -65,9 +66,14 @@ function App() {
               <TalonsTable />
             </div>
           }/>
-          <Route path='patientsCard' element={
+          <Route path='/patientsCard' element={
             <div>
               <PatientCard />
+            </div>
+          }/>
+          <Route path='/doctorsTalons' element={
+            <div>
+              <DoctorsTalons user={user}/>
             </div>
           }/>
           <Route path='/logout' element={<Logout setUser={setUser}/>}></Route>

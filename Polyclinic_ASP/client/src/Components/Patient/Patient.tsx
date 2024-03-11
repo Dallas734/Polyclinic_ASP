@@ -216,7 +216,7 @@ const Patient: React.FC<PropsType> = () => {
     ]
     return (
         <React.Fragment>
-            {<ModalPatient editingPatient={editingPatient} updatePatient={updatePatient} addPatient={addDoctor} method="POST" modalIsShow={modalIsShow} showModal={showModal}/>}
+            {<ModalPatient editingPatient={editingPatient} updatePatient={updatePatient} addPatient={addDoctor} modalIsShow={modalIsShow} showModal={showModal}/>}
             <div>
             <h3>Список пациентов</h3>
             <Button key="addBtn" type="primary" onClick={() => handleAddBtn(true)}>Добавить</Button>

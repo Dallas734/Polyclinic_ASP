@@ -71,7 +71,9 @@ const PatientCard: React.FC<PropsType> = () => {
             filters: createFilterArray(specializations), onFilter: (value, record) => record.specialization ? record.specialization.id === value : false},
         {title: 'Дата', dataIndex: 'dateT', key: 'dateT'},
         {title: 'Время', dataIndex: 'timeT',  key:  'timeT'},
-        {title: 'Диагноз', dataIndex: ['diagnosis', 'name'], key: 'diagnosis'}
+        {title: 'Диагноз', dataIndex: ['diagnosis', 'name'], key: 'diagnosis'},
+        {title: 'Процедура',  dataIndex: ['procedure', 'name'], key: 'procedure'},
+        {title: 'Рецепт', dataIndex: 'recipe', key: 'recipe'}
     ]
 
     return (

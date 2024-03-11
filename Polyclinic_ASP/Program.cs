@@ -56,12 +56,26 @@ builder.Services.AddCors((options) =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.Cookie.Name = "PolyclinicCookie";
+    options.LoginPath = "/";
+    options.AccessDeniedPath = "/";
+    options.LogoutPath = "/";
+    options.Events.OnRedirectToLogin = context =>
+    {
+        context.Response.StatusCode = 401;
+        return Task.CompletedTask;
+    };
+});
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
     var PolyclinicKurContext = scope.ServiceProvider.GetRequiredService<PolyclinicKurContext>();
     await PolyclinicContextSeed.SeedAsync(PolyclinicKurContext);
+    await IdentitySeed.CreateUserRoles(scope.ServiceProvider);
 }
 
     // Configure the HTTP request pipeline.

@@ -7,12 +7,13 @@ interface PropsType {
     editingPatient: PatientObj | undefined
     addPatient: (doctor: PatientObj) => void,
     updatePatient: (doctor: PatientObj) => void,
-    method: string,
     modalIsShow: boolean,
     showModal: (value: boolean) => void
 }
 
-const ModalDoctor: React.FC<PropsType> = ({editingPatient, addPatient, updatePatient, method, modalIsShow, showModal}) => {
+const ModalDoctor: React.FC<PropsType> = ({editingPatient, addPatient, updatePatient, modalIsShow, showModal}) => {
+
+    const [form] = Form.useForm();
 
     const [genders, setGenders] = useState<Array<DirectoryEntity>>([]);
     const [areas, setAreas] = useState<Array<DirectoryEntity>>([]);
@@ -46,6 +47,17 @@ const ModalDoctor: React.FC<PropsType> = ({editingPatient, addPatient, updatePat
     useEffect(() => {
         if (editingPatient !== undefined && Object.keys(editingPatient).length !== 0) {
             setIsEdit(true);
+            form.setFieldsValue({
+                lastName: editingPatient.lastName,
+                firstName: editingPatient.firstName,
+                surname: editingPatient.surname,
+                selectGender: editingPatient.genderId,
+                dateOfBirth: editingPatient.dateOfBirth,
+                address: editingPatient.address,
+                selectArea: editingPatient.areaId,
+                polis: editingPatient.polis,
+                workPlace: editingPatient.workPlace
+            });
             setLastName(editingPatient.lastName);
             setFirstName(editingPatient.firstName);
             setSurname(editingPatient.surname);
@@ -58,20 +70,13 @@ const ModalDoctor: React.FC<PropsType> = ({editingPatient, addPatient, updatePat
             setGenderId(editingPatient.genderId);
         }
         return () => {
-            setLastName("");
-            setFirstName("");
-            setSurname("");
-            setDateOfBirth(new Date().toISOString().split('T')[0]);
-            setAddress("");
-            setPolis("");
-            setWorkPlace("");
-            setGenderId(1);
+            form.resetFields();
             setIsEdit(false);
         }
-    }, [editingPatient]);
+    }, [editingPatient, form]);
 
     const handleSubmit = (e: Event) => {
-        const createDoctor = async () => {
+        const createPatient = async () => {
             const patient: PatientObj = {
                 firstName,
                 lastName,
@@ -95,9 +100,8 @@ const ModalDoctor: React.FC<PropsType> = ({editingPatient, addPatient, updatePat
                 .then(data => {
                     console.log(data);
                     addPatient(data);
-                    setFirstName("");
-                    setLastName("");
-                    setSurname("");
+                    form.resetFields();
+                    setIsEdit(false);
                 }, error => console.log(error));
         }
 
@@ -126,9 +130,6 @@ const ModalDoctor: React.FC<PropsType> = ({editingPatient, addPatient, updatePat
                 .then((data) => {
                     if (response.ok) {
                         updatePatient(data);
-                        setFirstName("");
-                        setLastName("");
-                        setSurname("");
                     }
                 },
                     (error) => console.log(error)
@@ -143,7 +144,7 @@ const ModalDoctor: React.FC<PropsType> = ({editingPatient, addPatient, updatePat
             }
         }
         else 
-            createDoctor();
+            createPatient();
     }
 
     const layout = {
@@ -161,7 +162,7 @@ const ModalDoctor: React.FC<PropsType> = ({editingPatient, addPatient, updatePat
                 <Button key="closeBtn" onClick={() => showModal(false)} danger>Закрыть</Button>
             ]}
         >
-            <Form id="patientForm" onFinish={handleSubmit} {...layout}>
+            <Form id="patientForm" onFinish={handleSubmit} {...layout} form={form}>
             <Form.Item
                     name="lastName"
                     label="Фамилия"
@@ -180,7 +181,7 @@ const ModalDoctor: React.FC<PropsType> = ({editingPatient, addPatient, updatePat
                         })
                     ]}
                 >
-                    <Input key="lastName" type="text" name="lastName" placeholder="Введите Фамилию" value={lastName} onChange={(e) => setLastName(e.target.value)}/>
+                    <Input key="lastName" type="text" name="lastName" placeholder="Введите Фамилию" onChange={(e) => setLastName(e.target.value)}/>
                 </Form.Item>
                 <Form.Item
                     name="firstName"
@@ -200,7 +201,7 @@ const ModalDoctor: React.FC<PropsType> = ({editingPatient, addPatient, updatePat
                         })
                     ]}
                 >
-                    <Input key="firstName" type="text" name="firstName" placeholder="Введите Имя" value={firstName} onChange={(e) => setFirstName(e.target.value)}/>
+                    <Input key="firstName" type="text" name="firstName" placeholder="Введите Имя" onChange={(e) => setFirstName(e.target.value)}/>
                 </Form.Item>
                 <Form.Item
                     name="surname"
@@ -220,11 +221,12 @@ const ModalDoctor: React.FC<PropsType> = ({editingPatient, addPatient, updatePat
                         })
                     ]}
                 >
-                    <Input key="surname" type="text" name="surname" placeholder="Введите отчество" value={surname} onChange={(e) => setSurname(e.target.value)}/>
+                    <Input key="surname" type="text" name="surname" placeholder="Введите отчество" onChange={(e) => setSurname(e.target.value)}/>
                 </Form.Item>
                 <Form.Item
                     name="selectGender"
                     label="Пол"
+                    hasFeedback
                     rules={[
                         {
                             required: true,
@@ -232,7 +234,7 @@ const ModalDoctor: React.FC<PropsType> = ({editingPatient, addPatient, updatePat
                         }
                     ]}
                 >
-                    <Select key="selectGender" value={genderId} onChange={value => setGenderId(value)} style={{width: '50%'}}>
+                    <Select key="selectGender" onChange={value => setGenderId(value)} style={{width: '50%'}}>
                         {
                             genders.map((s, k) => {
                                 return <Select.Option value={s.id} key={k}>{s.name}</Select.Option>
@@ -243,6 +245,7 @@ const ModalDoctor: React.FC<PropsType> = ({editingPatient, addPatient, updatePat
                 <Form.Item
                     name="dateOfBirth"
                     label="Дата рождения"
+                    hasFeedback
                     rules={[
                         {
                             type: "date"
@@ -253,11 +256,12 @@ const ModalDoctor: React.FC<PropsType> = ({editingPatient, addPatient, updatePat
                         }
                     ]}
                 >
-                    <Input key="dateOfBirth" type="date" name="dateOfBirth" value={dateOfBirth} onChange={(e) => setDateOfBirth(e.target.value)}/>
+                    <Input key="dateOfBirth" type="date" name="dateOfBirth" onChange={(e) => setDateOfBirth(e.target.value)}/>
                 </Form.Item>
                 <Form.Item
                     name="address"
                     label="Адрес"
+                    hasFeedback
                     rules={[
                         {
                             required: true,
@@ -265,11 +269,12 @@ const ModalDoctor: React.FC<PropsType> = ({editingPatient, addPatient, updatePat
                         }
                     ]}
                 >
-                    <Input key="address" type="text" name="address" placeholder="Введите адрес" value={address} onChange={(e) => setAddress(e.target.value)}/>
+                    <Input key="address" type="text" name="address" placeholder="Введите адрес" onChange={(e) => setAddress(e.target.value)}/>
                 </Form.Item>
                 <Form.Item
                     name="selectArea"
                     label="Участок"
+                    hasFeedback
                     rules={[
                         {
                             required: true,
@@ -277,7 +282,7 @@ const ModalDoctor: React.FC<PropsType> = ({editingPatient, addPatient, updatePat
                         }
                     ]}
                 >
-                    <Select key="selectArea" defaultValue={0} value={areaId} onChange={value => setAreaId(value)} style={{width: '50%'}}>
+                    <Select key="selectArea" onChange={value => setAreaId(value)} style={{width: '50%'}}>
                         {areas.map((s, k) => {
                             return <Select.Option value={s.id} key={k}>{s.id}</Select.Option>
                         })}
@@ -287,6 +292,7 @@ const ModalDoctor: React.FC<PropsType> = ({editingPatient, addPatient, updatePat
                 <Form.Item
                     name="polis"
                     label="Полис"
+                    hasFeedback
                     rules={[
                         {
                             required: true,
@@ -301,11 +307,12 @@ const ModalDoctor: React.FC<PropsType> = ({editingPatient, addPatient, updatePat
                         })
                     ]}
                 >
-                    <Input key="polis" type="text" name="polis" placeholder="Введите полис" width='auto' value={polis} onChange={(e) => setPolis(e.target.value)}/>
+                    <Input key="polis" type="text" name="polis" placeholder="Введите полис" width='auto' onChange={(e) => setPolis(e.target.value)}/>
                 </Form.Item>
                 <Form.Item
                     name="workPlace"
                     label="Место работы"
+                    hasFeedback
                     rules={[
                         {
                             required: true,
@@ -313,7 +320,7 @@ const ModalDoctor: React.FC<PropsType> = ({editingPatient, addPatient, updatePat
                         }
                     ]}
                 >
-                    <Input key="workPlace" type="text" name="workPlace" placeholder="Введите место работы" value={workPlace} onChange={(e) => setWorkPlace(e.target.value)}/>
+                    <Input key="workPlace" type="text" name="workPlace" placeholder="Введите место работы" onChange={(e) => setWorkPlace(e.target.value)}/>
                 </Form.Item>   
             </Form>
         </Modal>

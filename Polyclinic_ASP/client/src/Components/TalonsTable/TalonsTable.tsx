@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import { Table, Select, Input, Button } from 'antd';
+import { Table, Select, Button, DatePicker } from 'antd';
 import DirectoryEntity from "../Entities/DirectoryEntity";
 import type { TableProps } from "antd";
 import VisitObj from "../Entities/VisitObj";
@@ -7,23 +7,16 @@ import DoctorObj from "../Entities/DoctorObj";
 import PatientObj from "../Entities/PatientObj";
 import "./TalonsTable.css";
 import { Label } from "reactstrap";
-//import {Calendar, Views, DateLocalizer, momentLocalizer} from 'react-big-calendar';
-import moment from 'moment';
+import dayjs from "dayjs";
+import moment from "moment";
+import locale from 'antd/lib/locale/ru_RU';
+import 'dayjs/locale/ru';
+import { ConfigProvider } from "antd/lib";
 import 'moment/locale/ru';
-import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 interface PropsType {
 
 }
-
-// interface TableEvent
-// {
-//     id?: number,
-//     title: string,
-//     allDay?: boolean,
-//     start: Date,
-//     end: Date
-// }
 
 const TalonsTable: React.FC<PropsType> = () => {
 
@@ -37,7 +30,7 @@ const TalonsTable: React.FC<PropsType> = () => {
     const [patientId, setPatientId] = useState<number | undefined>(undefined);
     const [talons, setTalons] = useState<Array<VisitObj>>([]);
     const [selectedTalon, setSelectedTalon] = useState<VisitObj | undefined>(undefined);
-    const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split('T')[0]);
+    const [selectedDate, setSelectedDate] = useState<dayjs.Dayjs>(dayjs(new Date()));
     const [activeIndex, setActiveIndex] = useState<number>();
     //const [tableEvents, setTableEvents] = useState<Array<TableEvent>>([]);
 
@@ -47,7 +40,6 @@ const TalonsTable: React.FC<PropsType> = () => {
     const addTalon = (visit: VisitObj) => setTalons(talons.map(o => {
         if (o.timeT === visit.timeT)
         {
-            console.log('hi');
             return visit;
         }
         return o;
@@ -100,7 +92,7 @@ const TalonsTable: React.FC<PropsType> = () => {
     }, [areaId])
 
     useEffect(() => {
-        fetch(`api/Visits/Talons?doctorId=${doctorId}&date=${selectedDate}`, {method: 'GET'})
+        fetch(`api/Visits/Talons?doctorId=${doctorId}&date=${selectedDate.format('YYYY-MM-DD')}`, {method: 'GET'})
         .then(response => response.json())
         .then((data: Array<VisitObj>) => setTalons(data));
 
@@ -121,7 +113,7 @@ const TalonsTable: React.FC<PropsType> = () => {
         const visit: VisitObj = {
             doctorId,
             patientId,
-            dateT: selectedDate,
+            dateT: selectedDate.format('YYYY-MM-DD'),
             timeT: selectedTalon?.timeT,
         }
 
@@ -154,15 +146,6 @@ const TalonsTable: React.FC<PropsType> = () => {
                 }
             }, error => console.log(error));
     }
-
-    // const messages = {
-    //     week: 'Неделя',
-    //     day: 'День',
-    //     month: 'Месяц',
-    //     today: 'Сегодня',
-    //     previous: 'Пред',
-    //     next: 'След'
-    // }
 
     return (
     <React.Fragment>
@@ -208,7 +191,9 @@ const TalonsTable: React.FC<PropsType> = () => {
                 </li>
             </ul>
         </div><br/>
-        <Input key="selectedDate" type="date" name="selectedDate" value={selectedDate} onChange={(e) => setSelectedDate(e.target.value)} style={{width: '150px'}}/><br/>              
+        <ConfigProvider locale={locale}>
+            <DatePicker minDate={dayjs(new Date())} allowClear={false} format={'DD/MM/YYYY'} key="selectedDate" name="selectedDate" value={dayjs(selectedDate)} onChange={(data) => setSelectedDate(dayjs(data))} style={{width: '150px'}}/><br/>  
+        </ConfigProvider>            
         <Table key="talonsTable" dataSource={talons} columns={columns} pagination={{ pageSize: 20}} scroll={{ y: 400}} size='small'
             rowClassName={(record, index) => (record.visitStatusId === 1 ? "red" : index === activeIndex ? "gray" : "")} bordered
             className="div1" 

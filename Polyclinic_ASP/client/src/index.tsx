@@ -3,13 +3,18 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { ConfigProvider } from 'antd';
+import locale from 'antd/locale/ru_RU';
+import 'dayjs/locale/ru';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   //<React.StrictMode>
+  <ConfigProvider locale={locale}>
     <App />
+  </ConfigProvider>
   //</React.StrictMode>
 );
 

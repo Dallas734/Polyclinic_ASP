@@ -7,12 +7,13 @@ interface PropsType {
     editingDoctor: DoctorObj | undefined
     addDoctor: (doctor: DoctorObj) => void,
     updateDoctor: (doctor: DoctorObj) => void,
-    method: string,
     modalIsShow: boolean,
     showModal: (value: boolean) => void
 }
 
-const ModalDoctor: React.FC<PropsType> = ({editingDoctor, addDoctor, updateDoctor, method, modalIsShow, showModal}) => {
+const ModalDoctor: React.FC<PropsType> = ({editingDoctor, addDoctor, updateDoctor, modalIsShow, showModal}) => {
+
+    const [form] = Form.useForm();
 
     const [specializations, setSpec] = useState<Array<DirectoryEntity>>([]);
     const [genders, setGenders] = useState<Array<DirectoryEntity>>([]);
@@ -63,29 +64,34 @@ const ModalDoctor: React.FC<PropsType> = ({editingDoctor, addDoctor, updateDocto
     useEffect(() => {
         if (editingDoctor !== undefined && Object.keys(editingDoctor).length !== 0) {
             setIsEdit(true);
+            form.setFieldsValue(
+                {
+                    lastName: editingDoctor.lastName, 
+                    firstName: editingDoctor.firstName, 
+                    surname: editingDoctor.surname,
+                    selectGender: editingDoctor.genderId,
+                    dateOfBirth: editingDoctor.dateOfBirth !== undefined? 
+                        new Date(editingDoctor.dateOfBirth).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
+                    selectSpecialization: editingDoctor.specializationId,
+                    selectCategory: editingDoctor.categoryId,
+                    selectArea: editingDoctor.areaId,
+                    selectStatus: editingDoctor.statusId
+                });
             setLastName(editingDoctor.lastName);
             setFirstName(editingDoctor.firstName);
             setSurname(editingDoctor.surname);
             setDateOfBirth((editingDoctor.dateOfBirth !== undefined? 
                 new Date(editingDoctor.dateOfBirth) : new Date()).toISOString().split('T')[0]);
             setSpecializationId(editingDoctor.specializationId);
+            setCategoryId(editingDoctor.categoryId);
             setAreaId(editingDoctor.areaId);
             setStatusId(editingDoctor.statusId);
-            setCategoryId(editingDoctor.categoryId);
-            setGenderId(editingDoctor.genderId);
         }
-        return () => {
-            setLastName("");
-            setFirstName("");
-            setSurname("");
-            setDateOfBirth(new Date().toISOString().split('T')[0]);
-            setSpecializationId(1);
-            setStatusId(1);
-            setCategoryId(1);
-            setGenderId(1);
+        return () => {  
+            form.resetFields();
             setIsEdit(false);
         }
-    }, [editingDoctor]);
+    }, [editingDoctor, form]);
     
     const handleSubmit = (e: Event) => {
         //e.preventDefault();
@@ -112,11 +118,9 @@ const ModalDoctor: React.FC<PropsType> = ({editingDoctor, addDoctor, updateDocto
             return await fetch(`api/Doctors`, requestOptions)
                 .then(response => response.json())
                 .then(data => {
-                    console.log(data);
                     addDoctor(data);
-                    setFirstName("");
-                    setLastName("");
-                    setSurname("");
+                    form.resetFields();
+                    setIsEdit(false);
                 }, error => console.log(error));
         }
 
@@ -145,9 +149,6 @@ const ModalDoctor: React.FC<PropsType> = ({editingDoctor, addDoctor, updateDocto
                 .then((data) => {
                     if (response.ok) {
                         updateDoctor(data);
-                        setFirstName("");
-                        setLastName("");
-                        setSurname("");
                     }
                 },
                     (error) => console.log(error)
@@ -180,7 +181,7 @@ const ModalDoctor: React.FC<PropsType> = ({editingDoctor, addDoctor, updateDocto
                 <Button key="closeBtn" onClick={() => showModal(false)} danger>Закрыть</Button>
             ]}
         >
-            <Form id="doctorForm" onFinish={handleSubmit} {...layout}>
+            <Form id="doctorForm" onFinish={handleSubmit} {...layout} form={form}>
                 <Form.Item
                     name="lastName"
                     label="Фамилия"
@@ -205,6 +206,7 @@ const ModalDoctor: React.FC<PropsType> = ({editingDoctor, addDoctor, updateDocto
                     name="firstName"
                     label="Имя"
                     hasFeedback
+                    initialValue={firstName}
                     rules={[
                         {
                             required: true,
@@ -219,7 +221,7 @@ const ModalDoctor: React.FC<PropsType> = ({editingDoctor, addDoctor, updateDocto
                         })
                     ]}
                 >
-                    <Input key="firstName" type="text" name="firstName" placeholder="Введите Имя" value={firstName} onChange={(e) => setFirstName(e.target.value)}/>
+                    <Input key="firstName" type="text" name="firstName" placeholder="Введите Имя" onChange={(e) => setFirstName(e.target.value)}/>
                 </Form.Item>
                 <Form.Item
                     name="surname"
@@ -239,11 +241,12 @@ const ModalDoctor: React.FC<PropsType> = ({editingDoctor, addDoctor, updateDocto
                         })
                     ]}
                 >
-                    <Input key="surname" type="text" name="surname" placeholder="Введите отчество" value={surname} onChange={(e) => setSurname(e.target.value)}/>
+                    <Input key="surname" type="text" name="surname" placeholder="Введите отчество" onChange={(e) => setSurname(e.target.value)}/>
                 </Form.Item>
                 <Form.Item
                     name="selectGender"
                     label="Пол"
+                    hasFeedback
                     rules={[
                         {
                             required: true,
@@ -251,7 +254,7 @@ const ModalDoctor: React.FC<PropsType> = ({editingDoctor, addDoctor, updateDocto
                         }
                     ]}
                 >
-                    <Select key="selectGender" value={genderId} onChange={value => setGenderId(value)} style={{width: '50%'}}>
+                    <Select key="selectGender" onChange={value => setGenderId(value)} style={{width: '50%'}}>
                         {
                             genders.map((s, k) => {
                                 return <Select.Option value={s.id} key={k}>{s.name}</Select.Option>
@@ -262,6 +265,7 @@ const ModalDoctor: React.FC<PropsType> = ({editingDoctor, addDoctor, updateDocto
                 <Form.Item
                     name="dateOfBirth"
                     label="Дата рождения"
+                    hasFeedback
                     rules={[
                         {
                             type: "date"
@@ -272,11 +276,12 @@ const ModalDoctor: React.FC<PropsType> = ({editingDoctor, addDoctor, updateDocto
                         }
                     ]}
                 >
-                    <Input key="dateOfBirth" type="date" name="dateOfBirth" value={dateOfBirth} onChange={(e) => setDateOfBirth(e.target.value)}/>
+                    <Input key="dateOfBirth" type="date" name="dateOfBirth" onChange={(e) => setDateOfBirth(e.target.value)}/>
                 </Form.Item>
                 <Form.Item
                     name="selectSpecialization"
                     label="Специализация"
+                    hasFeedback
                     rules={[
                         {
                             required: true,
@@ -284,7 +289,7 @@ const ModalDoctor: React.FC<PropsType> = ({editingDoctor, addDoctor, updateDocto
                         }
                     ]}
                 >
-                    <Select key="selectSpecialization" value={specializationId} onChange={value => setSpecializationId(value)} style={{width: '50%'}}>
+                    <Select key="selectSpecialization" onChange={value => setSpecializationId(value)} style={{width: '50%'}}>
                         {specializations.map((s, k) => {
                             return <Select.Option value={s.id} key={k}>{s.name}</Select.Option>
                         })}
@@ -293,6 +298,7 @@ const ModalDoctor: React.FC<PropsType> = ({editingDoctor, addDoctor, updateDocto
                 <Form.Item
                     name="selectCategory"
                     label="Категория"
+                    hasFeedback
                     rules={[
                         {
                             required: true,
@@ -300,7 +306,7 @@ const ModalDoctor: React.FC<PropsType> = ({editingDoctor, addDoctor, updateDocto
                         }
                     ]}
                 >
-                    <Select key="selectCategory" value={categoryId} onChange={value => setCategoryId(value)} style={{width: '50%'}}>
+                    <Select key="selectCategory" onChange={value => setCategoryId(value)} style={{width: '50%'}}>
                         {categories.map((s, k) => {
                             return <Select.Option value={s.id} key={k}>{s.name}</Select.Option>
                         })}
@@ -309,6 +315,7 @@ const ModalDoctor: React.FC<PropsType> = ({editingDoctor, addDoctor, updateDocto
                 <Form.Item
                     name="selectArea"
                     label="Участок"
+                    hasFeedback
                     rules={[
                         {
                             required: true,
@@ -316,7 +323,7 @@ const ModalDoctor: React.FC<PropsType> = ({editingDoctor, addDoctor, updateDocto
                         }
                     ]}
                 >
-                    <Select key="selectArea" defaultValue={0} value={areaId} onChange={value => setAreaId(value)} style={{width: '50%'}}>
+                    <Select key="selectArea" onChange={value => setAreaId(value)} style={{width: '50%'}}>
                         {areas.map((s, k) => {
                             return <Select.Option value={s.id} key={k}>{s.id}</Select.Option>
                         })}
@@ -326,6 +333,7 @@ const ModalDoctor: React.FC<PropsType> = ({editingDoctor, addDoctor, updateDocto
                 <Form.Item
                     name="selectStatus"
                     label="Статус"
+                    hasFeedback
                     rules={[
                         {
                             required: true,
@@ -333,7 +341,7 @@ const ModalDoctor: React.FC<PropsType> = ({editingDoctor, addDoctor, updateDocto
                         }
                     ]}
                 >
-                    <Select key="selectStatus" value={statusId} onChange={value => setStatusId(value)} style={{width: '50%'}}>
+                    <Select key="selectStatus" onChange={value => setStatusId(value)} style={{width: '50%'}}>
                         {statuses.map((s, k) => {
                             return <Select.Option value={s.id} key={k}>{s.name}</Select.Option>
                         })}

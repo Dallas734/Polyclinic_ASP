@@ -99,6 +99,8 @@ const Doctor: React.FC<PropsType> = () => {
 
     const handleEditBtn = (obj: DoctorObj) => {
         setEditingDoctor(obj);
+        //console.log(obj);
+        //console.log(editingDoctor);
         setShowModal(true);
     }
 
@@ -180,7 +182,7 @@ const Doctor: React.FC<PropsType> = () => {
     ]
     return (
         <React.Fragment>
-            <ModalDoctor editingDoctor={editingDoctor} updateDoctor={updateDoctor} addDoctor={addDoctor} method="POST" modalIsShow={modalIsShow} showModal={showModal}/>
+            <ModalDoctor editingDoctor={editingDoctor} updateDoctor={updateDoctor} addDoctor={addDoctor} modalIsShow={modalIsShow} showModal={showModal}/>
             <div>
             <h3>Список врачей</h3>
             <Button key="addBtn" type="primary" onClick={() => handleAddBtn(true)}>Добавить</Button>
