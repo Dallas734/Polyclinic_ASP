@@ -9,6 +9,6 @@ namespace Application.Interfaces.Services
 {
     public interface ISheduleService
     {
-        List<SheduleDTO> GetSheduleOnDoctor(DoctorDTO doctor);
+        List<SheduleDTO> GetSheduleOnDoctor(int doctorId);
     }
 }

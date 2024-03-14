@@ -297,8 +297,8 @@ namespace BLL
         public void UpdateShedule(SheduleDTO shedule)
         {
             Shedule s = dbRepos.Shedules.GetItem(shedule.Id);
-            s.BeginTime = shedule.newBeginTime;
-            s.EndTime = shedule.newEndTime;
+            s.BeginTime = shedule.BeginTime;
+            s.EndTime = shedule.EndTime;
             
             dbRepos.Shedules.Update(s);
             //dbRepos.Save();

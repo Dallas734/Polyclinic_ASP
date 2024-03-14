@@ -5,8 +5,16 @@ import { Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.css';
 import UserObj from "../Entities/UserObj";
 import { Layout as LayoutAntd, Menu } from 'antd';
+import './Layout.css';
 
 const { Header, Content, Footer } = LayoutAntd;
+
+const defaultItems = [
+    {
+        label: <NavLink tag={Link} to="/">МИС</NavLink>,
+        key: "1",
+    }
+]
 
 const registratorItems = [
     {
@@ -18,12 +26,16 @@ const registratorItems = [
         key: "2",
     },
     {
-        label: <NavLink tag={Link} to="/patients">Пациенты</NavLink>,
+        label: <NavLink tag={Link} to="/shedule">Расписание</NavLink>,
         key: "3",
     },
     {
-        label: <NavLink tag={Link} to="/addVisits">Записать пациента</NavLink>,
+        label: <NavLink tag={Link} to="/patients">Пациенты</NavLink>,
         key: "4",
+    },
+    {
+        label: <NavLink tag={Link} to="/addVisits">Записать пациента</NavLink>,
+        key: "5",
     }
 ];
 
@@ -48,9 +60,9 @@ interface PropsType {
 
 const Layout: React.FC<PropsType> = ({ user }) => {
     return (
-    <LayoutAntd>
+    <LayoutAntd className="layout">
         <Header style={{display: "flex", position: "sticky", top: 0, zIndex: 1, width: "100%"}}>
-        <Menu theme="dark" mode="horizontal" items={user?.roles.includes("Registrator") ? registratorItems : user?.roles.includes("Doctor") ? doctorItems : [   ]}></Menu>
+        <Menu theme="dark" mode="horizontal" style={{minWidth: '800px'}} items={user?.roles.includes("Registrator") ? registratorItems : user?.roles.includes("Doctor") ? doctorItems : defaultItems}></Menu>
             <div style={{marginLeft: 'auto'}}>
                 <UncontrolledDropdown>
                     <DropdownToggle caret color="dark" right>

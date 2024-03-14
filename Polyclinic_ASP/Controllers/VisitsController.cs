@@ -24,6 +24,7 @@ namespace Polyclinic_ASP.Controllers
 
         // GET: api/<VisitController>
         [HttpGet]
+        [Authorize(Roles = "Registrator, Doctor")]
         public async Task<ActionResult<IEnumerable<VisitDTO>>> GetVisits()
         {
             try

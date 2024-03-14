@@ -24,7 +24,8 @@ namespace Infrastructure.Repositories
         }
         public IEnumerable<Shedule> GetAll()
         {
-            return dbContext.Shedules;
+            return dbContext.Shedules
+                .Include(s => s.Day);
         }
         public Shedule GetItem(int id)
         {

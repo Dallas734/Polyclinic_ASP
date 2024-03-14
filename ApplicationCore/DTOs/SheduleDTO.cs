@@ -13,26 +13,20 @@ namespace Application.DTOs
         public SheduleDTO(Shedule s)
         {
             Id = s.Id;
-            DayId = s.DayId;
+            Day = new DayDTO(s.Day);
             DoctorId = s.DoctorId;
             BeginTime = s.BeginTime;
             EndTime = s.EndTime;
         }
         public int Id { get; set; }
 
-        public int DayId { get; set; }
-
-        public string DayName { get; set; }
+        public DayDTO Day { get; set; }
 
         public int DoctorId { get; set; }
 
         public TimeOnly? BeginTime { get; set; }
 
         public TimeOnly? EndTime { get; set; }
-
-        public TimeOnly? newBeginTime { get; set; }
-
-        public TimeOnly? newEndTime { get; set; }
 
     }
 }

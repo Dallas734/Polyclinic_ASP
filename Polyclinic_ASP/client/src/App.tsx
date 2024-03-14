@@ -12,6 +12,7 @@ import { useState, useEffect } from 'react';
 import UserObj from './Components/Entities/UserObj';
 import Logout from './Components/Auth/Logout';
 import PatientCard from './Components/Patient/PatientCard';
+import Shedule from './Components/Shedule/Shedule';
 
 interface ResponseModel {
   message: string,
@@ -74,6 +75,11 @@ function App() {
           <Route path='/doctorsTalons' element={
             <div>
               <DoctorsTalons user={user}/>
+            </div>
+          }/>
+          <Route path='/shedule' element={
+            <div>
+              <Shedule />
             </div>
           }/>
           <Route path='/logout' element={<Logout setUser={setUser}/>}></Route>
