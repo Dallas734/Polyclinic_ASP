@@ -12,6 +12,7 @@ import locale from 'antd/locale/ru_RU';
 import dayjs from "dayjs";
 import 'dayjs/locale/ru';
 import 'moment/locale/ru';
+import { notification } from "antd";
 
 interface PropsType {
     user: UserObj | null
@@ -95,6 +96,11 @@ const DoctorsTalons: React.FC<PropsType> = ({user}) => {
                             .then((data: Array<VisitObj>) => setTalons(data));
                         }
                         getTalons();
+                        notification.success({
+                            message: "Запись завершена",
+                            placement: 'topRight',
+                            duration: 2
+                        });
                     };
                 }, error => console.log(error));
         
