@@ -6,6 +6,7 @@ import type { TableProps } from "antd";
 import { SearchOutlined } from "@ant-design/icons"; 
 import { ColumnFilterItem } from "antd/es/table/interface";
 import DirectoryEntity from "../Entities/DirectoryEntity";
+import { notification } from "antd";
 
 interface PropsType {
 
@@ -83,6 +84,11 @@ const Doctor: React.FC<PropsType> = () => {
             .then(response => {
                 if (response.ok) 
                 {
+                    notification.success({
+                        message: "Удаление завершилось удачно",
+                        placement: 'topRight',
+                        duration: 2
+                    });
                     removeDoctor(id);
                 }
             }, error => console.log(error));

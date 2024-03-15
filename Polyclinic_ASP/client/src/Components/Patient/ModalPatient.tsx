@@ -2,6 +2,7 @@ import React, {useState, useEffect} from "react";
 import PatientObj from "../Entities/PatientObj";
 import {Input, Select, Modal, Button, Form} from "antd";
 import DirectoryEntity from "../Entities/DirectoryEntity";
+import { notification } from "antd";
 
 interface PropsType {
     editingPatient: PatientObj | undefined
@@ -98,7 +99,11 @@ const ModalDoctor: React.FC<PropsType> = ({editingPatient, addPatient, updatePat
             return await fetch(`api/Patients`, requestOptions)
                 .then(response => response.json())
                 .then(data => {
-                    console.log(data);
+                    notification.success({
+                        message: "Добавление завершилось удачно",
+                        placement: 'topRight',
+                        duration: 2
+                    });
                     addPatient(data);
                     form.resetFields();
                     setIsEdit(false);
@@ -129,6 +134,11 @@ const ModalDoctor: React.FC<PropsType> = ({editingPatient, addPatient, updatePat
                 await response.json()
                 .then((data) => {
                     if (response.ok) {
+                        notification.success({
+                            message: "Обновление завершилось удачно",
+                            placement: 'topRight',
+                            duration: 2
+                        });
                         updatePatient(data);
                     }
                 },

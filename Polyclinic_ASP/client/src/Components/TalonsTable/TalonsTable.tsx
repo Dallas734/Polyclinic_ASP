@@ -13,6 +13,7 @@ import locale from 'antd/lib/locale/ru_RU';
 import 'dayjs/locale/ru';
 import { ConfigProvider } from "antd/lib";
 import 'moment/locale/ru';
+import { notification } from "antd";
 
 interface PropsType {
 
@@ -128,6 +129,11 @@ const TalonsTable: React.FC<PropsType> = () => {
                 .then(data => {
                     setSelectedTalon(data);
                     addTalon(data);
+                    notification.success({
+                        message: "Запись добавлена",
+                        placement: 'topRight',
+                        duration: 2
+                    });
                 }, error => console.log(error));
     }
 
@@ -142,6 +148,11 @@ const TalonsTable: React.FC<PropsType> = () => {
             .then(response => {
                 if (response.ok) 
                 {
+                    notification.success({
+                        message: "Запись удалена",
+                        placement: 'topRight',
+                        duration: 2
+                    });
                     removeTalon(selectedTalon?.id);
                 }
             }, error => console.log(error));

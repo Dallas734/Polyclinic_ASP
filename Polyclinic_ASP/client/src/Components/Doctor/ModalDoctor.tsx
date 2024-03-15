@@ -2,6 +2,7 @@ import React, {useState, useEffect} from "react";
 import DoctorObj from "../Entities/DoctorObj";
 import {Input, Select, Modal, Button, Form} from "antd";
 import DirectoryEntity from "../Entities/DirectoryEntity";
+import { notification } from "antd";
 
 interface PropsType {
     editingDoctor: DoctorObj | undefined
@@ -118,6 +119,11 @@ const ModalDoctor: React.FC<PropsType> = ({editingDoctor, addDoctor, updateDocto
             return await fetch(`api/Doctors`, requestOptions)
                 .then(response => response.json())
                 .then(data => {
+                    notification.success({
+                        message: "Добаление завершилось удачно",
+                        placement: 'topRight',
+                        duration: 2
+                    });
                     addDoctor(data);
                     form.resetFields();
                     setIsEdit(false);
@@ -148,6 +154,11 @@ const ModalDoctor: React.FC<PropsType> = ({editingDoctor, addDoctor, updateDocto
                 await response.json()
                 .then((data) => {
                     if (response.ok) {
+                        notification.success({
+                            message: "Обновление завершилось удачно",
+                            placement: 'topRight',
+                            duration: 2
+                        });
                         updateDoctor(data);
                     }
                 },

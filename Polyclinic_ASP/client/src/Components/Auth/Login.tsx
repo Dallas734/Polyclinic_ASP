@@ -4,6 +4,7 @@ import { Input, Button, Form, Checkbox} from "antd";
 import { Link } from "react-router-dom";
 import LoginModel from "../Entities/LoginModel";
 import UserObj from "../Entities/UserObj";
+import { notification } from "antd";
 
 interface ResponseModel {
     message: string,
@@ -42,23 +43,36 @@ const Login : React.FC<PropsType> = ({ setUser }) => {
             // handle success or error from the server
             if (response.ok) {
                 setMessage(["Вход завершился удачно"]);
-                // Переход куда-то
+                notification.success({
+                    message: "Вход завершился удачно",
+                    placement: 'topRight',
+                    duration: 2
+                });
+                // Переход на главную страницу
                 navigate("/");
                 //window.location.href = '/';
+            }
+            else
+            {
+                notification.error({
+                    message: "Вход завершился неудачно",
+                    placement: 'topRight',
+                    duration: 2
+                });
             }
             return response.json();
         })
         .then((data : ResponseModel) => {
-            if (data.responseUser === null)
+            console.log(data.responseUser);
+            if (data.responseUser === undefined)
             {
-                console.log(data.message);
-                setMessage(["Вход завершился неудачно"].concat(data.message));
+                console.log(data.responseUser);
+                setMessage([data.message]);
             }
             else
             {
-                //console.log(data.message);
                 setUser(data.responseUser);
-                setMessage([...message, data.message]);
+                setMessage([data.message]);
             }
         })
         .catch((error) => {

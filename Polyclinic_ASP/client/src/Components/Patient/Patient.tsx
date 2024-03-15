@@ -6,6 +6,7 @@ import ModalPatient from "./ModalPatient";
 import DirectoryEntity from "../Entities/DirectoryEntity";
 import { ColumnFilterItem } from "antd/es/table/interface";
 import { SearchOutlined } from "@ant-design/icons"; 
+import { notification } from "antd";
 
 interface PropsType {
 
@@ -67,6 +68,11 @@ const Patient: React.FC<PropsType> = () => {
             .then(response => {
                 if (response.ok) 
                 {
+                    notification.success({
+                        message: "Удаление завершилось удачно",
+                        placement: 'topRight',
+                        duration: 2
+                    });
                     removePatient(id);
                 }
             }, error => console.log(error));

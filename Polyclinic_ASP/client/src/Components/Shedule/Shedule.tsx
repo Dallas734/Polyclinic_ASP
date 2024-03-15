@@ -7,6 +7,7 @@ import SheduleObj from '../Entities/SheduleObj';
 import dayjs from "dayjs";
 import axios from 'axios';
 import './Shedule.css';
+import { notification } from 'antd';
 
 interface PropsType
 {
@@ -46,15 +47,19 @@ const Shedule: React.FC<PropsType> = () => {
     }, [doctorId])
 
     const handleSubmitSheduleBtn = async () => {
-        const requestOptions = {
-            method: 'PUT',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(shedules)
-        }
-
-        console.log(requestOptions);
-        console.log(shedules);
+        // const requestOptions = {
+        //     method: 'PUT',
+        //     headers: {'Content-Type': 'application/json'},
+        //     body: JSON.stringify(shedules)
+        // }
+        
         await axios.put(`api/shedules`, shedules);
+
+        notification.success({
+            message: "Обновление завершилось удачно",
+            placement: 'topRight',
+            duration: 2
+        });
 
         await fetch(`api/doctors/byAreaAndSpec?areaId=${areaId}&specId=${specId}`, {method: 'GET'})
         .then(response => response.json())

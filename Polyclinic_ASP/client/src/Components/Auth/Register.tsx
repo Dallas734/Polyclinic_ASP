@@ -3,6 +3,7 @@ import { Input, Button, Form, Radio } from "antd";
 import { Link } from "react-router-dom";
 import RegModel from "../Entities/RegModel";
 import "./ContainerStyle.css";
+import { notification } from "antd";
 
 interface responseModel {
     message: string,
@@ -50,7 +51,21 @@ const Register: React.FC<PropsType> = () => {
         })
         .then((response) => {
             if (response.ok)
-                setError(["Регистрация прошла успешно."]);
+            {
+                notification.success({
+                    message: "Регистрация завершилась удачно",
+                    placement: 'topRight',
+                    duration: 2
+                });
+            }
+            else 
+            {
+                notification.error({
+                    message: "Регистрация завершилась неудачно",
+                    placement: 'topRight',
+                    duration: 2
+                });
+            }
             return response.json();
         })
         .then((data : responseModel) => {
@@ -61,7 +76,7 @@ const Register: React.FC<PropsType> = () => {
             }
             else 
             {
-                setError([...error, data.message]);
+                setError([data.message]);
             }
         })
         .catch((error) => {
