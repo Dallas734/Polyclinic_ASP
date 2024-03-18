@@ -8,6 +8,7 @@ using Infrastructure.Repositories;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 using System.Text.Json.Serialization;
 using WebAPI.Data;
 
@@ -57,6 +58,14 @@ builder.Services.AddCors((options) =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Information()
+    .WriteTo.Console()
+    .WriteTo.File("logs/Log-.txt", rollingInterval: RollingInterval.Day)
+    .CreateLogger();
+
+builder.Host.UseSerilog();
+
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.Cookie.Name = "PolyclinicCookie";
@@ -87,15 +96,7 @@ using (var scope = app.Services.CreateScope())
     }
 
 app.UseHttpsRedirection();
-
-/*app.MapIdentityApi<User>();
-
-app.MapPost("/logout", async (SignInManager<User> signInManager) =>
-{
-    await signInManager.SignOutAsync();
-    return Results.Ok();
-
-}).RequireAuthorization();*/
+app.UseSerilogRequestLogging();
 
 app.UseAuthentication();
 app.UseAuthorization();
