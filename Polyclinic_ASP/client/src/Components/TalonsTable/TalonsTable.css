@@ -1,35 +1,35 @@
 ul {
-    margin: 0;
-    padding: 4px;
+  margin: 0;
+  padding: 4px;
 }
 li {
-    display: inline;
-    margin-right: 5px;
-    padding: 3px;
+  display: inline;
+  margin-right: 5px;
+  padding: 3px;
 }
 
 .red {
-    background-color: red;
+  background-color: red;
 }
 
 .gray {
-    background-color: gray;
+  background-color: gray;
 }
 
 .div1 {
-    float: left;
-    width: 65%;
+  float: left;
+  width: 65%;
 }
 
 .div2 {
-    float: left;
-    position: relative;
-    margin: 1%;
-    border: 1px solid green;
-    width: 30%;
-    border-radius: 10px;
+  float: left;
+  position: relative;
+  margin: 1%;
+  border: 1px solid green;
+  width: 30%;
+  border-radius: 10px;
 }
 
 .button {
-    margin-left: 5%;
+  margin-left: 5%;
 }

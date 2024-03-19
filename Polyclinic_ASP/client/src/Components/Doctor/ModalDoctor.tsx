@@ -3,6 +3,7 @@ import DoctorObj from "../Entities/DoctorObj";
 import { Input, Select, Modal, Button, Form } from "antd";
 import DirectoryEntity from "../Entities/DirectoryEntity";
 import { notification } from "antd";
+import { useErrorBoundary } from "react-error-boundary";
 
 interface PropsType {
   editingDoctor: DoctorObj | undefined;
@@ -41,32 +42,37 @@ const ModalDoctor: React.FC<PropsType> = ({
 
   const [isEdit, setIsEdit] = useState<boolean>(false);
 
-  //const [show, setShow] = React.useState<boolean>(false);
+  const { showBoundary } = useErrorBoundary();
 
   useEffect(() => {
     fetch("api/Specializations", { method: "GET" })
       .then((response) => response.json())
-      .then((data: Array<DirectoryEntity>) => setSpec(data));
+      .then((data: Array<DirectoryEntity>) => setSpec(data))
+      .catch((error) => showBoundary(error));
 
     fetch("api/Genders", { method: "GET" })
       .then((response) => response.json())
-      .then((data: Array<DirectoryEntity>) => setGenders(data));
+      .then((data: Array<DirectoryEntity>) => setGenders(data))
+      .catch((error) => showBoundary(error));
 
     fetch("api/Categories", { method: "GET" })
       .then((response) => response.json())
-      .then((data: Array<DirectoryEntity>) => setCategories(data));
+      .then((data: Array<DirectoryEntity>) => setCategories(data))
+      .catch((error) => showBoundary(error));
 
     fetch("api/Areas", { method: "GET" })
       .then((response) => response.json())
       .then((data: Array<DirectoryEntity>) => {
         setAreas(data);
         setAreaId(data[0].id);
-      });
+      })
+      .catch((error) => showBoundary(error));
 
     fetch("api/Statuses", { method: "GET" })
       .then((response) => response.json())
-      .then((data: Array<DirectoryEntity>) => setStatuses(data));
-  }, []);
+      .then((data: Array<DirectoryEntity>) => setStatuses(data))
+      .catch((error) => showBoundary(error));
+  }, [showBoundary]);
 
   useEffect(() => {
     if (
@@ -146,7 +152,8 @@ const ModalDoctor: React.FC<PropsType> = ({
             setIsEdit(false);
           },
           (error) => console.log(error)
-        );
+        )
+        .catch((error) => showBoundary(error));
     };
 
     const editDoctor = async (id: number | undefined) => {
@@ -170,19 +177,22 @@ const ModalDoctor: React.FC<PropsType> = ({
       };
 
       const response = await fetch(`api/Doctors/${id}`, requestOptions);
-      await response.json().then(
-        (data) => {
-          if (response.ok) {
-            notification.success({
-              message: "Обновление завершилось удачно",
-              placement: "topRight",
-              duration: 2,
-            });
-            updateDoctor(data);
-          }
-        },
-        (error) => console.log(error)
-      );
+      await response
+        .json()
+        .then(
+          (data) => {
+            if (response.ok) {
+              notification.success({
+                message: "Обновление завершилось удачно",
+                placement: "topRight",
+                duration: 2,
+              });
+              updateDoctor(data);
+            }
+          },
+          (error) => console.log(error)
+        )
+        .catch((error) => showBoundary(error));
     };
 
     if (isEdit) {

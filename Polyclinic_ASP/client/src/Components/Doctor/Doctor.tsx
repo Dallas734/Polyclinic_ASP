@@ -7,6 +7,7 @@ import { SearchOutlined } from "@ant-design/icons";
 import { ColumnFilterItem } from "antd/es/table/interface";
 import DirectoryEntity from "../Entities/DirectoryEntity";
 import { notification } from "antd";
+import { useErrorBoundary } from "react-error-boundary";
 
 interface PropsType {}
 
@@ -19,6 +20,8 @@ const Doctor: React.FC<PropsType> = () => {
   const [categories, setCategories] = useState<Array<DirectoryEntity>>([]);
   const [modalIsShow, setShowModal] = useState<boolean>(false);
   const [editingDoctor, setEditingDoctor] = useState<DoctorObj>();
+
+  const { showBoundary } = useErrorBoundary();
 
   const removeDoctor = (removeId: number | undefined) =>
     setDoctors(doctors.filter(({ id }) => id !== removeId));
@@ -46,33 +49,39 @@ const Doctor: React.FC<PropsType> = () => {
             setDoctors(data);
           },
           (error) => console.log(error)
-        );
+        )
+        .catch((error) => showBoundary(error));
     };
 
     fetch("api/Areas", { method: "GET" })
       .then((response) => response.json())
       .then((data: Array<DirectoryEntity>) => {
         setAreas(data);
-      });
+      })
+      .catch((error) => showBoundary(error));
 
     fetch("api/Statuses", { method: "GET" })
       .then((response) => response.json())
-      .then((data: Array<DirectoryEntity>) => setStatuses(data));
+      .then((data: Array<DirectoryEntity>) => setStatuses(data))
+      .catch((error) => showBoundary(error));
 
     fetch("api/Genders", { method: "GET" })
       .then((response) => response.json())
-      .then((data: Array<DirectoryEntity>) => setGenders(data));
+      .then((data: Array<DirectoryEntity>) => setGenders(data))
+      .catch((error) => showBoundary(error));
 
     fetch("api/Categories", { method: "GET" })
       .then((response) => response.json())
-      .then((data: Array<DirectoryEntity>) => setCategories(data));
+      .then((data: Array<DirectoryEntity>) => setCategories(data))
+      .catch((error) => showBoundary(error));
 
     fetch("api/Specializations", { method: "GET" })
       .then((response) => response.json())
-      .then((data: Array<DirectoryEntity>) => setSpec(data));
+      .then((data: Array<DirectoryEntity>) => setSpec(data))
+      .catch((error) => showBoundary(error));
 
     getDoctors();
-  }, []);
+  }, [showBoundary]);
 
   const deleteDoctor = async (id: number | undefined) => {
     const requestOptions: RequestInit = {
@@ -81,19 +90,21 @@ const Doctor: React.FC<PropsType> = () => {
       body: undefined,
     };
 
-    return await fetch(`api/Doctors/${id}`, requestOptions).then(
-      (response) => {
-        if (response.ok) {
-          notification.success({
-            message: "Удаление завершилось удачно",
-            placement: "topRight",
-            duration: 2,
-          });
-          removeDoctor(id);
-        }
-      },
-      (error) => console.log(error)
-    );
+    return await fetch(`api/Doctors/${id}`, requestOptions)
+      .then(
+        (response) => {
+          if (response.ok) {
+            notification.success({
+              message: "Удаление завершилось удачно",
+              placement: "topRight",
+              duration: 2,
+            });
+            removeDoctor(id);
+          }
+        },
+        (error) => console.log(error)
+      )
+      .catch((error) => showBoundary(error));
   };
 
   const showModal = (value: boolean) => {
@@ -107,8 +118,6 @@ const Doctor: React.FC<PropsType> = () => {
 
   const handleEditBtn = (obj: DoctorObj) => {
     setEditingDoctor(obj);
-    //console.log(obj);
-    //console.log(editingDoctor);
     setShowModal(true);
   };
 

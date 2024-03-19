@@ -14,6 +14,7 @@ import "dayjs/locale/ru";
 import { ConfigProvider } from "antd/lib";
 import "moment/locale/ru";
 import { notification } from "antd";
+import { useErrorBoundary } from "react-error-boundary";
 
 interface PropsType {}
 
@@ -34,10 +35,10 @@ const TalonsTable: React.FC<PropsType> = () => {
     dayjs(new Date())
   );
   const [activeIndex, setActiveIndex] = useState<number>();
-  //const [tableEvents, setTableEvents] = useState<Array<TableEvent>>([]);
+
+  const { showBoundary } = useErrorBoundary();
 
   moment.locale("ru");
-  //const localaizer = momentLocalizer(moment);
 
   const addTalon = (visit: VisitObj) =>
     setTalons(
@@ -70,31 +71,35 @@ const TalonsTable: React.FC<PropsType> = () => {
   useEffect(() => {
     fetch("api/Areas", { method: "GET" })
       .then((response) => response.json())
-      .then((data: Array<DirectoryEntity>) => setAreas(data));
+      .then((data: Array<DirectoryEntity>) => setAreas(data))
+      .catch((error) => showBoundary(error));
 
     fetch("api/Specializations", { method: "GET" })
       .then((response) => response.json())
-      .then((data: Array<DirectoryEntity>) => setSpecs(data));
-  }, []);
+      .then((data: Array<DirectoryEntity>) => setSpecs(data))
+      .catch((error) => showBoundary(error));
+  }, [showBoundary]);
 
   useEffect(() => {
     setDoctorId(undefined);
     fetch(`api/Doctors/byAreaAndSpec?areaId=${areaId}&specId=${specId}`)
       .then((response) => response.json())
-      .then((data: Array<DoctorObj>) => setDoctors(data));
+      .then((data: Array<DoctorObj>) => setDoctors(data))
+      .catch((error) => showBoundary(error));
 
     setSelectedTalon(undefined);
     setActiveIndex(undefined);
-  }, [areaId, specId]);
+  }, [areaId, specId, showBoundary]);
 
   useEffect(() => {
     fetch(`api/Patients/byArea?areaId=${areaId}`)
       .then((response) => response.json())
-      .then((data: Array<PatientObj>) => setPatients(data));
+      .then((data: Array<PatientObj>) => setPatients(data))
+      .catch((error) => showBoundary(error));
 
     setSelectedTalon(undefined);
     setActiveIndex(undefined);
-  }, [areaId]);
+  }, [areaId, showBoundary]);
 
   useEffect(() => {
     fetch(
@@ -104,11 +109,12 @@ const TalonsTable: React.FC<PropsType> = () => {
       { method: "GET" }
     )
       .then((response) => response.json())
-      .then((data: Array<VisitObj>) => setTalons(data));
+      .then((data: Array<VisitObj>) => setTalons(data))
+      .catch((error) => showBoundary(error));
 
     setSelectedTalon(undefined);
     setActiveIndex(undefined);
-  }, [doctorId, selectedDate]);
+  }, [doctorId, selectedDate, showBoundary]);
 
   const columns: TableProps<VisitObj>["columns"] = [
     { title: "Время", dataIndex: "timeT", key: "timeT" },
@@ -146,7 +152,8 @@ const TalonsTable: React.FC<PropsType> = () => {
           });
         },
         (error) => console.log(error)
-      );
+      )
+      .catch((error) => showBoundary(error));
   };
 
   const deleteVisit = async () => {
@@ -156,19 +163,21 @@ const TalonsTable: React.FC<PropsType> = () => {
       body: undefined,
     };
 
-    return await fetch(`api/Visits/${selectedTalon?.id}`, requestOptions).then(
-      (response) => {
-        if (response.ok) {
-          notification.success({
-            message: "Запись удалена",
-            placement: "topRight",
-            duration: 2,
-          });
-          removeTalon(selectedTalon?.id);
-        }
-      },
-      (error) => console.log(error)
-    );
+    return await fetch(`api/Visits/${selectedTalon?.id}`, requestOptions)
+      .then(
+        (response) => {
+          if (response.ok) {
+            notification.success({
+              message: "Запись удалена",
+              placement: "topRight",
+              duration: 2,
+            });
+            removeTalon(selectedTalon?.id);
+          }
+        },
+        (error) => console.log(error)
+      )
+      .catch((error) => showBoundary(error));
   };
 
   return (

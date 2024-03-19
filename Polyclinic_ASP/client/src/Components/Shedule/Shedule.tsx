@@ -8,6 +8,7 @@ import dayjs from "dayjs";
 import axios from "axios";
 import "./Shedule.css";
 import { notification } from "antd";
+import { useErrorBoundary } from "react-error-boundary";
 
 interface PropsType {}
 
@@ -20,30 +21,37 @@ const Shedule: React.FC<PropsType> = () => {
   const [areaId, setAreaId] = useState<number>();
   const [doctorId, setDoctorId] = useState<number>();
 
+  const { showBoundary } = useErrorBoundary();
+
   useEffect(() => {
     fetch(`api/areas`, { method: "GET" })
       .then((response) => response.json())
-      .then((data) => setAreas(data));
+      .then((data) => setAreas(data))
+      .catch((error) => showBoundary(error));
 
     fetch(`api/specializations`, { method: "GET" })
       .then((response) => response.json())
-      .then((data) => setSpec(data));
-  }, []);
+      .then((data) => setSpec(data))
+      .catch((error) => showBoundary(error));
+  }, [showBoundary]);
 
   useEffect(() => {
     fetch(`api/doctors/byAreaAndSpec?areaId=${areaId}&specId=${specId}`, {
       method: "GET",
     })
       .then((response) => response.json())
-      .then((data) => setDoctors(data));
+      .then((data) => setDoctors(data))
+      .catch((error) => showBoundary(error));
+
     setDoctorId(undefined);
-  }, [areaId, specId]);
+  }, [areaId, specId, showBoundary]);
 
   useEffect(() => {
     fetch(`api/shedules?doctorId=${doctorId}`, { method: "GET" })
       .then((response) => response.json())
-      .then((data) => setShedules(data));
-  }, [doctorId]);
+      .then((data) => setShedules(data))
+      .catch((error) => showBoundary(error));
+  }, [doctorId, showBoundary]);
 
   const handleSubmitSheduleBtn = async () => {
     // const requestOptions = {
@@ -64,7 +72,8 @@ const Shedule: React.FC<PropsType> = () => {
       method: "GET",
     })
       .then((response) => response.json())
-      .then((data) => setDoctors(data));
+      .then((data) => setDoctors(data))
+      .catch((error) => showBoundary(error));
   };
   return (
     <React.Fragment>

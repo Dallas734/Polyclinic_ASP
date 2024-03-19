@@ -6,6 +6,7 @@ import PatientObj from "../Entities/PatientObj";
 import type { TableProps } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import { ColumnFilterItem } from "antd/es/table/interface";
+import { useErrorBoundary } from "react-error-boundary";
 
 interface PropsType {}
 
@@ -17,27 +18,33 @@ const PatientCard: React.FC<PropsType> = () => {
   const [specializations, setSpec] = useState<Array<DirectoryEntity>>([]);
   const [cardVisits, setCardVisits] = useState<Array<VisitObj>>([]);
 
+  const { showBoundary } = useErrorBoundary();
+
   useEffect(() => {
     fetch("api/Areas", { method: "GET" })
       .then((response) => response.json())
-      .then((data: Array<DirectoryEntity>) => setAreas(data));
+      .then((data: Array<DirectoryEntity>) => setAreas(data))
+      .catch((error) => showBoundary(error));
 
     fetch("api/Specializations", { method: "GET" })
       .then((response) => response.json())
-      .then((data: Array<DirectoryEntity>) => setSpec(data));
-  }, []);
+      .then((data: Array<DirectoryEntity>) => setSpec(data))
+      .catch((error) => showBoundary(error));
+  }, [showBoundary]);
 
   useEffect(() => {
     fetch(`api/patients/byArea?areaId=${areaId}`, { method: "GET" })
       .then((response) => response.json())
-      .then((data: Array<PatientObj>) => setPatients(data));
-  }, [areaId]);
+      .then((data: Array<PatientObj>) => setPatients(data))
+      .catch((error) => showBoundary(error));
+  }, [areaId, showBoundary]);
 
   useEffect(() => {
     fetch(`api/patients/card?patientId=${patientId}`, { method: "GET" })
       .then((response) => response.json())
-      .then((data: Array<PatientObj>) => setCardVisits(data));
-  }, [patientId]);
+      .then((data: Array<PatientObj>) => setCardVisits(data))
+      .catch((error) => showBoundary(error));
+  }, [patientId, showBoundary]);
 
   const createFilterArray = (
     elements: Array<DirectoryEntity>

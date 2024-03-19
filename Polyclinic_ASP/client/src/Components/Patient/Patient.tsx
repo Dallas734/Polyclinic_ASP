@@ -7,6 +7,7 @@ import DirectoryEntity from "../Entities/DirectoryEntity";
 import { ColumnFilterItem } from "antd/es/table/interface";
 import { SearchOutlined } from "@ant-design/icons";
 import { notification } from "antd";
+import { useErrorBoundary } from "react-error-boundary";
 
 interface PropsType {}
 
@@ -17,6 +18,8 @@ const Patient: React.FC<PropsType> = () => {
 
   const [areas, setAreas] = useState<Array<DirectoryEntity>>([]);
   const [genders, setGenders] = useState<Array<DirectoryEntity>>([]);
+
+  const { showBoundary } = useErrorBoundary();
 
   const removePatient = (removeId: number | undefined) =>
     setPatients(patients.filter(({ id }) => id !== removeId));
@@ -37,27 +40,30 @@ const Patient: React.FC<PropsType> = () => {
         body: undefined,
       };
 
-      return await fetch("api/Patients", requestOptions)
+      await fetch("api/Patients", requestOptions)
         .then((response) => response.json())
         .then(
           (data) => {
             setPatients(data);
           },
           (error) => console.log(error)
-        );
+        )
+        .catch((error) => showBoundary(error));
     };
     fetch("api/Areas", { method: "GET" })
       .then((response) => response.json())
       .then((data: Array<DirectoryEntity>) => {
         setAreas(data);
-      });
+      })
+      .catch((error) => showBoundary(error));
 
     fetch("api/Genders", { method: "GET" })
       .then((response) => response.json())
-      .then((data: Array<DirectoryEntity>) => setGenders(data));
+      .then((data: Array<DirectoryEntity>) => setGenders(data))
+      .catch((error) => showBoundary(error));
 
     getPatients();
-  }, []);
+  }, [showBoundary]);
 
   const deletePatient = async (id: number | undefined) => {
     const requestOptions: RequestInit = {
@@ -66,19 +72,21 @@ const Patient: React.FC<PropsType> = () => {
       body: undefined,
     };
 
-    return await fetch(`api/Patients/${id}`, requestOptions).then(
-      (response) => {
-        if (response.ok) {
-          notification.success({
-            message: "Удаление завершилось удачно",
-            placement: "topRight",
-            duration: 2,
-          });
-          removePatient(id);
-        }
-      },
-      (error) => console.log(error)
-    );
+    return await fetch(`api/Patients/${id}`, requestOptions)
+      .then(
+        (response) => {
+          if (response.ok) {
+            notification.success({
+              message: "Удаление завершилось удачно",
+              placement: "topRight",
+              duration: 2,
+            });
+            removePatient(id);
+          }
+        },
+        (error) => console.log(error)
+      )
+      .catch((error) => showBoundary(error));
   };
 
   const showModal = (value: boolean) => {

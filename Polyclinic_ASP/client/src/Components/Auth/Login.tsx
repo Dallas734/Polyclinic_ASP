@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import LoginModel from "../Entities/LoginModel";
 import UserObj from "../Entities/UserObj";
 import { notification } from "antd";
+import { useErrorBoundary } from "react-error-boundary";
 
 interface ResponseModel {
   message: string;
@@ -20,6 +21,8 @@ const Login: React.FC<PropsType> = ({ setUser }) => {
   const [rememberMe, setRememberme] = useState<boolean>(false);
   const [message, setMessage] = useState<Array<string>>([]);
   const navigate = useNavigate();
+
+  const { showBoundary } = useErrorBoundary();
 
   // handle submit event for the form
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -70,6 +73,7 @@ const Login: React.FC<PropsType> = ({ setUser }) => {
       })
       .catch((error) => {
         // handle network error
+        showBoundary(error);
         console.error(error);
       });
   };

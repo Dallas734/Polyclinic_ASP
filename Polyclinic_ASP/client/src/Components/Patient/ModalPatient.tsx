@@ -3,6 +3,7 @@ import PatientObj from "../Entities/PatientObj";
 import { Input, Select, Modal, Button, Form } from "antd";
 import DirectoryEntity from "../Entities/DirectoryEntity";
 import { notification } from "antd";
+import { useErrorBoundary } from "react-error-boundary";
 
 interface PropsType {
   editingPatient: PatientObj | undefined;
@@ -38,18 +39,22 @@ const ModalDoctor: React.FC<PropsType> = ({
 
   const [isEdit, setIsEdit] = useState<boolean>(false);
 
+  const { showBoundary } = useErrorBoundary();
+
   useEffect(() => {
     fetch("api/Genders", { method: "GET" })
       .then((response) => response.json())
-      .then((data: Array<DirectoryEntity>) => setGenders(data));
+      .then((data: Array<DirectoryEntity>) => setGenders(data))
+      .catch((error) => showBoundary(error));
 
     fetch("api/Areas", { method: "GET" })
       .then((response) => response.json())
       .then((data: Array<DirectoryEntity>) => {
         setAreas(data);
         setAreaId(data[0].id);
-      });
-  }, []);
+      })
+      .catch((error) => showBoundary(error));
+  }, [showBoundary]);
 
   useEffect(() => {
     if (
@@ -125,7 +130,8 @@ const ModalDoctor: React.FC<PropsType> = ({
             setIsEdit(false);
           },
           (error) => console.log(error)
-        );
+        )
+        .catch((error) => showBoundary(error));
     };
 
     const editPatient = async (id: number | undefined) => {
@@ -149,19 +155,22 @@ const ModalDoctor: React.FC<PropsType> = ({
       };
 
       const response = await fetch(`api/Patients/${id}`, requestOptions);
-      await response.json().then(
-        (data) => {
-          if (response.ok) {
-            notification.success({
-              message: "Обновление завершилось удачно",
-              placement: "topRight",
-              duration: 2,
-            });
-            updatePatient(data);
-          }
-        },
-        (error) => console.log(error)
-      );
+      await response
+        .json()
+        .then(
+          (data) => {
+            if (response.ok) {
+              notification.success({
+                message: "Обновление завершилось удачно",
+                placement: "topRight",
+                duration: 2,
+              });
+              updatePatient(data);
+            }
+          },
+          (error) => console.log(error)
+        )
+        .catch((error) => showBoundary(error));
     };
 
     if (isEdit) {

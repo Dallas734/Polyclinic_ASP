@@ -23,7 +23,7 @@ namespace Polyclinic_ASP.Controllers
 
         // GET: api/<DoctorController>
         [HttpGet]
-        [Authorize(Roles = "Registrator, Doctor")]
+        [Authorize(Roles = "Registrator")]
         public async Task<ActionResult<IEnumerable<DoctorDTO>>> GetDoctors()
         {
             try

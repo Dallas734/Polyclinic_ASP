@@ -13,6 +13,7 @@ import dayjs from "dayjs";
 import "dayjs/locale/ru";
 import "moment/locale/ru";
 import { notification } from "antd";
+import { useErrorBoundary } from "react-error-boundary";
 
 interface PropsType {
   user: UserObj | null;
@@ -40,18 +41,22 @@ const DoctorsTalons: React.FC<PropsType> = ({ user }) => {
   const [procedureId, setProcedureId] = useState<number>();
   const [recipe, setRecipe] = useState<string>("");
 
+  const { showBoundary } = useErrorBoundary();
+
   moment.locale("ru");
   dayjs.locale("ru");
 
   useEffect(() => {
     fetch("api/diagnoses", { method: "GET" })
       .then((response) => response.json())
-      .then((data: Array<DirectoryEntity>) => setDiagnoses(data));
+      .then((data: Array<DirectoryEntity>) => setDiagnoses(data))
+      .catch((error) => showBoundary(error));
 
     fetch("api/procedures", { method: "GET" })
       .then((response) => response.json())
-      .then((data: Array<DirectoryEntity>) => setProcedures(data));
-  }, []);
+      .then((data: Array<DirectoryEntity>) => setProcedures(data))
+      .catch((error) => showBoundary(error));
+  }, [showBoundary]);
 
   useEffect(() => {
     console.log(selectedDate);
@@ -62,11 +67,12 @@ const DoctorsTalons: React.FC<PropsType> = ({ user }) => {
       { method: "GET" }
     )
       .then((response) => response.json())
-      .then((data: Array<VisitObj>) => setTalons(data));
+      .then((data: Array<VisitObj>) => setTalons(data))
+      .catch((error) => showBoundary(error));
 
     setSelectedTalon(undefined);
     setActiveIndex(undefined);
-  }, [selectedDate, user]);
+  }, [selectedDate, user, showBoundary]);
 
   const onRowClick = (row: VisitObj) => {
     setSelectedTalon(row);

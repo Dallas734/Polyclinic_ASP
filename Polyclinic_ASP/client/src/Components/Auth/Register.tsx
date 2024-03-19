@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import RegModel from "../Entities/RegModel";
 import "./ContainerStyle.css";
 import { notification } from "antd";
+import { useErrorBoundary } from "react-error-boundary";
 
 interface responseModel {
   message: string;
@@ -24,7 +25,8 @@ const Register: React.FC<PropsType> = () => {
   const [error, setError] = useState<Array<string>>([]);
 
   const [componentDisabled, setDisabled] = useState<boolean>(false);
-  //const [formItemsRules, setFormItemsRules] = useState([]);
+
+  const { showBoundary } = useErrorBoundary();
 
   // handle submit event for the form
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -38,7 +40,6 @@ const Register: React.FC<PropsType> = () => {
       doctorId,
       role,
     };
-    console.log(model);
 
     fetch("api/register", {
       method: "POST",
@@ -73,6 +74,7 @@ const Register: React.FC<PropsType> = () => {
       })
       .catch((error) => {
         // Сетевая ошибка
+        showBoundary(error);
         console.error(error);
       });
   };

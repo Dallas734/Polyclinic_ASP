@@ -1,20 +1,24 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-import { ConfigProvider } from 'antd';
-import locale from 'antd/locale/ru_RU';
-import 'dayjs/locale/ru';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import { ConfigProvider } from "antd";
+import locale from "antd/locale/ru_RU";
+import "dayjs/locale/ru";
+import { ErrorBoundary } from "react-error-boundary";
+import ErrorFallback from "./Components/ErrorBoundary/ErrorFallback";
 
 const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
+  document.getElementById("root") as HTMLElement
 );
 root.render(
   //<React.StrictMode>
-  <ConfigProvider locale={locale}>
-    <App />
-  </ConfigProvider>
+  <ErrorBoundary FallbackComponent={ErrorFallback}>
+    <ConfigProvider locale={locale}>
+      <App />
+    </ConfigProvider>
+  </ErrorBoundary>
   //</React.StrictMode>
 );
 
