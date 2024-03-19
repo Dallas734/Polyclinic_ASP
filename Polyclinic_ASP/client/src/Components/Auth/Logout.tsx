@@ -19,7 +19,7 @@ const LogOff: React.FC<PropsType> = ({ setUser }) => {
         method: "POST",
       };
 
-      return await fetch("api/logoff", requestOptions)
+      await fetch("api/logoff", requestOptions)
         .then((response) => {
           if (response.status === 200) {
             setUser(null);
@@ -37,7 +37,6 @@ const LogOff: React.FC<PropsType> = ({ setUser }) => {
               placement: "topRight",
               duration: 2,
             });
-            //alert("Сначала выполните вход")
             navigate("/login");
           }
         })

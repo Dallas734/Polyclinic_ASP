@@ -66,8 +66,6 @@ const TalonsTable: React.FC<PropsType> = () => {
     );
   };
 
-  //const previousValues = useRef({areaId, specId});
-
   useEffect(() => {
     fetch("api/Areas", { method: "GET" })
       .then((response) => response.json())

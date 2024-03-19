@@ -42,18 +42,22 @@ const ModalDoctor: React.FC<PropsType> = ({
   const { showBoundary } = useErrorBoundary();
 
   useEffect(() => {
-    fetch("api/Genders", { method: "GET" })
+    const getDict = async () => {
+    await fetch("api/Genders", { method: "GET" })
       .then((response) => response.json())
       .then((data: Array<DirectoryEntity>) => setGenders(data))
       .catch((error) => showBoundary(error));
 
-    fetch("api/Areas", { method: "GET" })
+    await fetch("api/Areas", { method: "GET" })
       .then((response) => response.json())
       .then((data: Array<DirectoryEntity>) => {
         setAreas(data);
         setAreaId(data[0].id);
       })
       .catch((error) => showBoundary(error));
+    }
+
+    getDict();
   }, [showBoundary]);
 
   useEffect(() => {
@@ -116,7 +120,7 @@ const ModalDoctor: React.FC<PropsType> = ({
         body: JSON.stringify(patient),
       };
 
-      return await fetch(`api/Patients`, requestOptions)
+      await fetch(`api/Patients`, requestOptions)
         .then((response) => response.json())
         .then(
           (data) => {
@@ -155,7 +159,7 @@ const ModalDoctor: React.FC<PropsType> = ({
       };
 
       const response = await fetch(`api/Patients/${id}`, requestOptions);
-      await response
+      response
         .json()
         .then(
           (data) => {

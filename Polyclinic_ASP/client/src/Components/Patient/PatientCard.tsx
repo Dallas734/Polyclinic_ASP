@@ -21,29 +21,41 @@ const PatientCard: React.FC<PropsType> = () => {
   const { showBoundary } = useErrorBoundary();
 
   useEffect(() => {
-    fetch("api/Areas", { method: "GET" })
+    const getDict = async () => {
+    await fetch("api/Areas", { method: "GET" })
       .then((response) => response.json())
       .then((data: Array<DirectoryEntity>) => setAreas(data))
       .catch((error) => showBoundary(error));
 
-    fetch("api/Specializations", { method: "GET" })
+    await fetch("api/Specializations", { method: "GET" })
       .then((response) => response.json())
       .then((data: Array<DirectoryEntity>) => setSpec(data))
       .catch((error) => showBoundary(error));
+    }
+
+    getDict();
   }, [showBoundary]);
 
   useEffect(() => {
-    fetch(`api/patients/byArea?areaId=${areaId}`, { method: "GET" })
+    const getPatientByArea = async () => {
+    await fetch(`api/patients/byArea?areaId=${areaId}`, { method: "GET" })
       .then((response) => response.json())
       .then((data: Array<PatientObj>) => setPatients(data))
       .catch((error) => showBoundary(error));
+    }
+
+    getPatientByArea();
   }, [areaId, showBoundary]);
 
   useEffect(() => {
-    fetch(`api/patients/card?patientId=${patientId}`, { method: "GET" })
+    const getPatientCard = async () => {
+    await fetch(`api/patients/card?patientId=${patientId}`, { method: "GET" })
       .then((response) => response.json())
       .then((data: Array<PatientObj>) => setCardVisits(data))
       .catch((error) => showBoundary(error));
+    }
+
+    getPatientCard();
   }, [patientId, showBoundary]);
 
   const createFilterArray = (

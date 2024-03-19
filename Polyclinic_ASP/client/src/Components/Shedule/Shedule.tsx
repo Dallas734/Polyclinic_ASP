@@ -24,41 +24,47 @@ const Shedule: React.FC<PropsType> = () => {
   const { showBoundary } = useErrorBoundary();
 
   useEffect(() => {
-    fetch(`api/areas`, { method: "GET" })
+    const getDict = async () => {
+    await fetch(`api/areas`, { method: "GET" })
       .then((response) => response.json())
       .then((data) => setAreas(data))
       .catch((error) => showBoundary(error));
 
-    fetch(`api/specializations`, { method: "GET" })
+    await fetch(`api/specializations`, { method: "GET" })
       .then((response) => response.json())
       .then((data) => setSpec(data))
       .catch((error) => showBoundary(error));
+    }
+
+    getDict();
   }, [showBoundary]);
 
   useEffect(() => {
-    fetch(`api/doctors/byAreaAndSpec?areaId=${areaId}&specId=${specId}`, {
+    const getDoctorByAreaAndSpec = async () => {
+    await fetch(`api/doctors/byAreaAndSpec?areaId=${areaId}&specId=${specId}`, {
       method: "GET",
     })
       .then((response) => response.json())
       .then((data) => setDoctors(data))
       .catch((error) => showBoundary(error));
+  }
 
+    getDoctorByAreaAndSpec();
     setDoctorId(undefined);
   }, [areaId, specId, showBoundary]);
 
   useEffect(() => {
-    fetch(`api/shedules?doctorId=${doctorId}`, { method: "GET" })
+    const getSheduleDoctor = async () => {
+    await fetch(`api/shedules?doctorId=${doctorId}`, { method: "GET" })
       .then((response) => response.json())
       .then((data) => setShedules(data))
       .catch((error) => showBoundary(error));
+    }
+
+    getSheduleDoctor();
   }, [doctorId, showBoundary]);
 
   const handleSubmitSheduleBtn = async () => {
-    // const requestOptions = {
-    //     method: 'PUT',
-    //     headers: {'Content-Type': 'application/json'},
-    //     body: JSON.stringify(shedules)
-    // }
 
     await axios.put(`api/shedules`, shedules);
 
@@ -80,7 +86,7 @@ const Shedule: React.FC<PropsType> = () => {
       <div>
         <h3>Расписание врача</h3>
       </div>
-      <br />
+      <br/>
       <div>
         <ul>
           <li>

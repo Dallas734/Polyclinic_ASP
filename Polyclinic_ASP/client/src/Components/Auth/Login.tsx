@@ -33,49 +33,52 @@ const Login: React.FC<PropsType> = ({ setUser }) => {
       rememberMe,
     };
 
-    fetch("api/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(model),
-    })
-      .then((response) => {
-        // handle success or error from the server
-        if (response.ok) {
-          setMessage(["Вход завершился удачно"]);
-          notification.success({
-            message: "Вход завершился удачно",
-            placement: "topRight",
-            duration: 2,
-          });
-          // Переход на главную страницу
-          navigate("/");
-          //window.location.href = '/';
-        } else {
-          notification.error({
-            message: "Вход завершился неудачно",
-            placement: "topRight",
-            duration: 2,
-          });
-        }
-        return response.json();
+    const login = async () => {
+      await fetch("api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(model),
       })
-      .then((data: ResponseModel) => {
-        console.log(data.responseUser);
-        if (data.responseUser === undefined) {
+        .then((response) => {
+          // handle success or error from the server
+          if (response.ok) {
+            setMessage(["Вход завершился удачно"]);
+            notification.success({
+              message: "Вход завершился удачно",
+              placement: "topRight",
+              duration: 2,
+            });
+            // Переход на главную страницу
+            navigate("/");
+          } else {
+            notification.error({
+              message: "Вход завершился неудачно",
+              placement: "topRight",
+              duration: 2,
+            });
+          }
+          return response.json();
+        })
+        .then((data: ResponseModel) => {
           console.log(data.responseUser);
-          setMessage([data.message]);
-        } else {
-          setUser(data.responseUser);
-          setMessage([data.message]);
-        }
-      })
-      .catch((error) => {
-        // handle network error
-        showBoundary(error);
-        console.error(error);
-      });
+          if (data.responseUser === undefined) {
+            console.log(data.responseUser);
+            setMessage([data.message]);
+          } else {
+            setUser(data.responseUser);
+            setMessage([data.message]);
+          }
+        })
+        .catch((error) => {
+          // handle network error
+          showBoundary(error);
+          console.error(error);
+        });
+    };
+
+    login();
   };
 
   const layout = {

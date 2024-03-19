@@ -45,33 +45,37 @@ const ModalDoctor: React.FC<PropsType> = ({
   const { showBoundary } = useErrorBoundary();
 
   useEffect(() => {
-    fetch("api/Specializations", { method: "GET" })
-      .then((response) => response.json())
-      .then((data: Array<DirectoryEntity>) => setSpec(data))
-      .catch((error) => showBoundary(error));
+    const getDict = async () => {
+      await fetch("api/Specializations", { method: "GET" })
+        .then((response) => response.json())
+        .then((data: Array<DirectoryEntity>) => setSpec(data))
+        .catch((error) => showBoundary(error));
 
-    fetch("api/Genders", { method: "GET" })
-      .then((response) => response.json())
-      .then((data: Array<DirectoryEntity>) => setGenders(data))
-      .catch((error) => showBoundary(error));
+      await fetch("api/Genders", { method: "GET" })
+        .then((response) => response.json())
+        .then((data: Array<DirectoryEntity>) => setGenders(data))
+        .catch((error) => showBoundary(error));
 
-    fetch("api/Categories", { method: "GET" })
-      .then((response) => response.json())
-      .then((data: Array<DirectoryEntity>) => setCategories(data))
-      .catch((error) => showBoundary(error));
+      await fetch("api/Categories", { method: "GET" })
+        .then((response) => response.json())
+        .then((data: Array<DirectoryEntity>) => setCategories(data))
+        .catch((error) => showBoundary(error));
 
-    fetch("api/Areas", { method: "GET" })
-      .then((response) => response.json())
-      .then((data: Array<DirectoryEntity>) => {
-        setAreas(data);
-        setAreaId(data[0].id);
-      })
-      .catch((error) => showBoundary(error));
+      await fetch("api/Areas", { method: "GET" })
+        .then((response) => response.json())
+        .then((data: Array<DirectoryEntity>) => {
+          setAreas(data);
+          setAreaId(data[0].id);
+        })
+        .catch((error) => showBoundary(error));
 
-    fetch("api/Statuses", { method: "GET" })
-      .then((response) => response.json())
-      .then((data: Array<DirectoryEntity>) => setStatuses(data))
-      .catch((error) => showBoundary(error));
+      await fetch("api/Statuses", { method: "GET" })
+        .then((response) => response.json())
+        .then((data: Array<DirectoryEntity>) => setStatuses(data))
+        .catch((error) => showBoundary(error));
+    };
+
+    getDict();
   }, [showBoundary]);
 
   useEffect(() => {
@@ -138,7 +142,7 @@ const ModalDoctor: React.FC<PropsType> = ({
         body: JSON.stringify(doctor),
       };
 
-      return await fetch(`api/Doctors`, requestOptions)
+      await fetch(`api/Doctors`, requestOptions)
         .then((response) => response.json())
         .then(
           (data) => {

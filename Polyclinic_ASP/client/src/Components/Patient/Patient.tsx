@@ -50,18 +50,22 @@ const Patient: React.FC<PropsType> = () => {
         )
         .catch((error) => showBoundary(error));
     };
-    fetch("api/Areas", { method: "GET" })
+
+    const getDict = async () => {
+    await fetch("api/Areas", { method: "GET" })
       .then((response) => response.json())
       .then((data: Array<DirectoryEntity>) => {
         setAreas(data);
       })
       .catch((error) => showBoundary(error));
 
-    fetch("api/Genders", { method: "GET" })
+    await fetch("api/Genders", { method: "GET" })
       .then((response) => response.json())
       .then((data: Array<DirectoryEntity>) => setGenders(data))
       .catch((error) => showBoundary(error));
+    }
 
+    getDict();
     getPatients();
   }, [showBoundary]);
 
@@ -72,7 +76,7 @@ const Patient: React.FC<PropsType> = () => {
       body: undefined,
     };
 
-    return await fetch(`api/Patients/${id}`, requestOptions)
+    await fetch(`api/Patients/${id}`, requestOptions)
       .then(
         (response) => {
           if (response.ok) {
@@ -95,7 +99,7 @@ const Patient: React.FC<PropsType> = () => {
 
   const handleAddBtn = (value: boolean) => {
     setEditingPatient(undefined);
-    setShowModal(true);
+    setShowModal(value);
   };
 
   const handleEditBtn = (obj: PatientObj) => {

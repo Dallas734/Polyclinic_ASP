@@ -47,20 +47,25 @@ const DoctorsTalons: React.FC<PropsType> = ({ user }) => {
   dayjs.locale("ru");
 
   useEffect(() => {
-    fetch("api/diagnoses", { method: "GET" })
+    const getDict = async () => {
+    await fetch("api/diagnoses", { method: "GET" })
       .then((response) => response.json())
       .then((data: Array<DirectoryEntity>) => setDiagnoses(data))
       .catch((error) => showBoundary(error));
 
-    fetch("api/procedures", { method: "GET" })
+    await fetch("api/procedures", { method: "GET" })
       .then((response) => response.json())
       .then((data: Array<DirectoryEntity>) => setProcedures(data))
       .catch((error) => showBoundary(error));
+    }
+
+    getDict();
   }, [showBoundary]);
 
   useEffect(() => {
     console.log(selectedDate);
-    fetch(
+    const getTalons = async () => {
+    await fetch(
       `api/Visits/Talons?doctorId=${user?.doctorId}&date=${selectedDate.format(
         "YYYY-MM-DD"
       )}`,
@@ -69,7 +74,9 @@ const DoctorsTalons: React.FC<PropsType> = ({ user }) => {
       .then((response) => response.json())
       .then((data: Array<VisitObj>) => setTalons(data))
       .catch((error) => showBoundary(error));
+    }
 
+    getTalons();
     setSelectedTalon(undefined);
     setActiveIndex(undefined);
   }, [selectedDate, user, showBoundary]);

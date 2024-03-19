@@ -41,42 +41,46 @@ const Register: React.FC<PropsType> = () => {
       role,
     };
 
-    fetch("api/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(model),
-    })
-      .then((response) => {
-        if (response.ok) {
-          notification.success({
-            message: "Регистрация завершилась удачно",
-            placement: "topRight",
-            duration: 2,
-          });
-        } else {
-          notification.error({
-            message: "Регистрация завершилась неудачно",
-            placement: "topRight",
-            duration: 2,
-          });
-        }
-        return response.json();
+    const register = async () => {
+      await fetch("api/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(model),
       })
-      .then((data: responseModel) => {
-        if (data.error !== undefined) {
-          console.log(data.error);
-          setError(["Регистрация завершилась неудачно "].concat(data.error));
-        } else {
-          setError([data.message]);
-        }
-      })
-      .catch((error) => {
-        // Сетевая ошибка
-        showBoundary(error);
-        console.error(error);
-      });
+        .then((response) => {
+          if (response.ok) {
+            notification.success({
+              message: "Регистрация завершилась удачно",
+              placement: "topRight",
+              duration: 2,
+            });
+          } else {
+            notification.error({
+              message: "Регистрация завершилась неудачно",
+              placement: "topRight",
+              duration: 2,
+            });
+          }
+          return response.json();
+        })
+        .then((data: responseModel) => {
+          if (data.error !== undefined) {
+            console.log(data.error);
+            setError(["Регистрация завершилась неудачно "].concat(data.error));
+          } else {
+            setError([data.message]);
+          }
+        })
+        .catch((error) => {
+          // Сетевая ошибка
+          showBoundary(error);
+          console.error(error);
+        });
+    };
+
+    register();
   };
 
   const handleSelectRole = (role: string) => {
