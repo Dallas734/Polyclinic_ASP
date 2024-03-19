@@ -48,16 +48,16 @@ const DoctorsTalons: React.FC<PropsType> = ({ user }) => {
 
   useEffect(() => {
     const getDict = async () => {
-    await fetch("api/diagnoses", { method: "GET" })
-      .then((response) => response.json())
-      .then((data: Array<DirectoryEntity>) => setDiagnoses(data))
-      .catch((error) => showBoundary(error));
+      await fetch("api/diagnoses", { method: "GET" })
+        .then((response) => response.json())
+        .then((data: Array<DirectoryEntity>) => setDiagnoses(data))
+        .catch((error) => showBoundary(error));
 
-    await fetch("api/procedures", { method: "GET" })
-      .then((response) => response.json())
-      .then((data: Array<DirectoryEntity>) => setProcedures(data))
-      .catch((error) => showBoundary(error));
-    }
+      await fetch("api/procedures", { method: "GET" })
+        .then((response) => response.json())
+        .then((data: Array<DirectoryEntity>) => setProcedures(data))
+        .catch((error) => showBoundary(error));
+    };
 
     getDict();
   }, [showBoundary]);
@@ -65,16 +65,16 @@ const DoctorsTalons: React.FC<PropsType> = ({ user }) => {
   useEffect(() => {
     console.log(selectedDate);
     const getTalons = async () => {
-    await fetch(
-      `api/Visits/Talons?doctorId=${user?.doctorId}&date=${selectedDate.format(
-        "YYYY-MM-DD"
-      )}`,
-      { method: "GET" }
-    )
-      .then((response) => response.json())
-      .then((data: Array<VisitObj>) => setTalons(data))
-      .catch((error) => showBoundary(error));
-    }
+      await fetch(
+        `api/Visits/Talons?doctorId=${
+          user?.doctorId
+        }&date=${selectedDate.format("YYYY-MM-DD")}`,
+        { method: "GET" }
+      )
+        .then((response) => response.json())
+        .then((data: Array<VisitObj>) => setTalons(data))
+        .catch((error) => showBoundary(error));
+    };
 
     getTalons();
     setSelectedTalon(undefined);

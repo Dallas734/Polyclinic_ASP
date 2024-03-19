@@ -22,38 +22,38 @@ const PatientCard: React.FC<PropsType> = () => {
 
   useEffect(() => {
     const getDict = async () => {
-    await fetch("api/Areas", { method: "GET" })
-      .then((response) => response.json())
-      .then((data: Array<DirectoryEntity>) => setAreas(data))
-      .catch((error) => showBoundary(error));
+      await fetch("api/Areas", { method: "GET" })
+        .then((response) => response.json())
+        .then((data: Array<DirectoryEntity>) => setAreas(data))
+        .catch((error) => showBoundary(error));
 
-    await fetch("api/Specializations", { method: "GET" })
-      .then((response) => response.json())
-      .then((data: Array<DirectoryEntity>) => setSpec(data))
-      .catch((error) => showBoundary(error));
-    }
+      await fetch("api/Specializations", { method: "GET" })
+        .then((response) => response.json())
+        .then((data: Array<DirectoryEntity>) => setSpec(data))
+        .catch((error) => showBoundary(error));
+    };
 
     getDict();
   }, [showBoundary]);
 
   useEffect(() => {
     const getPatientByArea = async () => {
-    await fetch(`api/patients/byArea?areaId=${areaId}`, { method: "GET" })
-      .then((response) => response.json())
-      .then((data: Array<PatientObj>) => setPatients(data))
-      .catch((error) => showBoundary(error));
-    }
+      await fetch(`api/patients/byArea?areaId=${areaId}`, { method: "GET" })
+        .then((response) => response.json())
+        .then((data: Array<PatientObj>) => setPatients(data))
+        .catch((error) => showBoundary(error));
+    };
 
     getPatientByArea();
   }, [areaId, showBoundary]);
 
   useEffect(() => {
     const getPatientCard = async () => {
-    await fetch(`api/patients/card?patientId=${patientId}`, { method: "GET" })
-      .then((response) => response.json())
-      .then((data: Array<PatientObj>) => setCardVisits(data))
-      .catch((error) => showBoundary(error));
-    }
+      await fetch(`api/patients/card?patientId=${patientId}`, { method: "GET" })
+        .then((response) => response.json())
+        .then((data: Array<PatientObj>) => setCardVisits(data))
+        .catch((error) => showBoundary(error));
+    };
 
     getPatientCard();
   }, [patientId, showBoundary]);

@@ -52,18 +52,18 @@ const Patient: React.FC<PropsType> = () => {
     };
 
     const getDict = async () => {
-    await fetch("api/Areas", { method: "GET" })
-      .then((response) => response.json())
-      .then((data: Array<DirectoryEntity>) => {
-        setAreas(data);
-      })
-      .catch((error) => showBoundary(error));
+      await fetch("api/Areas", { method: "GET" })
+        .then((response) => response.json())
+        .then((data: Array<DirectoryEntity>) => {
+          setAreas(data);
+        })
+        .catch((error) => showBoundary(error));
 
-    await fetch("api/Genders", { method: "GET" })
-      .then((response) => response.json())
-      .then((data: Array<DirectoryEntity>) => setGenders(data))
-      .catch((error) => showBoundary(error));
-    }
+      await fetch("api/Genders", { method: "GET" })
+        .then((response) => response.json())
+        .then((data: Array<DirectoryEntity>) => setGenders(data))
+        .catch((error) => showBoundary(error));
+    };
 
     getDict();
     getPatients();

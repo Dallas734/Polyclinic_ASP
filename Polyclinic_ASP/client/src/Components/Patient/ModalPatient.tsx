@@ -43,19 +43,19 @@ const ModalDoctor: React.FC<PropsType> = ({
 
   useEffect(() => {
     const getDict = async () => {
-    await fetch("api/Genders", { method: "GET" })
-      .then((response) => response.json())
-      .then((data: Array<DirectoryEntity>) => setGenders(data))
-      .catch((error) => showBoundary(error));
+      await fetch("api/Genders", { method: "GET" })
+        .then((response) => response.json())
+        .then((data: Array<DirectoryEntity>) => setGenders(data))
+        .catch((error) => showBoundary(error));
 
-    await fetch("api/Areas", { method: "GET" })
-      .then((response) => response.json())
-      .then((data: Array<DirectoryEntity>) => {
-        setAreas(data);
-        setAreaId(data[0].id);
-      })
-      .catch((error) => showBoundary(error));
-    }
+      await fetch("api/Areas", { method: "GET" })
+        .then((response) => response.json())
+        .then((data: Array<DirectoryEntity>) => {
+          setAreas(data);
+          setAreaId(data[0].id);
+        })
+        .catch((error) => showBoundary(error));
+    };
 
     getDict();
   }, [showBoundary]);
