@@ -14,6 +14,7 @@ import "dayjs/locale/ru";
 import "moment/locale/ru";
 import { notification } from "antd";
 import { useErrorBoundary } from "react-error-boundary";
+import axios from "axios";
 
 interface PropsType {
   user: UserObj | null;
@@ -47,33 +48,47 @@ const DoctorsTalons: React.FC<PropsType> = ({ user }) => {
   dayjs.locale("ru");
 
   useEffect(() => {
-    const getDict = async () => {
-      await fetch("api/diagnoses", { method: "GET" })
-        .then((response) => response.json())
-        .then((data: Array<DirectoryEntity>) => setDiagnoses(data))
-        .catch((error) => showBoundary(error));
-
-      await fetch("api/procedures", { method: "GET" })
-        .then((response) => response.json())
-        .then((data: Array<DirectoryEntity>) => setProcedures(data))
-        .catch((error) => showBoundary(error));
+    const getDiagnoses = async () => {
+      try {
+        const response = await axios.get<Array<DirectoryEntity>>(
+          "api/diagnoses"
+        );
+        if (response.status === 200) setDiagnoses(response.data);
+        else console.log(response.statusText);
+      } catch (error) {
+        showBoundary(error);
+      }
     };
 
-    getDict();
+    const getProcedures = async () => {
+      try {
+        const response = await axios.get<Array<DirectoryEntity>>(
+          "api/procedures"
+        );
+        if (response.status === 200) setProcedures(response.data);
+        else console.log(response.statusText);
+      } catch (error) {
+        showBoundary(error);
+      }
+    };
+
+    getDiagnoses();
+    getProcedures();
   }, [showBoundary]);
 
   useEffect(() => {
-    console.log(selectedDate);
     const getTalons = async () => {
-      await fetch(
-        `api/Visits/Talons?doctorId=${
-          user?.doctorId
-        }&date=${selectedDate.format("YYYY-MM-DD")}`,
-        { method: "GET" }
-      )
-        .then((response) => response.json())
-        .then((data: Array<VisitObj>) => setTalons(data))
-        .catch((error) => showBoundary(error));
+      try {
+        const response = await axios.get<Array<VisitObj>>(
+          `api/Visits/Talons?doctorId=${
+            user?.doctorId
+          }&date=${selectedDate.format("YYYY-MM-DD")}`
+        );
+        if (response.status === 200) setTalons(response.data);
+        else console.log(response.statusText);
+      } catch (error) {
+        showBoundary(error);
+      }
     };
 
     getTalons();
@@ -86,55 +101,53 @@ const DoctorsTalons: React.FC<PropsType> = ({ user }) => {
   };
 
   const completeVisit = async () => {
-    const visit: VisitObj = {
-      id: selectedTalon?.id,
-      patientId: selectedTalon?.patientId,
-      diagnosis: { id: diagnosisId ? diagnosisId : 0, name: "" },
-      recipe: recipe,
-      procedure: { id: procedureId ? procedureId : 0, name: "" },
-      dateT: selectedTalon?.dateT,
-      timeT: selectedTalon?.timeT,
-      doctorId: selectedTalon?.doctorId,
-      visitStatusId: 2,
-    };
+    try {
+      const visit: VisitObj = {
+        id: selectedTalon?.id,
+        patientId: selectedTalon?.patientId,
+        diagnosis: { id: diagnosisId ? diagnosisId : 0, name: "" },
+        recipe: recipe,
+        procedure: { id: procedureId ? procedureId : 0, name: "" },
+        dateT: selectedTalon?.dateT,
+        timeT: selectedTalon?.timeT,
+        doctorId: selectedTalon?.doctorId,
+        visitStatusId: 2,
+      };
 
-    console.log(visit);
-
-    const requestOptions: RequestInit = {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(visit),
-    };
-
-    const response = await fetch(
-      `api/visits/${selectedTalon?.id}`,
-      requestOptions
-    );
-    response.json().then(
-      (data) => {
-        if (response.ok) {
-          const getTalons = async () => {
-            await fetch(
+      const response = await axios.put(
+        `api/visits/${selectedTalon?.id}`,
+        visit
+      );
+      if (response.status === 201) {
+        const getTalons = async () => {
+          axios
+            .get<Array<VisitObj>>(
               `api/Visits/Talons?doctorId=${
                 user?.doctorId
-              }&date=${selectedDate.format("YYYY-MM-DD")}`,
-              { method: "GET" }
+              }&date=${selectedDate.format("YYYY-MM-DD")}`
             )
-              .then((response) => response.json())
-              .then((data: Array<VisitObj>) => setTalons(data));
-          };
-          getTalons();
-          notification.success({
-            message: "Запись завершена",
-            placement: "topRight",
-            duration: 2,
-          });
-        }
-      },
-      (error) => console.log(error)
-    );
+            .then((response) => setTalons(response.data))
+            .catch((error) => showBoundary(error));
+        };
+        getTalons();
+        notification.success({
+          message: "Запись завершена",
+          placement: "topRight",
+          duration: 2,
+        });
+      } else {
+        console.log(response.statusText);
+        notification.error({
+          message: "Ошибка",
+          placement: "topRight",
+          duration: 2,
+        });
+      }
 
-    setSelectedTalon(undefined);
+      setSelectedTalon(undefined);
+    } catch (error) {
+      showBoundary(error);
+    }
   };
 
   return (

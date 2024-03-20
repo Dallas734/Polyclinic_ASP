@@ -281,8 +281,8 @@ namespace BLL
         public void UpdateVisit(VisitDTO visit)
         {
             Visit v = dbRepos.Visits.GetItem(visit.Id);
-            v.ProcedureId = visit.Procedure == null ? null : visit.Procedure.Id;
-            v.DiagnosisId = visit.Diagnosis == null ? null : visit.Diagnosis.Id;
+            v.ProcedureId = visit.Procedure == null || visit.Procedure.Id == 0 ? null : visit.Procedure.Id;
+            v.DiagnosisId = visit.Diagnosis == null || visit.Diagnosis.Id == 0 ? null : visit.Diagnosis.Id;
             v.Recipe = visit.Recipe;
             v.VisitStatusId = visit.VisitStatusId;
             v.DateT = visit.DateT;

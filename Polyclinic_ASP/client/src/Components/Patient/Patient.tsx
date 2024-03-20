@@ -8,6 +8,7 @@ import { ColumnFilterItem } from "antd/es/table/interface";
 import { SearchOutlined } from "@ant-design/icons";
 import { notification } from "antd";
 import { useErrorBoundary } from "react-error-boundary";
+import axios from "axios";
 
 interface PropsType {}
 
@@ -34,63 +35,61 @@ const Patient: React.FC<PropsType> = () => {
 
   useEffect(() => {
     const getPatients = async () => {
-      const requestOptions: RequestInit = {
-        method: "GET",
-        headers: undefined,
-        body: undefined,
-      };
-
-      await fetch("api/Patients", requestOptions)
-        .then((response) => response.json())
-        .then(
-          (data) => {
-            setPatients(data);
-          },
-          (error) => console.log(error)
-        )
-        .catch((error) => showBoundary(error));
+      try {
+        const response = await axios.get<Array<PatientObj>>("api/Patients");
+        if (response.status === 200) setPatients(response.data);
+        else console.log(response.statusText);
+      } catch (error) {
+        showBoundary(error);
+      }
     };
 
-    const getDict = async () => {
-      await fetch("api/Areas", { method: "GET" })
-        .then((response) => response.json())
-        .then((data: Array<DirectoryEntity>) => {
-          setAreas(data);
-        })
-        .catch((error) => showBoundary(error));
-
-      await fetch("api/Genders", { method: "GET" })
-        .then((response) => response.json())
-        .then((data: Array<DirectoryEntity>) => setGenders(data))
-        .catch((error) => showBoundary(error));
+    const getAreas = async () => {
+      try {
+        const response = await axios.get<Array<DirectoryEntity>>("api/Areas");
+        if (response.status === 200) setAreas(response.data);
+        else console.log(response.statusText);
+      } catch (error) {
+        showBoundary(error);
+      }
     };
 
-    getDict();
+    const getGenders = async () => {
+      try {
+        const response = await axios.get<Array<DirectoryEntity>>("api/Genders");
+        if (response.status === 200) setGenders(response.data);
+        else console.log(response.statusText);
+      } catch (error) {
+        showBoundary(error);
+      }
+    };
+
+    getAreas();
+    getGenders();
     getPatients();
   }, [showBoundary]);
 
   const deletePatient = async (id: number | undefined) => {
-    const requestOptions: RequestInit = {
-      method: "DELETE",
-      headers: undefined,
-      body: undefined,
-    };
-
-    await fetch(`api/Patients/${id}`, requestOptions)
-      .then(
-        (response) => {
-          if (response.ok) {
-            notification.success({
-              message: "Удаление завершилось удачно",
-              placement: "topRight",
-              duration: 2,
-            });
-            removePatient(id);
-          }
-        },
-        (error) => console.log(error)
-      )
-      .catch((error) => showBoundary(error));
+    try {
+      const response = await axios.delete(`api/Patients/${id}`);
+      if (response.status === 200) {
+        notification.success({
+          message: "Удаление завершилось удачно",
+          placement: "topRight",
+          duration: 2,
+        });
+        removePatient(id);
+      } else {
+        console.log(response.statusText);
+        notification.error({
+          message: "Ошибка",
+          placement: "topRight",
+          duration: 2,
+        });
+      }
+    } catch (error) {
+      showBoundary(error);
+    }
   };
 
   const showModal = (value: boolean) => {

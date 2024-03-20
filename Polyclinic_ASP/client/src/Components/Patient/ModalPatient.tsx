@@ -4,6 +4,7 @@ import { Input, Select, Modal, Button, Form } from "antd";
 import DirectoryEntity from "../Entities/DirectoryEntity";
 import { notification } from "antd";
 import { useErrorBoundary } from "react-error-boundary";
+import axios from "axios";
 
 interface PropsType {
   editingPatient: PatientObj | undefined;
@@ -42,22 +43,30 @@ const ModalDoctor: React.FC<PropsType> = ({
   const { showBoundary } = useErrorBoundary();
 
   useEffect(() => {
-    const getDict = async () => {
-      await fetch("api/Genders", { method: "GET" })
-        .then((response) => response.json())
-        .then((data: Array<DirectoryEntity>) => setGenders(data))
-        .catch((error) => showBoundary(error));
-
-      await fetch("api/Areas", { method: "GET" })
-        .then((response) => response.json())
-        .then((data: Array<DirectoryEntity>) => {
-          setAreas(data);
-          setAreaId(data[0].id);
-        })
-        .catch((error) => showBoundary(error));
+    const getAreas = async () => {
+      try {
+        const response = await axios.get<Array<DirectoryEntity>>("api/Areas");
+        if (response.status === 200) {
+          setAreas(response.data);
+          setAreaId(response.data[0].id);
+        } else console.log(response.statusText);
+      } catch (error) {
+        showBoundary(error);
+      }
     };
 
-    getDict();
+    const getGenders = async () => {
+      try {
+        const response = await axios.get<Array<DirectoryEntity>>("api/Genders");
+        if (response.status === 200) setGenders(response.data);
+        else console.log(response.statusText);
+      } catch (error) {
+        showBoundary(error);
+      }
+    };
+
+    getAreas();
+    getGenders();
   }, [showBoundary]);
 
   useEffect(() => {
@@ -102,79 +111,78 @@ const ModalDoctor: React.FC<PropsType> = ({
 
   const handleSubmit = (e: Event) => {
     const createPatient = async () => {
-      const patient: PatientObj = {
-        firstName,
-        lastName,
-        surname,
-        dateOfBirth,
-        address,
-        areaId,
-        polis,
-        workPlace,
-        genderId,
-      };
+      try {
+        const patient: PatientObj = {
+          firstName,
+          lastName,
+          surname,
+          dateOfBirth,
+          address,
+          areaId,
+          polis,
+          workPlace,
+          genderId,
+        };
 
-      const requestOptions: RequestInit = {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(patient),
-      };
-
-      await fetch(`api/Patients`, requestOptions)
-        .then((response) => response.json())
-        .then(
-          (data) => {
-            notification.success({
-              message: "Добавление завершилось удачно",
-              placement: "topRight",
-              duration: 2,
-            });
-            addPatient(data);
-            form.resetFields();
-            setIsEdit(false);
-          },
-          (error) => console.log(error)
-        )
-        .catch((error) => showBoundary(error));
+        const response = await axios.post<PatientObj>("api/Patients", patient);
+        if (response.status === 201) {
+          addPatient(response.data);
+          form.resetFields();
+          setIsEdit(false);
+          notification.success({
+            message: "Добавление завершилось удачно",
+            placement: "topRight",
+            duration: 2,
+          });
+        } else {
+          console.log(response.statusText);
+          notification.error({
+            message: "Ошибка",
+            placement: "topRight",
+            duration: 2,
+          });
+        }
+      } catch (error) {
+        showBoundary(error);
+      }
     };
 
     const editPatient = async (id: number | undefined) => {
-      const patient: PatientObj = {
-        id,
-        firstName,
-        lastName,
-        surname,
-        dateOfBirth,
-        address,
-        areaId,
-        polis,
-        workPlace,
-        genderId,
-      };
-      console.log(patient);
-      const requestOptions = {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(patient),
-      };
-
-      const response = await fetch(`api/Patients/${id}`, requestOptions);
-      response
-        .json()
-        .then(
-          (data) => {
-            if (response.ok) {
-              notification.success({
-                message: "Обновление завершилось удачно",
-                placement: "topRight",
-                duration: 2,
-              });
-              updatePatient(data);
-            }
-          },
-          (error) => console.log(error)
-        )
-        .catch((error) => showBoundary(error));
+      try {
+        const patient: PatientObj = {
+          id,
+          firstName,
+          lastName,
+          surname,
+          dateOfBirth,
+          address,
+          areaId,
+          polis,
+          workPlace,
+          genderId,
+        };
+        const response = await axios.put<PatientObj>(
+          `api/Patients/${id}`,
+          patient
+        );
+        if (response.status === 201) {
+          notification.success({
+            message: "Обновление завершилось удачно",
+            placement: "topRight",
+            duration: 2,
+          });
+          updatePatient(response.data);
+        } else {
+          console.log(response.statusText);
+          notification.error({
+            message: "Ошибка",
+            placement: "topRight",
+            duration: 2,
+          });
+        }
+      } catch (error) {
+        showBoundary(error);
+      }
     };
 
     if (isEdit) {

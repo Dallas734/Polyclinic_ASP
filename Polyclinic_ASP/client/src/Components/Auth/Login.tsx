@@ -6,6 +6,8 @@ import LoginModel from "../Entities/LoginModel";
 import UserObj from "../Entities/UserObj";
 import { notification } from "antd";
 import { useErrorBoundary } from "react-error-boundary";
+import axios, { AxiosError } from "axios";
+
 
 interface ResponseModel {
   message: string;
@@ -34,48 +36,43 @@ const Login: React.FC<PropsType> = ({ setUser }) => {
     };
 
     const login = async () => {
-      await fetch("api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(model),
-      })
-        .then((response) => {
-          // handle success or error from the server
-          if (response.ok) {
-            setMessage(["Вход завершился удачно"]);
+      try {
+        const response =  await axios.post<ResponseModel>("api/login", model);
+        if (response.status === 200)
+        {
+          setMessage(["Вход завершился удачно"]);
             notification.success({
               message: "Вход завершился удачно",
               placement: "topRight",
               duration: 2,
             });
+
+            setUser(response.data.responseUser);
             // Переход на главную страницу
             navigate("/");
-          } else {
+        }
+        else
+        {
+          setMessage(["Вход завершился неудачно"]);
             notification.error({
               message: "Вход завершился неудачно",
               placement: "topRight",
               duration: 2,
             });
-          }
-          return response.json();
-        })
-        .then((data: ResponseModel) => {
-          console.log(data.responseUser);
-          if (data.responseUser === undefined) {
-            console.log(data.responseUser);
-            setMessage([data.message]);
-          } else {
-            setUser(data.responseUser);
-            setMessage([data.message]);
-          }
-        })
-        .catch((error) => {
-          // handle network error
-          showBoundary(error);
-          console.error(error);
-        });
+        }
+      }
+      catch (error)
+      {
+        const errors = error as AxiosError;
+        if (errors.response?.status === 500)
+        {
+          showBoundary(errors);
+        }
+        else
+        {
+        setMessage(["Неправильный логин или пароль"])
+        }
+      }
     };
 
     login();

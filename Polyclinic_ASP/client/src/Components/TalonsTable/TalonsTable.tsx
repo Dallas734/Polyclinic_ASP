@@ -15,6 +15,7 @@ import { ConfigProvider } from "antd/lib";
 import "moment/locale/ru";
 import { notification } from "antd";
 import { useErrorBoundary } from "react-error-boundary";
+import axios from "axios";
 
 interface PropsType {}
 
@@ -67,49 +68,86 @@ const TalonsTable: React.FC<PropsType> = () => {
   };
 
   useEffect(() => {
-    fetch("api/Areas", { method: "GET" })
-      .then((response) => response.json())
-      .then((data: Array<DirectoryEntity>) => setAreas(data))
-      .catch((error) => showBoundary(error));
+    const getAreas = async () => {
+      try {
+        const response = await axios.get<Array<DirectoryEntity>>("api/Areas");
+        if (response.status === 200) setAreas(response.data);
+        else console.log(response.statusText);
+      } catch (error) {
+        showBoundary(error);
+      }
+    };
 
-    fetch("api/Specializations", { method: "GET" })
-      .then((response) => response.json())
-      .then((data: Array<DirectoryEntity>) => setSpecs(data))
-      .catch((error) => showBoundary(error));
+    const getSpecs = async () => {
+      try {
+        const response = await axios.get<Array<DirectoryEntity>>(
+          "api/Specializations"
+        );
+        if (response.status === 200) setSpecs(response.data);
+        else console.log(response.statusText);
+      } catch (error) {
+        showBoundary(error);
+      }
+    };
+
+    getAreas();
+    getSpecs();
   }, [showBoundary]);
 
   useEffect(() => {
     setDoctorId(undefined);
-    fetch(`api/Doctors/byAreaAndSpec?areaId=${areaId}&specId=${specId}`)
-      .then((response) => response.json())
-      .then((data: Array<DoctorObj>) => setDoctors(data))
-      .catch((error) => showBoundary(error));
 
+    const getDoctorByAreaAndSpec = async () => {
+      try {
+        const response = await axios.get<Array<DoctorObj>>(
+          `api/Doctors/byAreaAndSpec?areaId=${areaId}&specId=${specId}`
+        );
+        if (response.status === 200) setDoctors(response.data);
+        else console.log(response.statusText);
+      } catch (error) {
+        showBoundary(error);
+      }
+    };
+
+    getDoctorByAreaAndSpec();
     setSelectedTalon(undefined);
     setActiveIndex(undefined);
   }, [areaId, specId, showBoundary]);
 
   useEffect(() => {
-    fetch(`api/Patients/byArea?areaId=${areaId}`)
-      .then((response) => response.json())
-      .then((data: Array<PatientObj>) => setPatients(data))
-      .catch((error) => showBoundary(error));
+    const getPatientsByArea = async () => {
+      try {
+        const response = await axios.get<Array<PatientObj>>(
+          `api/Patients/byArea?areaId=${areaId}`
+        );
+        if (response.status === 200) setPatients(response.data);
+        else console.log(response.statusText);
+      } catch (error) {
+        showBoundary(error);
+      }
+    };
 
+    getPatientsByArea();
     setSelectedTalon(undefined);
     setActiveIndex(undefined);
   }, [areaId, showBoundary]);
 
   useEffect(() => {
-    fetch(
-      `api/Visits/Talons?doctorId=${doctorId}&date=${selectedDate.format(
-        "YYYY-MM-DD"
-      )}`,
-      { method: "GET" }
-    )
-      .then((response) => response.json())
-      .then((data: Array<VisitObj>) => setTalons(data))
-      .catch((error) => showBoundary(error));
+    const getTalons = async () => {
+      try {
+        const response = await axios.get<Array<VisitObj>>(
+          `api/Visits/Talons?doctorId=${doctorId}&date=${selectedDate.format(
+            "YYYY-MM-DD"
+          )}`
+        );
+        if (response.status === 200) setTalons(response.data);
+        else console.log(response.statusText);
+      } catch (error) {
+        showBoundary(error);
+      }
+    };
 
+    getTalons();
     setSelectedTalon(undefined);
     setActiveIndex(undefined);
   }, [doctorId, selectedDate, showBoundary]);
@@ -124,58 +162,57 @@ const TalonsTable: React.FC<PropsType> = () => {
   };
 
   const addVisit = async () => {
-    const visit: VisitObj = {
-      doctorId,
-      patientId,
-      dateT: selectedDate.format("YYYY-MM-DD"),
-      timeT: selectedTalon?.timeT,
-    };
+    try {
+      const visit: VisitObj = {
+        doctorId,
+        patientId,
+        dateT: selectedDate.format("YYYY-MM-DD"),
+        timeT: selectedTalon?.timeT,
+      };
 
-    const requestOptions: RequestInit = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(visit),
-    };
-
-    return await fetch(`api/Visits`, requestOptions)
-      .then((response) => response.json())
-      .then(
-        (data) => {
-          setSelectedTalon(data);
-          addTalon(data);
-          notification.success({
-            message: "Запись добавлена",
-            placement: "topRight",
-            duration: 2,
-          });
-        },
-        (error) => console.log(error)
-      )
-      .catch((error) => showBoundary(error));
+      const response = await axios.post<VisitObj>(`api/Visits`, visit);
+      if (response.status === 201) {
+        setSelectedTalon(response.data);
+        addTalon(response.data);
+        notification.success({
+          message: "Запись добавлена",
+          placement: "topRight",
+          duration: 2,
+        });
+      } else {
+        console.log(response.statusText);
+        notification.error({
+          message: "Ошибка",
+          placement: "topRight",
+          duration: 2,
+        });
+      }
+    } catch (error) {
+      showBoundary(error);
+    }
   };
 
   const deleteVisit = async () => {
-    const requestOptions: RequestInit = {
-      method: "DELETE",
-      headers: undefined,
-      body: undefined,
-    };
-
-    return await fetch(`api/Visits/${selectedTalon?.id}`, requestOptions)
-      .then(
-        (response) => {
-          if (response.ok) {
-            notification.success({
-              message: "Запись удалена",
-              placement: "topRight",
-              duration: 2,
-            });
-            removeTalon(selectedTalon?.id);
-          }
-        },
-        (error) => console.log(error)
-      )
-      .catch((error) => showBoundary(error));
+    try {
+      const response = await axios.delete(`api/Visits/${selectedTalon?.id}`);
+      if (response.status === 200) {
+        removeTalon(selectedTalon?.id);
+        notification.success({
+          message: "Запись удалена",
+          placement: "topRight",
+          duration: 2,
+        });
+      } else {
+        console.log(response.statusText);
+        notification.error({
+          message: "Ошибка",
+          placement: "topRight",
+          duration: 2,
+        });
+      }
+    } catch (error) {
+      showBoundary(error);
+    }
   };
 
   return (

@@ -8,6 +8,7 @@ import { ColumnFilterItem } from "antd/es/table/interface";
 import DirectoryEntity from "../Entities/DirectoryEntity";
 import { notification } from "antd";
 import { useErrorBoundary } from "react-error-boundary";
+import axios from "axios";
 
 interface PropsType {}
 
@@ -36,78 +37,101 @@ const Doctor: React.FC<PropsType> = () => {
 
   useEffect(() => {
     const getDoctors = async () => {
-      const requestOptions: RequestInit = {
-        method: "GET",
-        headers: undefined,
-        body: undefined,
-      };
-
-      await fetch("api/Doctors", requestOptions)
-        .then((response) => response.json())
-        .then(
-          (data) => {
-            setDoctors(data);
-          },
-          (error) => console.log(error)
-        )
-        .catch((error) => showBoundary(error));
+      try
+      {
+        const response = await axios.get<Array<DoctorObj>>("api/Doctors")
+        setDoctors(response.data)
+      }
+      catch (error)
+      {
+        showBoundary(error)
+      }
     };
 
-    const getDict = async () => {
-      await fetch("api/Areas", { method: "GET" })
-        .then((response) => response.json())
-        .then((data: Array<DirectoryEntity>) => {
-          setAreas(data);
-        })
-        .catch((error) => showBoundary(error));
-
-      await fetch("api/Statuses", { method: "GET" })
-        .then((response) => response.json())
-        .then((data: Array<DirectoryEntity>) => setStatuses(data))
-        .catch((error) => showBoundary(error));
-
-      await fetch("api/Genders", { method: "GET" })
-        .then((response) => response.json())
-        .then((data: Array<DirectoryEntity>) => setGenders(data))
-        .catch((error) => showBoundary(error));
-
-      await fetch("api/Categories", { method: "GET" })
-        .then((response) => response.json())
-        .then((data: Array<DirectoryEntity>) => setCategories(data))
-        .catch((error) => showBoundary(error));
-
-      await fetch("api/Specializations", { method: "GET" })
-        .then((response) => response.json())
-        .then((data: Array<DirectoryEntity>) => setSpec(data))
-        .catch((error) => showBoundary(error));
+    const getAreas = async () => {
+      try {
+        const response = await axios.get<Array<DirectoryEntity>>("api/Areas");
+        if (response.status === 200) setAreas(response.data);
+        else console.log(response.statusText);
+      } catch (error) {
+        showBoundary(error);
+      }
+    };
+    
+    const getStatuses = async () => {
+      try {
+        const response = await axios.get<Array<DirectoryEntity>>("api/Statuses");
+        if (response.status === 200) setStatuses(response.data);
+        else console.log(response.statusText);
+      } catch (error) {
+        showBoundary(error);
+      }
     };
 
-    getDict();
+    const getGenders = async () => {
+      try {
+        const response = await axios.get<Array<DirectoryEntity>>("api/Genders");
+        if (response.status === 200) setGenders(response.data)
+        else console.log(response.statusText);
+      } catch (error) {
+        showBoundary(error);
+      }
+    };
+
+    const getCategories = async () => {
+      try {
+        const response = await axios.get<Array<DirectoryEntity>>("api/Categories");
+        if (response.status === 200) setCategories(response.data)
+        else console.log(response.statusText);
+      } catch (error) {
+        showBoundary(error);
+      }
+    };
+
+    const getSpecs = async () => {
+      try {
+        const response = await axios.get<Array<DirectoryEntity>>("api/Specializations");
+        if (response.status === 200) setSpec(response.data);
+        else console.log(response.statusText);
+      } catch (error) {
+        showBoundary(error);
+      }
+    };
+
+    getAreas();
+    getStatuses();
+    getGenders();
+    getCategories();
+    getSpecs();
     getDoctors();
   }, [showBoundary]);
 
   const deleteDoctor = async (id: number | undefined) => {
-    const requestOptions: RequestInit = {
-      method: "DELETE",
-      headers: undefined,
-      body: undefined,
-    };
-
-    return await fetch(`api/Doctors/${id}`, requestOptions)
-      .then(
-        (response) => {
-          if (response.ok) {
-            notification.success({
-              message: "Удаление завершилось удачно",
-              placement: "topRight",
-              duration: 2,
-            });
-            removeDoctor(id);
-          }
-        },
-        (error) => console.log(error)
-      )
-      .catch((error) => showBoundary(error));
+    try{
+      const response = await axios.delete(`api/Doctors/${id}`);
+      if (response.status === 200)
+      {
+        notification.success({
+          message: "Удаление завершилось удачно",
+          placement: "topRight",
+          duration: 2,
+        });
+        removeDoctor(id);
+      }
+      else
+      {
+        console.log(response.statusText);
+        notification.error({
+          message: "Ошибка",
+          placement: "topRight",
+          duration: 2,
+        });
+      }
+    }
+    catch (error)
+    {
+      showBoundary(error)
+    }
   };
 
   const showModal = (value: boolean) => {

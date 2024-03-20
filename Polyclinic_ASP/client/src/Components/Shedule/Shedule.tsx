@@ -24,32 +24,42 @@ const Shedule: React.FC<PropsType> = () => {
   const { showBoundary } = useErrorBoundary();
 
   useEffect(() => {
-    const getDict = async () => {
-      await fetch(`api/areas`, { method: "GET" })
-        .then((response) => response.json())
-        .then((data) => setAreas(data))
-        .catch((error) => showBoundary(error));
-
-      await fetch(`api/specializations`, { method: "GET" })
-        .then((response) => response.json())
-        .then((data) => setSpec(data))
-        .catch((error) => showBoundary(error));
+    const getAreas = async () => {
+      try {
+        const response = await axios.get<Array<DirectoryEntity>>(`api/areas`);
+        if (response.status === 200) setAreas(response.data);
+        else console.log(response.statusText);
+      } catch (error) {
+        showBoundary(error);
+      }
     };
 
-    getDict();
+    const getSpecs = async () => {
+      try {
+        const response = await axios.get<Array<DirectoryEntity>>(
+          `api/specializations`
+        );
+        if (response.status === 200) setSpec(response.data);
+        else console.log(response.statusText);
+      } catch (error) {
+        showBoundary(error);
+      }
+    };
+    getAreas();
+    getSpecs();
   }, [showBoundary]);
 
   useEffect(() => {
     const getDoctorByAreaAndSpec = async () => {
-      await fetch(
-        `api/doctors/byAreaAndSpec?areaId=${areaId}&specId=${specId}`,
-        {
-          method: "GET",
-        }
-      )
-        .then((response) => response.json())
-        .then((data) => setDoctors(data))
-        .catch((error) => showBoundary(error));
+      try {
+        const response = await axios.get<Array<DoctorObj>>(
+          `api/doctors/byAreaAndSpec?areaId=${areaId}&specId=${specId}`
+        );
+        if (response.status === 200) setDoctors(response.data);
+        else console.log(response.statusText);
+      } catch (error) {
+        showBoundary(error);
+      }
     };
 
     getDoctorByAreaAndSpec();
@@ -58,30 +68,37 @@ const Shedule: React.FC<PropsType> = () => {
 
   useEffect(() => {
     const getSheduleDoctor = async () => {
-      await fetch(`api/shedules?doctorId=${doctorId}`, { method: "GET" })
-        .then((response) => response.json())
-        .then((data) => setShedules(data))
-        .catch((error) => showBoundary(error));
+      try {
+        const response = await axios.get<Array<SheduleObj>>(
+          `api/shedules?doctorId=${doctorId}`
+        );
+        if (response.status === 200) setShedules(response.data);
+        else console.log(response.statusText);
+      } catch (error) {
+        showBoundary(error);
+      }
     };
 
     getSheduleDoctor();
   }, [doctorId, showBoundary]);
 
   const handleSubmitSheduleBtn = async () => {
-    await axios.put(`api/shedules`, shedules);
+    const response = await axios.put(`api/shedules`, shedules);
 
-    notification.success({
-      message: "Обновление завершилось удачно",
-      placement: "topRight",
-      duration: 2,
-    });
-
-    await fetch(`api/doctors/byAreaAndSpec?areaId=${areaId}&specId=${specId}`, {
-      method: "GET",
-    })
-      .then((response) => response.json())
-      .then((data) => setDoctors(data))
-      .catch((error) => showBoundary(error));
+    if (response.status === 201) {
+      notification.success({
+        message: "Обновление завершилось удачно",
+        placement: "topRight",
+        duration: 2,
+      });
+    } else {
+      console.log(response.statusText);
+      notification.error({
+        message: "Ошибка",
+        placement: "topRight",
+        duration: 2,
+      });
+    }
   };
   return (
     <React.Fragment>

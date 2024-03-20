@@ -7,6 +7,7 @@ import type { TableProps } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import { ColumnFilterItem } from "antd/es/table/interface";
 import { useErrorBoundary } from "react-error-boundary";
+import axios from "axios";
 
 interface PropsType {}
 
@@ -21,27 +22,43 @@ const PatientCard: React.FC<PropsType> = () => {
   const { showBoundary } = useErrorBoundary();
 
   useEffect(() => {
-    const getDict = async () => {
-      await fetch("api/Areas", { method: "GET" })
-        .then((response) => response.json())
-        .then((data: Array<DirectoryEntity>) => setAreas(data))
-        .catch((error) => showBoundary(error));
-
-      await fetch("api/Specializations", { method: "GET" })
-        .then((response) => response.json())
-        .then((data: Array<DirectoryEntity>) => setSpec(data))
-        .catch((error) => showBoundary(error));
+    const getAreas = async () => {
+      try {
+        const response = await axios.get<Array<DirectoryEntity>>("api/Areas");
+        if (response.status === 200) setAreas(response.data);
+        else console.log(response.statusText);
+      } catch (error) {
+        showBoundary(error);
+      }
     };
 
-    getDict();
+    const getSpecs = async () => {
+      try {
+        const response = await axios.get<Array<DirectoryEntity>>(
+          "api/Specializations"
+        );
+        if (response.status === 200) setSpec(response.data);
+        else console.log(response.statusText);
+      } catch (error) {
+        showBoundary(error);
+      }
+    };
+
+    getAreas();
+    getSpecs();
   }, [showBoundary]);
 
   useEffect(() => {
     const getPatientByArea = async () => {
-      await fetch(`api/patients/byArea?areaId=${areaId}`, { method: "GET" })
-        .then((response) => response.json())
-        .then((data: Array<PatientObj>) => setPatients(data))
-        .catch((error) => showBoundary(error));
+      try {
+        const response = await axios.get<Array<PatientObj>>(
+          `api/patients/byArea?areaId=${areaId}`
+        );
+        if (response.status === 200) setPatients(response.data);
+        else console.log(response.statusText);
+      } catch (error) {
+        showBoundary(error);
+      }
     };
 
     getPatientByArea();
@@ -49,10 +66,15 @@ const PatientCard: React.FC<PropsType> = () => {
 
   useEffect(() => {
     const getPatientCard = async () => {
-      await fetch(`api/patients/card?patientId=${patientId}`, { method: "GET" })
-        .then((response) => response.json())
-        .then((data: Array<PatientObj>) => setCardVisits(data))
-        .catch((error) => showBoundary(error));
+      try {
+        const response = await axios.get<Array<VisitObj>>(
+          `api/patients/card?patientId=${patientId}`
+        );
+        if (response.status === 200) setCardVisits(await response.data);
+        else console.log(response.statusText);
+      } catch (error) {
+        showBoundary(error);
+      }
     };
 
     getPatientCard();

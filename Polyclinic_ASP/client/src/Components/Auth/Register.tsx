@@ -5,6 +5,7 @@ import RegModel from "../Entities/RegModel";
 import "./ContainerStyle.css";
 import { notification } from "antd";
 import { useErrorBoundary } from "react-error-boundary";
+import axios from "axios";
 
 interface responseModel {
   message: string;
@@ -21,18 +22,15 @@ const Register: React.FC<PropsType> = () => {
   const [doctorId, setDoctorId] = useState<number>();
   const [role, setRole] = useState<string>("");
 
-  // state variable for error messages
   const [error, setError] = useState<Array<string>>([]);
 
   const [componentDisabled, setDisabled] = useState<boolean>(false);
 
   const { showBoundary } = useErrorBoundary();
 
-  // handle submit event for the form
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    //e.preventDefault();
-    // validate email and passwords
     setError([]);
+
     const model: RegModel = {
       email,
       password,
@@ -42,42 +40,74 @@ const Register: React.FC<PropsType> = () => {
     };
 
     const register = async () => {
-      await fetch("api/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(model),
-      })
-        .then((response) => {
-          if (response.ok) {
+        try
+        {
+          const response = await axios.post<responseModel>("api/register", model);;
+          if (response.status === 200)
+          {
             notification.success({
               message: "Регистрация завершилась удачно",
               placement: "topRight",
               duration: 2,
             });
-          } else {
+            if (response.data.error !== undefined) {
+              console.log(response.data.error);
+              setError(["Регистрация завершилась неудачно "].concat(response.data.error));
+            } else {
+              setError([response.data.message]);
+            }
+          }
+          else
+          {
             notification.error({
               message: "Регистрация завершилась неудачно",
               placement: "topRight",
               duration: 2,
             });
           }
-          return response.json();
-        })
-        .then((data: responseModel) => {
-          if (data.error !== undefined) {
-            console.log(data.error);
-            setError(["Регистрация завершилась неудачно "].concat(data.error));
-          } else {
-            setError([data.message]);
-          }
-        })
-        .catch((error) => {
-          // Сетевая ошибка
+        }
+        catch (error)
+        {
           showBoundary(error);
           console.error(error);
-        });
+        }
+
+      // await fetch("api/register", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify(model),
+      // })
+      //   .then((response) => {
+      //     if (response.ok) {
+      //       notification.success({
+      //         message: "Регистрация завершилась удачно",
+      //         placement: "topRight",
+      //         duration: 2,
+      //       });
+      //     } else {
+      //       notification.error({
+      //         message: "Регистрация завершилась неудачно",
+      //         placement: "topRight",
+      //         duration: 2,
+      //       });
+      //     }
+      //     return response.json();
+      //   })
+      //   .then((data: responseModel) => {
+      //     if (data.error !== undefined) {
+      //       console.log(data.error);
+      //       setError(["Регистрация завершилась неудачно "].concat(data.error));
+      //     } else {
+      //       setError([data.message]);
+      //     }
+      //   })
+      //   .catch((error) => {
+      //     // Сетевая ошибка
+      //     showBoundary(error);
+      //     console.error(error);
+      //   });
     };
 
     register();

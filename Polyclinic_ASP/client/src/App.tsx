@@ -34,7 +34,6 @@ function App() {
         })
         .then(
           (data: ResponseModel) => {
-            console.log(data.responseUser);
             setUser(data.responseUser);
           },
           (error) => console.log(error)
