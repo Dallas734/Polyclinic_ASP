@@ -5,7 +5,7 @@ import RegModel from "../Entities/RegModel";
 import "./ContainerStyle.css";
 import { notification } from "antd";
 import { useErrorBoundary } from "react-error-boundary";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 interface responseModel {
   message: string;
@@ -40,74 +40,37 @@ const Register: React.FC<PropsType> = () => {
     };
 
     const register = async () => {
-        try
-        {
-          const response = await axios.post<responseModel>("api/register", model);;
-          if (response.status === 200)
-          {
-            notification.success({
-              message: "Регистрация завершилась удачно",
-              placement: "topRight",
-              duration: 2,
-            });
-            if (response.data.error !== undefined) {
-              console.log(response.data.error);
-              setError(["Регистрация завершилась неудачно "].concat(response.data.error));
-            } else {
-              setError([response.data.message]);
-            }
+      try {
+        const response = await axios.post<responseModel>("api/register", model);
+        if (response.status === 200) {
+          notification.success({
+            message: "Регистрация завершилась удачно",
+            placement: "topRight",
+            duration: 2,
+          });
+          if (response.data.error !== undefined) {
+            console.log(response.data.error);
+            setError(
+              ["Регистрация завершилась неудачно "].concat(response.data.error)
+            );
+          } else {
+            setError([response.data.message]);
           }
-          else
-          {
-            notification.error({
-              message: "Регистрация завершилась неудачно",
-              placement: "topRight",
-              duration: 2,
-            });
-          }
+        } else {
+          notification.error({
+            message: "Регистрация завершилась неудачно",
+            placement: "topRight",
+            duration: 2,
+          });
         }
-        catch (error)
-        {
-          showBoundary(error);
-          console.error(error);
+      } catch (error) {
+        const errors = error as AxiosError;
+        if (errors.response?.status === 500) {
+          showBoundary(errors);
+        } else {
+          setError(["Ошибка регистрации"]);
         }
-
-      // await fetch("api/register", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify(model),
-      // })
-      //   .then((response) => {
-      //     if (response.ok) {
-      //       notification.success({
-      //         message: "Регистрация завершилась удачно",
-      //         placement: "topRight",
-      //         duration: 2,
-      //       });
-      //     } else {
-      //       notification.error({
-      //         message: "Регистрация завершилась неудачно",
-      //         placement: "topRight",
-      //         duration: 2,
-      //       });
-      //     }
-      //     return response.json();
-      //   })
-      //   .then((data: responseModel) => {
-      //     if (data.error !== undefined) {
-      //       console.log(data.error);
-      //       setError(["Регистрация завершилась неудачно "].concat(data.error));
-      //     } else {
-      //       setError([data.message]);
-      //     }
-      //   })
-      //   .catch((error) => {
-      //     // Сетевая ошибка
-      //     showBoundary(error);
-      //     console.error(error);
-      //   });
+      }
     };
 
     register();

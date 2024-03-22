@@ -3,6 +3,7 @@ using Application.Interfaces.Services;
 using Domain.DomainModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -62,8 +63,7 @@ namespace Polyclinic_ASP.Controllers
                             ModelState.AddModelError("", item.Description);
                         }
                         var errorMsg = ModelState.Values.SelectMany(e => e.Errors.Select(er => er.ErrorMessage));
-                        return StatusCode(StatusCodes.Status500InternalServerError,
-                            new { message = "Ошибка", error = errorMsg });
+                        return BadRequest(new { message = "Ошибка", error = errorMsg });
                     }
 
                 }
