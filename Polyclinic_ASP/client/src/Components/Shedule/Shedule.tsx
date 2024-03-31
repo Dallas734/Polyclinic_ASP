@@ -85,7 +85,7 @@ const Shedule: React.FC<PropsType> = () => {
   const handleSubmitSheduleBtn = async () => {
     const response = await axios.put(`api/shedules`, shedules);
 
-    if (response.status === 201) {
+    if (response.status === 200) {
       notification.success({
         message: "Обновление завершилось удачно",
         placement: "topRight",
