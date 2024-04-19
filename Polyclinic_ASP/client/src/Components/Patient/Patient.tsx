@@ -8,7 +8,7 @@ import { ColumnFilterItem } from "antd/es/table/interface";
 import { SearchOutlined } from "@ant-design/icons";
 import { notification } from "antd";
 import { useErrorBoundary } from "react-error-boundary";
-import axios from "axios";
+import { Fetch } from "../../axiosInstance";
 
 interface PropsType {}
 
@@ -36,7 +36,7 @@ const Patient: React.FC<PropsType> = () => {
   useEffect(() => {
     const getPatients = async () => {
       try {
-        const response = await axios.get<Array<PatientObj>>("api/Patients");
+        const response = await Fetch.get<Array<PatientObj>>(`api/Patients`);
         if (response.status === 200) setPatients(response.data);
         else console.log(response.statusText);
       } catch (error) {
@@ -46,7 +46,7 @@ const Patient: React.FC<PropsType> = () => {
 
     const getAreas = async () => {
       try {
-        const response = await axios.get<Array<DirectoryEntity>>("api/Areas");
+        const response = await Fetch.get<Array<DirectoryEntity>>(`api/Areas`);
         if (response.status === 200) setAreas(response.data);
         else console.log(response.statusText);
       } catch (error) {
@@ -56,7 +56,7 @@ const Patient: React.FC<PropsType> = () => {
 
     const getGenders = async () => {
       try {
-        const response = await axios.get<Array<DirectoryEntity>>("api/Genders");
+        const response = await Fetch.get<Array<DirectoryEntity>>(`api/Genders`);
         if (response.status === 200) setGenders(response.data);
         else console.log(response.statusText);
       } catch (error) {
@@ -71,7 +71,7 @@ const Patient: React.FC<PropsType> = () => {
 
   const deletePatient = async (id: number | undefined) => {
     try {
-      const response = await axios.delete(`api/Patients/${id}`);
+      const response = await Fetch.delete(`api/Patients/${id}`);
       if (response.status === 200) {
         notification.success({
           message: "Удаление завершилось удачно",

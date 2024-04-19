@@ -7,7 +7,7 @@ import type { TableProps } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import { ColumnFilterItem } from "antd/es/table/interface";
 import { useErrorBoundary } from "react-error-boundary";
-import axios from "axios";
+import { Fetch } from "../../axiosInstance";
 
 interface PropsType {}
 
@@ -24,7 +24,7 @@ const PatientCard: React.FC<PropsType> = () => {
   useEffect(() => {
     const getAreas = async () => {
       try {
-        const response = await axios.get<Array<DirectoryEntity>>("api/Areas");
+        const response = await Fetch.get<Array<DirectoryEntity>>(`api/Areas`);
         if (response.status === 200) setAreas(response.data);
         else console.log(response.statusText);
       } catch (error) {
@@ -34,8 +34,8 @@ const PatientCard: React.FC<PropsType> = () => {
 
     const getSpecs = async () => {
       try {
-        const response = await axios.get<Array<DirectoryEntity>>(
-          "api/Specializations"
+        const response = await Fetch.get<Array<DirectoryEntity>>(
+          `api/Specializations`
         );
         if (response.status === 200) setSpec(response.data);
         else console.log(response.statusText);
@@ -51,7 +51,7 @@ const PatientCard: React.FC<PropsType> = () => {
   useEffect(() => {
     const getPatientByArea = async () => {
       try {
-        const response = await axios.get<Array<PatientObj>>(
+        const response = await Fetch.get<Array<PatientObj>>(
           `api/patients/byArea?areaId=${areaId}`
         );
         if (response.status === 200) setPatients(response.data);
@@ -67,7 +67,7 @@ const PatientCard: React.FC<PropsType> = () => {
   useEffect(() => {
     const getPatientCard = async () => {
       try {
-        const response = await axios.get<Array<VisitObj>>(
+        const response = await Fetch.get<Array<VisitObj>>(
           `api/patients/card?patientId=${patientId}`
         );
         if (response.status === 200) setCardVisits(await response.data);

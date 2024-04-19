@@ -5,10 +5,10 @@ import { Button, Select, TimePicker } from "antd";
 import { Label } from "reactstrap";
 import SheduleObj from "../Entities/SheduleObj";
 import dayjs from "dayjs";
-import axios from "axios";
 import "./Shedule.css";
 import { notification } from "antd";
 import { useErrorBoundary } from "react-error-boundary";
+import { Fetch } from "../../axiosInstance";
 
 interface PropsType {}
 
@@ -26,7 +26,7 @@ const Shedule: React.FC<PropsType> = () => {
   useEffect(() => {
     const getAreas = async () => {
       try {
-        const response = await axios.get<Array<DirectoryEntity>>(`api/areas`);
+        const response = await Fetch.get<Array<DirectoryEntity>>(`api/areas`);
         if (response.status === 200) setAreas(response.data);
         else console.log(response.statusText);
       } catch (error) {
@@ -36,7 +36,7 @@ const Shedule: React.FC<PropsType> = () => {
 
     const getSpecs = async () => {
       try {
-        const response = await axios.get<Array<DirectoryEntity>>(
+        const response = await Fetch.get<Array<DirectoryEntity>>(
           `api/specializations`
         );
         if (response.status === 200) setSpec(response.data);
@@ -52,7 +52,7 @@ const Shedule: React.FC<PropsType> = () => {
   useEffect(() => {
     const getDoctorByAreaAndSpec = async () => {
       try {
-        const response = await axios.get<Array<DoctorObj>>(
+        const response = await Fetch.get<Array<DoctorObj>>(
           `api/doctors/byAreaAndSpec?areaId=${areaId}&specId=${specId}`
         );
         if (response.status === 200) setDoctors(response.data);
@@ -69,7 +69,7 @@ const Shedule: React.FC<PropsType> = () => {
   useEffect(() => {
     const getSheduleDoctor = async () => {
       try {
-        const response = await axios.get<Array<SheduleObj>>(
+        const response = await Fetch.get<Array<SheduleObj>>(
           `api/shedules?doctorId=${doctorId}`
         );
         if (response.status === 200) setShedules(response.data);
@@ -83,7 +83,7 @@ const Shedule: React.FC<PropsType> = () => {
   }, [doctorId, showBoundary]);
 
   const handleSubmitSheduleBtn = async () => {
-    const response = await axios.put(`api/shedules`, shedules);
+    const response = await Fetch.put(`api/shedules`, shedules);
 
     if (response.status === 200) {
       notification.success({

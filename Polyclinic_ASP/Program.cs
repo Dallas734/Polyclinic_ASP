@@ -44,16 +44,6 @@ builder.Services.AddControllers().ConfigureApiBehaviorOptions(opt =>
     opt.SuppressModelStateInvalidFilter = true;
 });
 
-builder.Services.AddCors((options) =>
-{
-    options.AddDefaultPolicy(builder =>
-    {
-        builder.WithOrigins("https://http://localhost:3000/")
-        .AllowAnyMethod()
-        .AllowAnyHeader();
-    });
-});
-
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -68,6 +58,9 @@ builder.Host.UseSerilog();
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
+    options.Cookie.SameSite = SameSiteMode.None;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+    options.Cookie.HttpOnly = true;
     options.Cookie.Name = "PolyclinicCookie";
     options.LoginPath = "/";
     options.AccessDeniedPath = "/";
@@ -79,6 +72,36 @@ builder.Services.ConfigureApplicationCookie(options =>
     };
 });
 
+builder.Services.AddHttpContextAccessor();
+
+/*builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(opt =>
+    {
+        opt.Cookie.HttpOnly = true;
+        opt.Cookie.SameSite = SameSiteMode.None;
+        opt.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+        opt.Cookie.Name = "PolyclinicCookie";
+        opt.LoginPath = "/";
+        opt.AccessDeniedPath = "/";
+        opt.LogoutPath = "/";
+        opt.Events.OnRedirectToLogin = context =>
+        {
+            context.Response.StatusCode = 401;
+            return Task.CompletedTask;
+        };
+    });*/
+
+builder.Services.AddCors((options) =>
+{
+    options.AddDefaultPolicy(builder =>
+    {
+        builder.WithOrigins("http://localhost:3000", "https://localhost:44390")
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowCredentials();
+    });
+});
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
@@ -88,19 +111,23 @@ using (var scope = app.Services.CreateScope())
     await IdentitySeed.CreateUserRoles(scope.ServiceProvider);
 }
 
-    // Configure the HTTP request pipeline.
-    if (app.Environment.IsDevelopment())
-    {
-        app.UseSwagger();
-        app.UseSwaggerUI();
-    }
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
 
 app.UseHttpsRedirection();
 app.UseSerilogRequestLogging();
 
+app.UseStaticFiles();
+
+app.UseCors();
+
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseCors();
 app.MapControllers();
 
 app.Run();

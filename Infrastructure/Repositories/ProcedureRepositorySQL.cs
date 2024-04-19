@@ -1,11 +1,6 @@
 ﻿using Application.Interfaces.Repositories;
 using Domain.DomainModels;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Repositories
 {
@@ -28,7 +23,7 @@ namespace Infrastructure.Repositories
         }
 
         public void Update(Procedure procedure)
-        { 
+        {
             dbContext.Entry(procedure).State = EntityState.Modified;
         }
         public void Delete(int id)
@@ -37,9 +32,9 @@ namespace Infrastructure.Repositories
             if (procedure != null)
                 dbContext.Procedures.Remove(procedure);
         }
-        public Procedure GetItem(int id) 
-        { 
-            return dbContext.Procedures.Find(id); 
+        public Procedure GetItem(int id)
+        {
+            return dbContext.Procedures.Find(id);
         }
         public int Create(Procedure procedure)
         {

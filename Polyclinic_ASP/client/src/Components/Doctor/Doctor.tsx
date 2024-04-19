@@ -8,7 +8,7 @@ import { ColumnFilterItem } from "antd/es/table/interface";
 import DirectoryEntity from "../Entities/DirectoryEntity";
 import { notification } from "antd";
 import { useErrorBoundary } from "react-error-boundary";
-import axios from "axios";
+import { Fetch } from "../../axiosInstance";
 
 interface PropsType {}
 
@@ -38,7 +38,7 @@ const Doctor: React.FC<PropsType> = () => {
   useEffect(() => {
     const getDoctors = async () => {
       try {
-        const response = await axios.get<Array<DoctorObj>>("api/Doctors");
+        const response = await Fetch.get<Array<DoctorObj>>(`api/Doctors`);
         setDoctors(response.data);
       } catch (error) {
         showBoundary(error);
@@ -47,7 +47,7 @@ const Doctor: React.FC<PropsType> = () => {
 
     const getAreas = async () => {
       try {
-        const response = await axios.get<Array<DirectoryEntity>>("api/Areas");
+        const response = await Fetch.get<Array<DirectoryEntity>>(`api/Areas`);
         if (response.status === 200) setAreas(response.data);
         else console.log(response.statusText);
       } catch (error) {
@@ -57,8 +57,8 @@ const Doctor: React.FC<PropsType> = () => {
 
     const getStatuses = async () => {
       try {
-        const response = await axios.get<Array<DirectoryEntity>>(
-          "api/Statuses"
+        const response = await Fetch.get<Array<DirectoryEntity>>(
+          `api/Statuses`
         );
         if (response.status === 200) setStatuses(response.data);
         else console.log(response.statusText);
@@ -69,7 +69,7 @@ const Doctor: React.FC<PropsType> = () => {
 
     const getGenders = async () => {
       try {
-        const response = await axios.get<Array<DirectoryEntity>>("api/Genders");
+        const response = await Fetch.get<Array<DirectoryEntity>>(`api/Genders`);
         if (response.status === 200) setGenders(response.data);
         else console.log(response.statusText);
       } catch (error) {
@@ -79,8 +79,8 @@ const Doctor: React.FC<PropsType> = () => {
 
     const getCategories = async () => {
       try {
-        const response = await axios.get<Array<DirectoryEntity>>(
-          "api/Categories"
+        const response = await Fetch.get<Array<DirectoryEntity>>(
+          `api/Categories`
         );
         if (response.status === 200) setCategories(response.data);
         else console.log(response.statusText);
@@ -91,8 +91,8 @@ const Doctor: React.FC<PropsType> = () => {
 
     const getSpecs = async () => {
       try {
-        const response = await axios.get<Array<DirectoryEntity>>(
-          "api/Specializations"
+        const response = await Fetch.get<Array<DirectoryEntity>>(
+          `api/Specializations`,
         );
         if (response.status === 200) setSpec(response.data);
         else console.log(response.statusText);
@@ -111,7 +111,7 @@ const Doctor: React.FC<PropsType> = () => {
 
   const deleteDoctor = async (id: number | undefined) => {
     try {
-      const response = await axios.delete(`api/Doctors/${id}`);
+      const response = await Fetch.delete(`api/Doctors/${id}`);
       if (response.status === 200) {
         notification.success({
           message: "Удаление завершилось удачно",
@@ -120,7 +120,6 @@ const Doctor: React.FC<PropsType> = () => {
         });
         removeDoctor(id);
       } else {
-        console.log(response.statusText);
         notification.error({
           message: "Ошибка",
           placement: "topRight",

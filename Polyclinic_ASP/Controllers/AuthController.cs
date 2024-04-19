@@ -1,15 +1,14 @@
 ﻿using Application.DTOs;
 using Application.Interfaces.Services;
 using Domain.DomainModels;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Polyclinic_ASP.Controllers
 {
     [ApiController]
+    [EnableCors]
     public class AuthController : ControllerBase
     {
         private readonly IDbCrud dbCrud;
@@ -71,7 +70,7 @@ namespace Polyclinic_ASP.Controllers
                 {
                     return StatusCode(StatusCodes.Status500InternalServerError,
                         new { message = "Ошибка", error = "Роли не существует" });
-                }             
+                }
             }
             else
             {
@@ -87,7 +86,8 @@ namespace Polyclinic_ASP.Controllers
             if (ModelState.IsValid)
             {
                 var result = await signInManager.PasswordSignInAsync(loginDTO.Email, loginDTO.Password, loginDTO.RememberMe, false);
-
+                //HttpContext.User = (ClaimsPrincipal)userManager.GetUserAsync(HttpContext.User);
+                string url = HttpContext.Request.Host.ToString();
                 if (result.Succeeded)
                 {
                     User? user = await userManager.GetUserAsync(HttpContext.User);
@@ -99,7 +99,7 @@ namespace Polyclinic_ASP.Controllers
                         DoctorId = user.DoctorId,
                         Roles = roles
                     };
-                    return Ok(new { message = "Выполнен вход " + loginDTO.Email,  responseUser });
+                    return Ok(new { message = "Выполнен вход " + loginDTO.Email, responseUser });
                 }
                 else
                 {
@@ -133,6 +133,7 @@ namespace Polyclinic_ASP.Controllers
         [Route("api/isauthenticated")]
         public async Task<IActionResult> IsAuthenticated()
         {
+            string url = HttpContext.Request.Host.ToString();
             User? user = await userManager.GetUserAsync(HttpContext.User);
             if (user == null)
                 return Unauthorized(new { message = "Вы Гость. Пожалуйста, выполните вход", responseUser = user });
@@ -144,7 +145,7 @@ namespace Polyclinic_ASP.Controllers
                 DoctorId = user.DoctorId,
                 Roles = roles
             };
-            return Ok(new { message = "Пользователь " + user.UserName, responseUser});
+            return Ok(responseUser);
         }
     }
 }

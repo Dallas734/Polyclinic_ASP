@@ -1,11 +1,6 @@
 ﻿using Application.Interfaces.Repositories;
 using Domain.DomainModels;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Repositories
 {
@@ -27,8 +22,8 @@ namespace Infrastructure.Repositories
             return dbContext.Days;
         }
 
-        public void Update(Day day) 
-        { 
+        public void Update(Day day)
+        {
             dbContext.Entry(day).State = EntityState.Modified;
         }
         public void Delete(int id)
@@ -37,11 +32,11 @@ namespace Infrastructure.Repositories
             if (day != null)
                 dbContext.Days.Remove(day);
         }
-        public Day GetItem(int id) 
-        { 
-            return dbContext.Days.Find(id); 
+        public Day GetItem(int id)
+        {
+            return dbContext.Days.Find(id);
         }
-        public int Create(Day day) 
+        public int Create(Day day)
         {
             dbContext.Days.Add(day);
             return day.Id;

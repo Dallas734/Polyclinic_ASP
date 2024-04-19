@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Domain.DomainModels;
+﻿using Domain.DomainModels;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace WebAPI.Data

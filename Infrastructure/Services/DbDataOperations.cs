@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.ComponentModel;
-using Application.Interfaces.Services;
+﻿using Application.DTOs;
 using Application.Interfaces.Repositories;
-using Application.DTOs;
+using Application.Interfaces.Services;
 using Domain.DomainModels;
 
 namespace BLL
@@ -20,7 +14,7 @@ namespace BLL
             dbRepos = dbRepositorySQL;
         }
 
-        public List<AreaDTO> areaDTOs 
+        public List<AreaDTO> areaDTOs
         {
             get
             {
@@ -36,15 +30,15 @@ namespace BLL
             });
         }
 
-        public List<CategoryDTO> categoryDTOs 
-        { 
+        public List<CategoryDTO> categoryDTOs
+        {
             get
             {
                 return dbRepos.Categories.GetAll().Select(i => new CategoryDTO(i)).ToList();
             }
         }
 
-        public List<CertificateDTO> certificateDTOs 
+        public List<CertificateDTO> certificateDTOs
         {
             get
             {
@@ -63,7 +57,8 @@ namespace BLL
             });
         }
 
-        public List<DayDTO> dayDTOs { 
+        public List<DayDTO> dayDTOs
+        {
             get
             {
                 return dbRepos.Days.GetAll().Select(i => new DayDTO(i)).ToList();
@@ -71,7 +66,7 @@ namespace BLL
         }
 
         public List<DiagnosisDTO> diagnosisDTOs
-        { 
+        {
             get
             {
                 return dbRepos.Diagnosises.GetAll().Select(i => new DiagnosisDTO(i)).ToList();
@@ -81,7 +76,7 @@ namespace BLL
         {
             dbRepos.Diagnosises.Create(new Diagnosis()
             {
-                Id= diagnosisDTO.Id,
+                Id = diagnosisDTO.Id,
                 Name = diagnosisDTO.Name,
             });
         }
@@ -91,7 +86,7 @@ namespace BLL
             dbRepos.Diagnosises.Delete(diagnosisDTO.Id);
         }
 
-        public List<DoctorDTO> doctorDTOs 
+        public List<DoctorDTO> doctorDTOs
         {
             get
             {
@@ -103,7 +98,7 @@ namespace BLL
             return dbRepos.Doctors.Create(new Doctor()
             {
                 Id = doctorDTO.Id,
-                SpecializationId= doctorDTO.SpecializationId,
+                SpecializationId = doctorDTO.SpecializationId,
                 LastName = doctorDTO.LastName,
                 FirstName = doctorDTO.FirstName,
                 Surname = doctorDTO.Surname,
@@ -136,8 +131,8 @@ namespace BLL
             //dbRepos.Save();
         }
 
-        public List<PatientDTO> patientDTOs 
-        { 
+        public List<PatientDTO> patientDTOs
+        {
             get
             {
                 return dbRepos.Patients.GetAll().Select(i => new PatientDTO(i)).ToList();
@@ -182,8 +177,8 @@ namespace BLL
             dbRepos.Patients.Delete(id);
         }
 
-        public List<ProcedureDTO> procedureDTOs 
-        { 
+        public List<ProcedureDTO> procedureDTOs
+        {
             get
             {
                 return dbRepos.Procedures.GetAll().Select(i => new ProcedureDTO(i)).ToList();
@@ -198,7 +193,8 @@ namespace BLL
             });
         }
 
-        public List<SpecializationDTO> specializationDTOs { 
+        public List<SpecializationDTO> specializationDTOs
+        {
             get
             {
                 return dbRepos.Specializations.GetAll().Select(i => new SpecializationDTO(i)).ToList();
@@ -213,8 +209,8 @@ namespace BLL
             });
         }
 
-        public List<StatusDTO> statusDTOs 
-        { 
+        public List<StatusDTO> statusDTOs
+        {
             get
             {
                 return dbRepos.Statuses.GetAll().Select(i => new StatusDTO(i)).ToList();
@@ -229,7 +225,7 @@ namespace BLL
             });
         }
 
-        public List<VisitDTO> visitDTOs 
+        public List<VisitDTO> visitDTOs
         {
             get
             {
@@ -241,12 +237,12 @@ namespace BLL
         {
             return dbRepos.Visits.Create(new Visit()
             {
-                DateT = visit.DateT, 
-                TimeT = visit.TimeT, 
+                DateT = visit.DateT,
+                TimeT = visit.TimeT,
                 DoctorId = visit.DoctorId,
                 PatientId = visit.PatientId,
-                DiagnosisId = visit.Diagnosis == null ? null : visit.Diagnosis.Id, 
-                ProcedureId = visit.Procedure == null ? null : visit.Procedure.Id, 
+                DiagnosisId = visit.Diagnosis == null ? null : visit.Diagnosis.Id,
+                ProcedureId = visit.Procedure == null ? null : visit.Procedure.Id,
                 VisitStatusId = visit.VisitStatusId
             });
         }
@@ -299,7 +295,7 @@ namespace BLL
             Shedule s = dbRepos.Shedules.GetItem(shedule.Id);
             s.BeginTime = shedule.BeginTime;
             s.EndTime = shedule.EndTime;
-            
+
             dbRepos.Shedules.Update(s);
             //dbRepos.Save();
         }

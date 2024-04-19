@@ -4,7 +4,7 @@ import { Input, Select, Modal, Button, Form } from "antd";
 import DirectoryEntity from "../Entities/DirectoryEntity";
 import { notification } from "antd";
 import { useErrorBoundary } from "react-error-boundary";
-import axios from "axios";
+import { Fetch } from "../../axiosInstance";
 
 interface PropsType {
   editingPatient: PatientObj | undefined;
@@ -45,7 +45,7 @@ const ModalDoctor: React.FC<PropsType> = ({
   useEffect(() => {
     const getAreas = async () => {
       try {
-        const response = await axios.get<Array<DirectoryEntity>>("api/Areas");
+        const response = await Fetch.get<Array<DirectoryEntity>>(`api/Areas`);
         if (response.status === 200) {
           setAreas(response.data);
           setAreaId(response.data[0].id);
@@ -57,7 +57,7 @@ const ModalDoctor: React.FC<PropsType> = ({
 
     const getGenders = async () => {
       try {
-        const response = await axios.get<Array<DirectoryEntity>>("api/Genders");
+        const response = await Fetch.get<Array<DirectoryEntity>>(`api/Genders`);
         if (response.status === 200) setGenders(response.data);
         else console.log(response.statusText);
       } catch (error) {
@@ -124,7 +124,7 @@ const ModalDoctor: React.FC<PropsType> = ({
           genderId,
         };
 
-        const response = await axios.post<PatientObj>("api/Patients", patient);
+        const response = await Fetch.post<PatientObj>(`api/Patients`, patient);
         if (response.status === 201) {
           addPatient(response.data);
           form.resetFields();
@@ -161,7 +161,7 @@ const ModalDoctor: React.FC<PropsType> = ({
           workPlace,
           genderId,
         };
-        const response = await axios.put<PatientObj>(
+        const response = await Fetch.put<PatientObj>(
           `api/Patients/${id}`,
           patient
         );
@@ -187,7 +187,6 @@ const ModalDoctor: React.FC<PropsType> = ({
 
     if (isEdit) {
       if (editingPatient !== undefined) {
-        console.log(editingPatient.id);
         editPatient(editingPatient.id);
       }
     } else createPatient();

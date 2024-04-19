@@ -1,11 +1,6 @@
 ﻿using Application.DTOs;
-using Application.Interfaces.Services;
 using Application.Interfaces.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Application.Interfaces.Services;
 
 namespace BLL.Services
 {
@@ -13,7 +8,7 @@ namespace BLL.Services
     {
         enum Days
         {
-            
+
         }
 
         IDbRepository repos;
@@ -25,7 +20,7 @@ namespace BLL.Services
 
         public bool CheckVisitAvailable(VisitDTO visit)
         {
-            return true; 
+            return true;
         }
 
         public List<VisitDTO> GetTalons(int doctorId, DateOnly date)
@@ -67,7 +62,7 @@ namespace BLL.Services
 
             return talons;
         }
-        
+
         public List<VisitDTO> GetFutureVisitsOnPatientAndDate(PatientDTO patient, DateOnly date)
         {
             return repos.Visits.GetList().Where(

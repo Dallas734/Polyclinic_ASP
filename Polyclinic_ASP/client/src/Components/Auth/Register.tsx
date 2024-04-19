@@ -5,7 +5,8 @@ import RegModel from "../Entities/RegModel";
 import "./ContainerStyle.css";
 import { notification } from "antd";
 import { useErrorBoundary } from "react-error-boundary";
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
+import { Fetch } from "../../axiosInstance";
 
 interface responseModel {
   message: string;
@@ -41,7 +42,7 @@ const Register: React.FC<PropsType> = () => {
 
     const register = async () => {
       try {
-        const response = await axios.post<responseModel>("api/register", model);
+        const response = await Fetch.post<responseModel>(`api/register`, model);
         if (response.status === 200) {
           notification.success({
             message: "Регистрация завершилась удачно",

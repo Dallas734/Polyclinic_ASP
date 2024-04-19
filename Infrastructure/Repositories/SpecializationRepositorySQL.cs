@@ -1,11 +1,6 @@
 ﻿using Application.Interfaces.Repositories;
 using Domain.DomainModels;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Repositories
 {
@@ -27,8 +22,8 @@ namespace Infrastructure.Repositories
             return dbContext.Specializations;
         }
 
-        public void Update(Specialization specialization) 
-        { 
+        public void Update(Specialization specialization)
+        {
             dbContext.Entry(specialization).State = EntityState.Modified;
         }
         public void Delete(int id)
@@ -39,7 +34,7 @@ namespace Infrastructure.Repositories
         }
         public Specialization GetItem(int id)
         {
-            return dbContext.Specializations.Find(id); 
+            return dbContext.Specializations.Find(id);
         }
         public int Create(Specialization specialization)
         {

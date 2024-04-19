@@ -50,7 +50,6 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "https://localhost:44390/",
   "devDependencies": {
     "@types/react-big-calendar": "^1.8.9"
   }

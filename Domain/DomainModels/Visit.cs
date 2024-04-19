@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Domain.DomainModels;
+﻿namespace Domain.DomainModels;
 
 public partial class Visit
 {

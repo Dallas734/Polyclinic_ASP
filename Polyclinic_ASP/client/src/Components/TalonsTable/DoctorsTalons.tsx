@@ -14,7 +14,7 @@ import "dayjs/locale/ru";
 import "moment/locale/ru";
 import { notification } from "antd";
 import { useErrorBoundary } from "react-error-boundary";
-import axios from "axios";
+import { Fetch } from "../../axiosInstance";
 
 interface PropsType {
   user: UserObj | null;
@@ -50,8 +50,8 @@ const DoctorsTalons: React.FC<PropsType> = ({ user }) => {
   useEffect(() => {
     const getDiagnoses = async () => {
       try {
-        const response = await axios.get<Array<DirectoryEntity>>(
-          "api/diagnoses"
+        const response = await Fetch.get<Array<DirectoryEntity>>(
+          `api/diagnoses`
         );
         if (response.status === 200) setDiagnoses(response.data);
         else console.log(response.statusText);
@@ -62,8 +62,8 @@ const DoctorsTalons: React.FC<PropsType> = ({ user }) => {
 
     const getProcedures = async () => {
       try {
-        const response = await axios.get<Array<DirectoryEntity>>(
-          "api/procedures"
+        const response = await Fetch.get<Array<DirectoryEntity>>(
+          `api/procedures`
         );
         if (response.status === 200) setProcedures(response.data);
         else console.log(response.statusText);
@@ -79,7 +79,7 @@ const DoctorsTalons: React.FC<PropsType> = ({ user }) => {
   useEffect(() => {
     const getTalons = async () => {
       try {
-        const response = await axios.get<Array<VisitObj>>(
+        const response = await Fetch.get<Array<VisitObj>>(
           `api/Visits/Talons?doctorId=${
             user?.doctorId
           }&date=${selectedDate.format("YYYY-MM-DD")}`
@@ -114,13 +114,13 @@ const DoctorsTalons: React.FC<PropsType> = ({ user }) => {
         visitStatusId: 2,
       };
 
-      const response = await axios.put(
+      const response = await Fetch.put(
         `api/visits/${selectedTalon?.id}`,
         visit
       );
       if (response.status === 201) {
         const getTalons = async () => {
-          axios
+          Fetch
             .get<Array<VisitObj>>(
               `api/Visits/Talons?doctorId=${
                 user?.doctorId

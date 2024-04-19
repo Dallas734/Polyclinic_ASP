@@ -1,9 +1,8 @@
-﻿using Application.Interfaces.Services;
+﻿using Application.DTOs;
+using Application.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using Application.DTOs;
-using Microsoft.AspNetCore.Authorization;
-using Domain.DomainModels;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -47,7 +46,7 @@ namespace Polyclinic_ASP.Controllers
 
             try
             {
-                foreach(var shedule in shedules)
+                foreach (var shedule in shedules)
                     await Task.Run(() => _dbCrud.UpdateShedule(shedule));
                 await _dbCrud.Save();
             }

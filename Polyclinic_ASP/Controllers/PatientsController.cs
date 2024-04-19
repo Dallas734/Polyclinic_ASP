@@ -1,12 +1,8 @@
 ﻿using Application.DTOs;
 using Application.Interfaces.Services;
-using Domain.DomainModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Client;
-using System.Numerics;
 
 namespace Polyclinic_ASP.Controllers
 {
@@ -64,9 +60,9 @@ namespace Polyclinic_ASP.Controllers
 
                 return Ok(patients);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-               return BadRequest(e.Message);
+                return BadRequest(e.Message);
             }
         }
 
@@ -150,7 +146,7 @@ namespace Polyclinic_ASP.Controllers
         }
 
         [HttpGet("card")]
-        [Authorize(Roles="Doctor")]
+        [Authorize(Roles = "Doctor")]
         public async Task<ActionResult<IEnumerable<VisitDTO>>> GetPatientCard(int patientId)
         {
             var patientCard = await Task.Run(() => _patientService.GetPatientCard(patientId));

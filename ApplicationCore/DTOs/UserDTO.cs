@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Domain.DomainModels;
-
-namespace Application.DTOs
+﻿namespace Application.DTOs
 {
     public class UserDTO
     {

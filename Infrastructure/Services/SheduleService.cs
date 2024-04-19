@@ -1,11 +1,6 @@
 ﻿using Application.DTOs;
-using Application.Interfaces.Services;
 using Application.Interfaces.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Application.Interfaces.Services;
 
 namespace BLL.Services
 {

@@ -15,7 +15,7 @@ import { ConfigProvider } from "antd/lib";
 import "moment/locale/ru";
 import { notification } from "antd";
 import { useErrorBoundary } from "react-error-boundary";
-import axios from "axios";
+import { Fetch } from "../../axiosInstance";
 
 interface PropsType {}
 
@@ -70,7 +70,7 @@ const TalonsTable: React.FC<PropsType> = () => {
   useEffect(() => {
     const getAreas = async () => {
       try {
-        const response = await axios.get<Array<DirectoryEntity>>("api/Areas");
+        const response = await Fetch.get<Array<DirectoryEntity>>(`api/Areas`);
         if (response.status === 200) setAreas(response.data);
         else console.log(response.statusText);
       } catch (error) {
@@ -80,8 +80,8 @@ const TalonsTable: React.FC<PropsType> = () => {
 
     const getSpecs = async () => {
       try {
-        const response = await axios.get<Array<DirectoryEntity>>(
-          "api/Specializations"
+        const response = await Fetch.get<Array<DirectoryEntity>>(
+          `api/Specializations`
         );
         if (response.status === 200) setSpecs(response.data);
         else console.log(response.statusText);
@@ -99,7 +99,7 @@ const TalonsTable: React.FC<PropsType> = () => {
 
     const getDoctorByAreaAndSpec = async () => {
       try {
-        const response = await axios.get<Array<DoctorObj>>(
+        const response = await Fetch.get<Array<DoctorObj>>(
           `api/Doctors/byAreaAndSpec?areaId=${areaId}&specId=${specId}`
         );
         if (response.status === 200) setDoctors(response.data);
@@ -117,7 +117,7 @@ const TalonsTable: React.FC<PropsType> = () => {
   useEffect(() => {
     const getPatientsByArea = async () => {
       try {
-        const response = await axios.get<Array<PatientObj>>(
+        const response = await Fetch.get<Array<PatientObj>>(
           `api/Patients/byArea?areaId=${areaId}`
         );
         if (response.status === 200) setPatients(response.data);
@@ -135,7 +135,7 @@ const TalonsTable: React.FC<PropsType> = () => {
   useEffect(() => {
     const getTalons = async () => {
       try {
-        const response = await axios.get<Array<VisitObj>>(
+        const response = await Fetch.get<Array<VisitObj>>(
           `api/Visits/Talons?doctorId=${doctorId}&date=${selectedDate.format(
             "YYYY-MM-DD"
           )}`
@@ -170,7 +170,7 @@ const TalonsTable: React.FC<PropsType> = () => {
         timeT: selectedTalon?.timeT,
       };
 
-      const response = await axios.post<VisitObj>(`api/Visits`, visit);
+      const response = await Fetch.post<VisitObj>(`api/Visits`, visit);
       if (response.status === 201) {
         setSelectedTalon(response.data);
         addTalon(response.data);
@@ -194,7 +194,7 @@ const TalonsTable: React.FC<PropsType> = () => {
 
   const deleteVisit = async () => {
     try {
-      const response = await axios.delete(`api/Visits/${selectedTalon?.id}`);
+      const response = await Fetch.delete(`api/Visits/${selectedTalon?.id}`);
       if (response.status === 200) {
         removeTalon(selectedTalon?.id);
         notification.success({

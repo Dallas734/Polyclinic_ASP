@@ -4,7 +4,7 @@ import { Input, Select, Modal, Button, Form } from "antd";
 import DirectoryEntity from "../Entities/DirectoryEntity";
 import { notification } from "antd";
 import { useErrorBoundary } from "react-error-boundary";
-import axios from "axios";
+import { Fetch } from "../../axiosInstance";
 
 interface PropsType {
   editingDoctor: DoctorObj | undefined;
@@ -48,8 +48,8 @@ const ModalDoctor: React.FC<PropsType> = ({
   useEffect(() => {
     const getSpecs = async () => {
       try {
-        const response = await axios.get<Array<DirectoryEntity>>(
-          "api/Specializations"
+        const response = await Fetch.get<Array<DirectoryEntity>>(
+          `api/Specializations`
         );
         if (response.status === 200) setSpec(response.data);
         else console.log(response.statusText);
@@ -60,7 +60,8 @@ const ModalDoctor: React.FC<PropsType> = ({
 
     const getGenders = async () => {
       try {
-        const response = await axios.get<Array<DirectoryEntity>>("api/Genders");
+        const response = await Fetch.get<Array<DirectoryEntity>>(`api/Genders`
+        );
         if (response.status === 200) setGenders(response.data);
         else console.log(response.statusText);
       } catch (error) {
@@ -70,8 +71,8 @@ const ModalDoctor: React.FC<PropsType> = ({
 
     const getCategories = async () => {
       try {
-        const response = await axios.get<Array<DirectoryEntity>>(
-          "api/Categories"
+        const response = await Fetch.get<Array<DirectoryEntity>>(
+          `api/Categories`
         );
         if (response.status === 200) setCategories(response.data);
         else console.log(response.statusText);
@@ -82,7 +83,8 @@ const ModalDoctor: React.FC<PropsType> = ({
 
     const getAreas = async () => {
       try {
-        const response = await axios.get<Array<DirectoryEntity>>("api/Areas");
+        const response = await Fetch.get<Array<DirectoryEntity>>(`api/Areas`
+        );
         if (response.status === 200) {
           setAreas(response.data);
           setAreaId(response.data[0].id);
@@ -94,8 +96,8 @@ const ModalDoctor: React.FC<PropsType> = ({
 
     const getStatuses = async () => {
       try {
-        const response = await axios.get<Array<DirectoryEntity>>(
-          "api/Categories"
+        const response = await Fetch.get<Array<DirectoryEntity>>(
+          `api/Categories`
         );
         if (response.status === 200) setStatuses(response.data);
         else console.log(response.statusText);
@@ -168,7 +170,7 @@ const ModalDoctor: React.FC<PropsType> = ({
           genderId,
         };
 
-        const response = await axios.post<DoctorObj>(`api/Doctors`, doctor);
+        const response = await Fetch.post<DoctorObj>(`api/Doctors`, doctor);
         if (response.status === 201) {
           notification.success({
             message: "Добаление завершилось удачно",
@@ -206,7 +208,7 @@ const ModalDoctor: React.FC<PropsType> = ({
           genderId,
         };
 
-        const response = await axios.put<DoctorObj>(
+        const response = await Fetch.put<DoctorObj>(
           `api/Doctors/${id}`,
           doctor
         );
@@ -293,7 +295,6 @@ const ModalDoctor: React.FC<PropsType> = ({
           name="firstName"
           label="Имя"
           hasFeedback
-          initialValue={firstName}
           rules={[
             {
               required: true,

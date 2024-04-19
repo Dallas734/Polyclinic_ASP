@@ -1,11 +1,5 @@
 ﻿using Application.Interfaces.Repositories;
 using Domain.DomainModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
 
 namespace Infrastructure.Repositories
 {
@@ -26,7 +20,7 @@ namespace Infrastructure.Repositories
         private CategoryRepositorySQL? categoryRepository;
         private CertificateRepositorySQL? certificateRepository;
         private VisitStatusRepositorySQL? visitStatusRepository;
-        private GenderRepositorySQL? genderRepository;  
+        private GenderRepositorySQL? genderRepository;
         private ReportRepositorySQL? reportRepository;
         public DbRepositorySQL(PolyclinicKurContext dbContext)
         {
@@ -165,7 +159,7 @@ namespace Infrastructure.Repositories
             get
             {
                 if (genderRepository == null)
-                    genderRepository = new GenderRepositorySQL(dbContext); 
+                    genderRepository = new GenderRepositorySQL(dbContext);
                 return genderRepository;
             }
         }

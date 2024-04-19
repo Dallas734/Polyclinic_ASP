@@ -13,31 +13,20 @@ import UserObj from "./Components/Entities/UserObj";
 import Logout from "./Components/Auth/Logout";
 import PatientCard from "./Components/Patient/PatientCard";
 import Shedule from "./Components/Shedule/Shedule";
-
-interface ResponseModel {
-  message: string;
-  responseUser: UserObj;
-}
+import { Fetch } from "./axiosInstance";
 
 function App() {
   const [user, setUser] = useState<UserObj | null>(null);
 
   useEffect(() => {
     const getUser = async () => {
-      const requestOptions = {
-        method: "GET",
-      };
-
-      return await fetch("api/isauthenticated", requestOptions)
-        .then((response) => {
-          return response.json();
-        })
-        .then(
-          (data: ResponseModel) => {
-            setUser(data.responseUser);
-          },
-          (error) => console.log(error)
-        );
+      try {
+        const { data } = await Fetch.get<UserObj>(`api/isauthenticated`);
+        if (data !== null) {
+          console.log(data);
+          setUser(data);
+        }
+      } catch (error) {}
     };
     getUser();
   }, []);

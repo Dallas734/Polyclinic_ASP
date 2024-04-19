@@ -1,10 +1,8 @@
 ﻿using Application.DTOs;
 using Application.Interfaces.Services;
-using Domain.DomainModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Polyclinic_ASP.Controllers
 {
@@ -15,7 +13,7 @@ namespace Polyclinic_ASP.Controllers
     {
         private IDbCrud _dbCrud;
         private IDoctorService _doctorService;
-        public DoctorsController(IDbCrud dbCrud, IDoctorService doctorService) 
+        public DoctorsController(IDbCrud dbCrud, IDoctorService doctorService)
         {
             _dbCrud = dbCrud;
             _doctorService = doctorService;
@@ -23,7 +21,7 @@ namespace Polyclinic_ASP.Controllers
 
         // GET: api/<DoctorController>
         [HttpGet]
-        [Authorize(Roles = "Registrator")]
+        [Authorize(Roles = "Registrator, Doctor")]
         public async Task<ActionResult<IEnumerable<DoctorDTO>>> GetDoctors()
         {
             try
@@ -65,9 +63,9 @@ namespace Polyclinic_ASP.Controllers
 
                 return Ok(doctors);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-               return BadRequest(e.Message);
+                return BadRequest(e.Message);
             }
         }
 
@@ -81,7 +79,7 @@ namespace Polyclinic_ASP.Controllers
 
                 return Ok(doctors);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return BadRequest(e.Message);
             }
@@ -103,7 +101,7 @@ namespace Polyclinic_ASP.Controllers
                 doctor.SpecializationName = _dbCrud.specializationDTOs.Find(i => i.Id == doctor.SpecializationId)?.Name;
                 doctor.CategoryName = _dbCrud.categoryDTOs.Find(i => i.Id == doctor.CategoryId)?.Name;
                 doctor.StatusName = _dbCrud.statusDTOs.Find(i => i.Id == doctor.StatusId)?.Name;
-                doctor.GenderName = _dbCrud.genderDTOs.Find(i => i.Id == doctor.GenderId)?.Name; 
+                doctor.GenderName = _dbCrud.genderDTOs.Find(i => i.Id == doctor.GenderId)?.Name;
                 if (doctor.AreaId == 0) doctor.AreaId = null;
                 doctor.Id = _dbCrud.AddDoctor(doctor);
                 await _dbCrud.Save();
@@ -126,9 +124,9 @@ namespace Polyclinic_ASP.Controllers
                 return BadRequest(ModelState.Values.SelectMany(e => e.Errors.Select(e => e.ErrorMessage)));
             }
 
-            if (id !=  doctor.Id)
+            if (id != doctor.Id)
             {
-                return BadRequest("Mismatched id");  
+                return BadRequest("Mismatched id");
             }
 
             try

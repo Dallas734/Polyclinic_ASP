@@ -1,11 +1,6 @@
 ﻿using Application.Interfaces.Repositories;
 using Domain.DomainModels;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Repositories
 {
@@ -27,7 +22,7 @@ namespace Infrastructure.Repositories
             return dbContext.Diagnoses;
         }
 
-        public void Update(Diagnosis diagnosis) 
+        public void Update(Diagnosis diagnosis)
         {
             dbContext.Entry(diagnosis).State = EntityState.Modified;
         }
@@ -37,8 +32,8 @@ namespace Infrastructure.Repositories
             if (diagnosis != null)
                 dbContext.Diagnoses.Remove(diagnosis);
         }
-        public Diagnosis GetItem(int id) 
-        { 
+        public Diagnosis GetItem(int id)
+        {
             return dbContext.Diagnoses.Find(id);
         }
         public int Create(Diagnosis diagnosis)

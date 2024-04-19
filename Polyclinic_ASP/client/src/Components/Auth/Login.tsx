@@ -6,7 +6,8 @@ import LoginModel from "../Entities/LoginModel";
 import UserObj from "../Entities/UserObj";
 import { notification } from "antd";
 import { useErrorBoundary } from "react-error-boundary";
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
+import { Fetch } from "../../axiosInstance";
 
 
 interface ResponseModel {
@@ -37,7 +38,7 @@ const Login: React.FC<PropsType> = ({ setUser }) => {
 
     const login = async () => {
       try {
-        const response =  await axios.post<ResponseModel>("api/login", model);
+        const response =  await Fetch.post<ResponseModel>(`api/login`, model);
         if (response.status === 200)
         {
           setMessage(["Вход завершился удачно"]);
@@ -64,11 +65,11 @@ const Login: React.FC<PropsType> = ({ setUser }) => {
       catch (error)
       {
         const errors = error as AxiosError;
-        if (errors.response?.status === 500)
+        if (errors.response?.status === 500 || errors.response?.status === 404)
         {
           showBoundary(errors);
         }
-        else
+        else if (errors.response?.status === 401)
         {
         setMessage(["Неправильный логин или пароль"])
         }

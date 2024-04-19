@@ -1,11 +1,6 @@
 ﻿using Application.DTOs;
-using Application.Interfaces.Services;
 using Application.Interfaces.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Application.Interfaces.Services;
 
 namespace Infrastructure.Services
 {
@@ -27,7 +22,7 @@ namespace Infrastructure.Services
         public List<DoctorDTO> GetDoctorsOnAreaAndSpecialization(int area_id, int spec_id)
         {
             return repos.Doctors.GetAll()
-                .Where(i => (i.SpecializationId == spec_id && i.AreaId == area_id) || 
+                .Where(i => (i.SpecializationId == spec_id && i.AreaId == area_id) ||
                 (i.SpecializationId == spec_id && i.AreaId == null))
                 .Select(i => new DoctorDTO(i)).ToList();
         }

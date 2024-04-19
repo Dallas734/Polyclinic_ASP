@@ -1,11 +1,6 @@
 ﻿using Application.Interfaces.Repositories;
 using Domain.DomainModels;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Repositories
 {
@@ -40,10 +35,10 @@ namespace Infrastructure.Repositories
             }
         }
         public Status GetItem(int id)
-        { 
+        {
             return dbContext.Statuses.Find(id);
         }
-        public int Create(Status status) 
+        public int Create(Status status)
         {
             dbContext.Statuses.Add(status);
             return status.Id;

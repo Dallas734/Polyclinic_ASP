@@ -1,11 +1,6 @@
 ﻿using Application.Interfaces.Repositories;
 using Domain.DomainModels;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Repositories
 {
@@ -27,22 +22,22 @@ namespace Infrastructure.Repositories
             return dbContext.Categories;
         }
 
-        public void Update(Category category) 
-        { 
+        public void Update(Category category)
+        {
             dbContext.Entry(category).State = EntityState.Modified;
         }
         public void Delete(int id)
-        { 
-           Category category = dbContext.Categories.Find(id);
+        {
+            Category category = dbContext.Categories.Find(id);
             if (category != null)
                 dbContext.Categories.Remove(category);
         }
         public Category GetItem(int id)
         {
-            return dbContext.Categories.Find(id); 
+            return dbContext.Categories.Find(id);
         }
         public int Create(Category category)
-        { 
+        {
             dbContext.Categories.Add(category);
             return category.Id;
         }
