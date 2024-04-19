@@ -21,6 +21,10 @@ Fetch.interceptors.response.use(
       });
       console.log("У вас нет доступа к этому ресурсу!");
     }
+    else
+    {
+        console.log(404);
+    }
     return Promise.reject(error);
   }
 );

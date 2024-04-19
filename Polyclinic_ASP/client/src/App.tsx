@@ -15,6 +15,7 @@ import PatientCard from "./Components/Patient/PatientCard";
 import Shedule from "./Components/Shedule/Shedule";
 import Fetch from "./Axios/axiosInstance";
 import { Helmet } from "react-helmet";
+import NotFound from "./Components/NotFound";
 
 function App() {
   const [user, setUser] = useState<UserObj | null>(null);
@@ -25,7 +26,6 @@ function App() {
         if (user !== null) {
           const { data } = await Fetch.get<UserObj>(`api/isauthenticated`);
           if (data !== null) {
-            console.log(data);
             setUser(data);
           }
         }
@@ -42,6 +42,7 @@ function App() {
       </Helmet>
       <BrowserRouter>
         <Routes>
+          <Route path="/notFound" element={<NotFound />} />
           <Route path="/" element={<Layout user={user} />}>
             <Route
               index
@@ -57,6 +58,7 @@ function App() {
                 </div>
               }
             />
+            
             <Route
               path="/patients"
               element={
@@ -100,7 +102,7 @@ function App() {
             <Route
               path="/logout"
               element={<Logout setUser={setUser} />}
-            ></Route>
+            />
           </Route>
         </Routes>
       </BrowserRouter>
