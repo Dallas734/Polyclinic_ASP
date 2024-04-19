@@ -14,6 +14,7 @@ import Logout from "./Components/Auth/Logout";
 import PatientCard from "./Components/Patient/PatientCard";
 import Shedule from "./Components/Shedule/Shedule";
 import { Fetch } from "./axiosInstance";
+import { Helmet } from "react-helmet";
 
 function App() {
   const [user, setUser] = useState<UserObj | null>(null);
@@ -32,67 +33,76 @@ function App() {
   }, []);
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Layout user={user} />}>
-          <Route
-            index
-            element={<h3>Медицинская информационная система (МИС)</h3>}
-          />
-          <Route path="/register" element={<Register />} />
-          <Route path="/login" element={<Login setUser={setUser} />} />
-          <Route
-            path="/doctors"
-            element={
-              <div>
-                <Doctor />
-              </div>
-            }
-          />
-          <Route
-            path="/patients"
-            element={
-              <div>
-                <Patient />
-              </div>
-            }
-          />
-          <Route
-            path="/addVisits"
-            element={
-              <div>
-                <TalonsTable />
-              </div>
-            }
-          />
-          <Route
-            path="/patientsCard"
-            element={
-              <div>
-                <PatientCard />
-              </div>
-            }
-          />
-          <Route
-            path="/doctorsTalons"
-            element={
-              <div>
-                <DoctorsTalons user={user} />
-              </div>
-            }
-          />
-          <Route
-            path="/shedule"
-            element={
-              <div>
-                <Shedule />
-              </div>
-            }
-          />
-          <Route path="/logout" element={<Logout setUser={setUser} />}></Route>
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>МИС</title>
+      </Helmet>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Layout user={user} />}>
+            <Route
+              index
+              element={<h3>Медицинская информационная система (МИС)</h3>}
+            />
+            <Route path="/register" element={<Register />} />
+            <Route path="/login" element={<Login setUser={setUser} />} />
+            <Route
+              path="/doctors"
+              element={
+                <div>
+                  <Doctor />
+                </div>
+              }
+            />
+            <Route
+              path="/patients"
+              element={
+                <div>
+                  <Patient />
+                </div>
+              }
+            />
+            <Route
+              path="/addVisits"
+              element={
+                <div>
+                  <TalonsTable />
+                </div>
+              }
+            />
+            <Route
+              path="/patientsCard"
+              element={
+                <div>
+                  <PatientCard />
+                </div>
+              }
+            />
+            <Route
+              path="/doctorsTalons"
+              element={
+                <div>
+                  <DoctorsTalons user={user} />
+                </div>
+              }
+            />
+            <Route
+              path="/shedule"
+              element={
+                <div>
+                  <Shedule />
+                </div>
+              }
+            />
+            <Route
+              path="/logout"
+              element={<Logout setUser={setUser} />}
+            ></Route>
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </>
   );
 }
 
