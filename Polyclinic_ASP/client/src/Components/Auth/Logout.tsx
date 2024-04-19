@@ -17,7 +17,7 @@ const LogOff: React.FC<PropsType> = ({ setUser }) => {
   useEffect(() => {
     const logOff = async () => {
       try {
-      const response = await Fetch.post(`${process.env.REACT_APP_BACKEND_URL}api/logoff`);
+      const response = await Fetch.post(`api/logoff`);
       if (response.status === 200)
       {
         setUser(null);

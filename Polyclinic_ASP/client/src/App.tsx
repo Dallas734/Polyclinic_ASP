@@ -14,6 +14,7 @@ import Logout from "./Components/Auth/Logout";
 import PatientCard from "./Components/Patient/PatientCard";
 import Shedule from "./Components/Shedule/Shedule";
 import { Fetch } from "./axiosInstance";
+import { Helmet } from 'react-helmet';
 
 function App() {
   const [user, setUser] = useState<UserObj | null>(null);
@@ -32,6 +33,11 @@ function App() {
   }, []);
 
   return (
+    <>
+    <Helmet>
+      <meta charSet="utf-8"/>
+      <title>МИС</title>
+    </Helmet>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Layout user={user} />}>
@@ -93,6 +99,7 @@ function App() {
         </Route>
       </Routes>
     </BrowserRouter>
+    </>
   );
 }
 

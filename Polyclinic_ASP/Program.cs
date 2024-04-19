@@ -58,8 +58,8 @@ builder.Host.UseSerilog();
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
-    options.Cookie.SameSite = SameSiteMode.None;
-    options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+    options.Cookie.SameSite = SameSiteMode.Strict;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.None;
     options.Cookie.HttpOnly = true;
     options.Cookie.Name = "PolyclinicCookie";
     options.LoginPath = "/";
@@ -95,7 +95,7 @@ builder.Services.AddCors((options) =>
 {
     options.AddDefaultPolicy(builder =>
     {
-        builder.WithOrigins("http://localhost:3000", "https://localhost:44390")
+        builder.WithOrigins("http://localhost:3000", "http://localhost:8055")
         .AllowAnyHeader()
         .AllowAnyMethod()
         .AllowCredentials();
