@@ -4,7 +4,7 @@ import { Input, Select, Modal, Button, Form } from "antd";
 import DirectoryEntity from "../Entities/DirectoryEntity";
 import { notification } from "antd";
 import { useErrorBoundary } from "react-error-boundary";
-import { Fetch } from "../../axiosInstance";
+import Fetch from "../../Axios/axiosInstance";
 
 interface PropsType {
   editingPatient: PatientObj | undefined;

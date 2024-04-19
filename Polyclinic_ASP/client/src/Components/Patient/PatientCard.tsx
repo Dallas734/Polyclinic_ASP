@@ -7,7 +7,7 @@ import type { TableProps } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import { ColumnFilterItem } from "antd/es/table/interface";
 import { useErrorBoundary } from "react-error-boundary";
-import { Fetch } from "../../axiosInstance";
+import Fetch from "../../Axios/axiosInstance";
 
 interface PropsType {}
 

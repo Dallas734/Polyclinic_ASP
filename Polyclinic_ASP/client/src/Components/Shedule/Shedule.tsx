@@ -8,7 +8,7 @@ import dayjs from "dayjs";
 import "./Shedule.css";
 import { notification } from "antd";
 import { useErrorBoundary } from "react-error-boundary";
-import { Fetch } from "../../axiosInstance";
+import Fetch from "../../Axios/axiosInstance";
 
 interface PropsType {}
 

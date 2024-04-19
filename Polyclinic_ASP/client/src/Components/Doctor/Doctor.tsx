@@ -8,7 +8,8 @@ import { ColumnFilterItem } from "antd/es/table/interface";
 import DirectoryEntity from "../Entities/DirectoryEntity";
 import { notification } from "antd";
 import { useErrorBoundary } from "react-error-boundary";
-import { Fetch } from "../../axiosInstance";
+import { AxiosError } from "axios";
+import Fetch from "../../Axios/axiosInstance";
 
 interface PropsType {}
 
@@ -41,7 +42,10 @@ const Doctor: React.FC<PropsType> = () => {
         const response = await Fetch.get<Array<DoctorObj>>(`api/Doctors`);
         setDoctors(response.data);
       } catch (error) {
-        showBoundary(error);
+        const errors = error as AxiosError;
+        if (errors.response?.status === 401)
+          showBoundary("У вас нет доступа к этому ресурсу!");
+        else showBoundary(error);
       }
     };
 
@@ -51,7 +55,10 @@ const Doctor: React.FC<PropsType> = () => {
         if (response.status === 200) setAreas(response.data);
         else console.log(response.statusText);
       } catch (error) {
-        showBoundary(error);
+        const errors = error as AxiosError;
+        if (errors.response?.status === 401)
+          showBoundary("У вас нет доступа к этому ресурсу!");
+        else showBoundary(error);
       }
     };
 
@@ -63,7 +70,10 @@ const Doctor: React.FC<PropsType> = () => {
         if (response.status === 200) setStatuses(response.data);
         else console.log(response.statusText);
       } catch (error) {
-        showBoundary(error);
+        const errors = error as AxiosError;
+        if (errors.response?.status === 401)
+          showBoundary("У вас нет доступа к этому ресурсу!");
+        else showBoundary(error);
       }
     };
 
@@ -73,7 +83,10 @@ const Doctor: React.FC<PropsType> = () => {
         if (response.status === 200) setGenders(response.data);
         else console.log(response.statusText);
       } catch (error) {
-        showBoundary(error);
+        const errors = error as AxiosError;
+        if (errors.response?.status === 401)
+          showBoundary("У вас нет доступа к этому ресурсу!");
+        else showBoundary(error);
       }
     };
 
@@ -85,7 +98,10 @@ const Doctor: React.FC<PropsType> = () => {
         if (response.status === 200) setCategories(response.data);
         else console.log(response.statusText);
       } catch (error) {
-        showBoundary(error);
+        const errors = error as AxiosError;
+        if (errors.response?.status === 401)
+          showBoundary("У вас нет доступа к этому ресурсу!");
+        else showBoundary(error);
       }
     };
 
@@ -97,7 +113,10 @@ const Doctor: React.FC<PropsType> = () => {
         if (response.status === 200) setSpec(response.data);
         else console.log(response.statusText);
       } catch (error) {
-        showBoundary(error);
+        const errors = error as AxiosError;
+        if (errors.response?.status === 401)
+          showBoundary("У вас нет доступа к этому ресурсу!");
+        else showBoundary(error);
       }
     };
 

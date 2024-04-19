@@ -6,7 +6,7 @@ import "./ContainerStyle.css";
 import { notification } from "antd";
 import { useErrorBoundary } from "react-error-boundary";
 import { AxiosError } from "axios";
-import { Fetch } from "../../axiosInstance";
+import Fetch from "../../Axios/axiosInstance";
 
 interface responseModel {
   message: string;

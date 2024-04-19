@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import UserObj from "../Entities/UserObj";
 import { notification } from "antd";
 import { useErrorBoundary } from "react-error-boundary";
-import { Fetch } from "../../axiosInstance";
+import Fetch from "../../Axios/axiosInstance";
 
 interface PropsType {
   setUser: (value: UserObj | null) => void;
@@ -18,7 +18,7 @@ const LogOff: React.FC<PropsType> = ({ setUser }) => {
     const logOff = async () => {
       try {
         const response = await Fetch.post(
-          `${process.env.REACT_APP_BACKEND_URL}api/logoff`
+          `api/logoff`
         );
         if (response.status === 200) {
           setUser(null);

@@ -7,7 +7,7 @@ import UserObj from "../Entities/UserObj";
 import { notification } from "antd";
 import { useErrorBoundary } from "react-error-boundary";
 import { AxiosError } from "axios";
-import { Fetch } from "../../axiosInstance";
+import Fetch from "../../Axios/axiosInstance";
 
 interface ResponseModel {
   message: string;

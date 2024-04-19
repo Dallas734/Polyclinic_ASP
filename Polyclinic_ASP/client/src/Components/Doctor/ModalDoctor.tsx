@@ -4,7 +4,8 @@ import { Input, Select, Modal, Button, Form } from "antd";
 import DirectoryEntity from "../Entities/DirectoryEntity";
 import { notification } from "antd";
 import { useErrorBoundary } from "react-error-boundary";
-import { Fetch } from "../../axiosInstance";
+import Fetch from "../../Axios/axiosInstance";
+import { AxiosError } from "axios";
 
 interface PropsType {
   editingDoctor: DoctorObj | undefined;
@@ -54,7 +55,10 @@ const ModalDoctor: React.FC<PropsType> = ({
         if (response.status === 200) setSpec(response.data);
         else console.log(response.statusText);
       } catch (error) {
-        showBoundary(error);
+        const errors = error as AxiosError;
+        if (errors.response?.status === 401)
+          showBoundary("У вас нет доступа к этому ресурсу!");
+        else showBoundary(error);
       }
     };
 
