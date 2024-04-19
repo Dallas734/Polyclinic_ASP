@@ -120,12 +120,11 @@ const DoctorsTalons: React.FC<PropsType> = ({ user }) => {
       );
       if (response.status === 201) {
         const getTalons = async () => {
-          Fetch
-            .get<Array<VisitObj>>(
-              `api/Visits/Talons?doctorId=${
-                user?.doctorId
-              }&date=${selectedDate.format("YYYY-MM-DD")}`
-            )
+          Fetch.get<Array<VisitObj>>(
+            `api/Visits/Talons?doctorId=${
+              user?.doctorId
+            }&date=${selectedDate.format("YYYY-MM-DD")}`
+          )
             .then((response) => setTalons(response.data))
             .catch((error) => showBoundary(error));
         };

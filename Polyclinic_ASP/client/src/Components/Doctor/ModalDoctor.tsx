@@ -60,8 +60,7 @@ const ModalDoctor: React.FC<PropsType> = ({
 
     const getGenders = async () => {
       try {
-        const response = await Fetch.get<Array<DirectoryEntity>>(`api/Genders`
-        );
+        const response = await Fetch.get<Array<DirectoryEntity>>(`api/Genders`);
         if (response.status === 200) setGenders(response.data);
         else console.log(response.statusText);
       } catch (error) {
@@ -83,8 +82,7 @@ const ModalDoctor: React.FC<PropsType> = ({
 
     const getAreas = async () => {
       try {
-        const response = await Fetch.get<Array<DirectoryEntity>>(`api/Areas`
-        );
+        const response = await Fetch.get<Array<DirectoryEntity>>(`api/Areas`);
         if (response.status === 200) {
           setAreas(response.data);
           setAreaId(response.data[0].id);

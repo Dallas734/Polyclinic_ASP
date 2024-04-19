@@ -92,7 +92,7 @@ const Doctor: React.FC<PropsType> = () => {
     const getSpecs = async () => {
       try {
         const response = await Fetch.get<Array<DirectoryEntity>>(
-          `api/Specializations`,
+          `api/Specializations`
         );
         if (response.status === 200) setSpec(response.data);
         else console.log(response.statusText);

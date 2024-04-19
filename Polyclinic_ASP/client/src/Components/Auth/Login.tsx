@@ -9,7 +9,6 @@ import { useErrorBoundary } from "react-error-boundary";
 import { AxiosError } from "axios";
 import { Fetch } from "../../axiosInstance";
 
-
 interface ResponseModel {
   message: string;
   responseUser: UserObj;
@@ -38,40 +37,35 @@ const Login: React.FC<PropsType> = ({ setUser }) => {
 
     const login = async () => {
       try {
-        const response =  await Fetch.post<ResponseModel>(`api/login`, model);
-        if (response.status === 200)
-        {
+        const response = await Fetch.post<ResponseModel>(`api/login`, model);
+        if (response.status === 200) {
           setMessage(["Вход завершился удачно"]);
-            notification.success({
-              message: "Вход завершился удачно",
-              placement: "topRight",
-              duration: 2,
-            });
+          notification.success({
+            message: "Вход завершился удачно",
+            placement: "topRight",
+            duration: 2,
+          });
 
-            setUser(response.data.responseUser);
-            // Переход на главную страницу
-            navigate("/");
-        }
-        else
-        {
+          setUser(response.data.responseUser);
+          // Переход на главную страницу
+          navigate("/");
+        } else {
           setMessage(["Вход завершился неудачно"]);
-            notification.error({
-              message: "Вход завершился неудачно",
-              placement: "topRight",
-              duration: 2,
-            });
+          notification.error({
+            message: "Вход завершился неудачно",
+            placement: "topRight",
+            duration: 2,
+          });
         }
-      }
-      catch (error)
-      {
+      } catch (error) {
         const errors = error as AxiosError;
-        if (errors.response?.status === 500 || errors.response?.status === 404)
-        {
+        if (
+          errors.response?.status === 500 ||
+          errors.response?.status === 404
+        ) {
           showBoundary(errors);
-        }
-        else if (errors.response?.status === 401)
-        {
-        setMessage(["Неправильный логин или пароль"])
+        } else if (errors.response?.status === 401) {
+          setMessage(["Неправильный логин или пароль"]);
         }
       }
     };
