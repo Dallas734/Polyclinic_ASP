@@ -79,10 +79,10 @@ namespace Polyclinic_ASP.Controllers
 
             try
             {
-                visit.VisitStatusId = 1;
+                /*visit.VisitStatusId = 1;
                 visit.VisitStatusName = _dbCrud.visitStatusDTOs.Find(i => i.Id == visit.VisitStatusId).Name;
                 visit.PatientFullName = _dbCrud.patientDTOs.Find(i => i.Id == visit.PatientId).FullName;
-                visit.DoctorFullName = _dbCrud.doctorDTOs.Find(i => i.Id == visit.DoctorId).FullName;
+                visit.DoctorFullName = _dbCrud.doctorDTOs.Find(i => i.Id == visit.DoctorId).FullName;*/
                 visit.Id = _dbCrud.AddVisit(visit);
                 await _dbCrud.Save();
             }

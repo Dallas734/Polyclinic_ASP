@@ -19,7 +19,8 @@ namespace Infrastructure.Repositories
         public IEnumerable<Patient> GetAll()
         {
             return dbContext.Patients
-                .Include(p => p.Gender);
+                .Include(p => p.Gender)
+                .Include(p => p.Area);
         }
         public Patient GetItem(int id)
         {

@@ -97,7 +97,7 @@ const ModalDoctor: React.FC<PropsType> = ({
     const getStatuses = async () => {
       try {
         const response = await Fetch.get<Array<DirectoryEntity>>(
-          `api/Categories`
+          `api/Statuses`
         );
         if (response.status === 200) setStatuses(response.data);
         else console.log(response.statusText);

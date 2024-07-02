@@ -10,20 +10,26 @@ namespace Application.DTOs
         public DoctorDTO(Doctor d)
         {
             Id = d.Id;
-            SpecializationId = d.SpecializationId;
+            /*SpecializationId = d.SpecializationId;*/
+            Specialization = new SpecializationDTO(d.Specialization);
             LastName = d.LastName;
             FirstName = d.FirstName;
             Surname = d.Surname;
-            GenderId = d.GenderId;
+            /*GenderId = d.GenderId;*/
+            Gender = new GenderDTO(d.Gender);
             DateOfBirth = d.DateOfBirth;
-            StatusId = d.StatusId;
+            /*StatusId = d.StatusId;
             AreaId = d.AreaId;
-            CategoryId = d.CategoryId;
+            CategoryId = d.CategoryId;*/
+            Status = new StatusDTO(d.Status);
+            Area = new AreaDTO(d.Area);
             FullName = d.LastName + " " + d.FirstName + " " + d.Surname;
-            SpecializationName = d.Specialization.Name;
+            /*SpecializationName = d.Specialization.Name;
             StatusName = d.Status.Name;
             CategoryName = d.Category.Name;
-            GenderName = d.Gender.Name;
+            GenderName = d.Gender.Name;*/
+            Category = new CategoryDTO(d.Category);
+            Gender = new GenderDTO(d.Gender);
 
         }
 
@@ -37,22 +43,32 @@ namespace Application.DTOs
 
         public DateOnly DateOfBirth { get; set; }
 
-        public int SpecializationId { get; set; }
+       /* public int SpecializationId { get; set; }
 
-        public string? SpecializationName { get; set; }
+        public string? SpecializationName { get; set; }*/
 
-        public int StatusId { get; set; }
+        public SpecializationDTO Specialization { get; set; }
 
-        public string? StatusName { get; set; }
+        /*public int StatusId { get; set; }
 
-        public int? AreaId { get; set; }
+        public string? StatusName { get; set; }*/
 
-        public int CategoryId { get; set; }
+        public StatusDTO Status { get; set; }
 
-        public string? CategoryName { get; set; }
+        // public int? AreaId { get; set; }
 
-        public int GenderId { get; set; }
+        public AreaDTO Area { get; set; }
 
-        public string? GenderName { get; set; }
+        /*public int CategoryId { get; set; }
+
+        public string? CategoryName { get; set; }*/
+
+        public CategoryDTO Category { get; set; }
+
+        /*public int GenderId { get; set; }
+
+        public string? GenderName { get; set; }*/
+
+        public GenderDTO Gender { get; set; }
     }
 }

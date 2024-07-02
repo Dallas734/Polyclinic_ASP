@@ -16,11 +16,13 @@ namespace Application.DTOs
             FirstName = p.FirstName;
             Surname = p.Surname;
             FullName = p.LastName + " " + p.FirstName + " " + p.Surname;
-            GenderId = p.GenderId;
-            GenderName = p.Gender.Name;
+            /*GenderId = p.GenderId;
+            GenderName = p.Gender.Name;*/
+            Gender = new GenderDTO(p.Gender);
             DateOfBirth = p.DateOfBirth;
             Address = p.Address;
-            AreaId = p.AreaId;
+            // AreaId = p.AreaId;
+            Area = new AreaDTO(p.Area);
             Polis = p.Polis;
             WorkPlace = p.WorkPlace;
         }
@@ -39,15 +41,19 @@ namespace Application.DTOs
 
         public string? Address { get; set; }
 
-        public int? AreaId { get; set; }
+        /*public int? AreaId { get; set; }*/
+
+        public AreaDTO Area { get; set; }
 
         [MaxLength(16)]
         public string Polis { get; set; }
 
         public string WorkPlace { get; set; }
 
-        public int GenderId { get; set; }
+        /*public int GenderId { get; set; }
 
-        public string? GenderName { get; set; }
+        public string? GenderName { get; set; }*/
+
+        public GenderDTO Gender { get; set; }
     }
 }

@@ -10,8 +10,11 @@ namespace Application.DTOs
 
         public AreaDTO(Area a)
         {
-            Id = a.Id;
-            Type = a.Type;
+            if (a != null)
+            {
+                Id = a.Id;
+                Type = a.Type;
+            }
             //Addresses = new ObservableCollection<AddressDTO>(context.addressDTOs.Where(i => i.AreaId == Id).ToList());
         }
 

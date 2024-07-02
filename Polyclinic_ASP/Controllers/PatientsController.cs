@@ -78,8 +78,8 @@ namespace Polyclinic_ASP.Controllers
 
             try
             {
-                patient.GenderName = _dbCrud.genderDTOs.Find(i => i.Id == patient.GenderId).Name;
-                if (patient.AreaId == 0) patient.AreaId = null;
+                patient.Gender = _dbCrud.genderDTOs.Find(i => i.Id == patient.Gender.Id);
+                if (patient.Area == null) patient.Area = null;
                 patient.Id = _dbCrud.AddPatient(patient);
                 await _dbCrud.Save();
             }
@@ -108,8 +108,8 @@ namespace Polyclinic_ASP.Controllers
 
             try
             {
-                patient.GenderName = _dbCrud.genderDTOs.Find(i => i.Id == patient.GenderId).Name;
-                if (patient.AreaId == 0) patient.AreaId = null;
+                patient.Gender = _dbCrud.genderDTOs.Find(i => i.Id == patient.Gender.Id);
+                if (patient.Area == null) patient.Area = null;
                 _dbCrud.UpdatePatient(patient);
                 await _dbCrud.Save();
             }

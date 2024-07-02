@@ -22,11 +22,19 @@ namespace Infrastructure.Repositories
         {
             return dbContext.Visits
                 .Include(v => v.Doctor)
-                .Include(v => v.Doctor.Specialization)
+                //.Include(v => v.Doctor.Specialization)
                 .Include(v => v.Patient)
                 .Include(v => v.Diagnosis)
                 .Include(v => v.Procedure)
-                .Include(v => v.VisitStatus);
+                .Include(v => v.VisitStatus)
+                .Include(v => v.Doctor.Gender)
+                .Include(v => v.Patient.Gender)
+                .Include(v => v.Patient.Area)
+                .Include(v => v.Doctor.Specialization)
+                .Include(v => v.Doctor.Status)
+                .Include(v => v.Doctor.Area)
+                .Include(v => v.Doctor.Category);
+
         }
         public Visit GetItem(int id)
         {

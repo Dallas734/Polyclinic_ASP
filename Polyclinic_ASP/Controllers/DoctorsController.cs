@@ -98,11 +98,11 @@ namespace Polyclinic_ASP.Controllers
 
             try
             {
-                doctor.SpecializationName = _dbCrud.specializationDTOs.Find(i => i.Id == doctor.SpecializationId)?.Name;
-                doctor.CategoryName = _dbCrud.categoryDTOs.Find(i => i.Id == doctor.CategoryId)?.Name;
-                doctor.StatusName = _dbCrud.statusDTOs.Find(i => i.Id == doctor.StatusId)?.Name;
-                doctor.GenderName = _dbCrud.genderDTOs.Find(i => i.Id == doctor.GenderId)?.Name;
-                if (doctor.AreaId == 0) doctor.AreaId = null;
+                doctor.Specialization = _dbCrud.specializationDTOs.Find(i => i.Id == doctor.Specialization.Id);
+                doctor.Category = _dbCrud.categoryDTOs.Find(i => i.Id == doctor.Category.Id);
+                doctor.Status = _dbCrud.statusDTOs.Find(i => i.Id == doctor.Status.Id);
+                doctor.Gender = _dbCrud.genderDTOs.Find(i => i.Id == doctor.Gender.Id);
+                if (doctor.Area == null) doctor.Area = null;
                 doctor.Id = _dbCrud.AddDoctor(doctor);
                 await _dbCrud.Save();
             }
@@ -131,11 +131,11 @@ namespace Polyclinic_ASP.Controllers
 
             try
             {
-                doctor.SpecializationName = _dbCrud.specializationDTOs.Find(i => i.Id == doctor.SpecializationId)?.Name;
-                doctor.CategoryName = _dbCrud.categoryDTOs.Find(i => i.Id == doctor.CategoryId)?.Name;
-                doctor.StatusName = _dbCrud.statusDTOs.Find(i => i.Id == doctor.StatusId)?.Name;
-                doctor.GenderName = _dbCrud.genderDTOs.Find(i => i.Id == doctor.GenderId)?.Name;
-                if (doctor.AreaId == 0) doctor.AreaId = null;
+                doctor.Specialization = _dbCrud.specializationDTOs.Find(i => i.Id == doctor.Specialization.Id);
+                doctor.Category = _dbCrud.categoryDTOs.Find(i => i.Id == doctor.Category.Id);
+                doctor.Status = _dbCrud.statusDTOs.Find(i => i.Id == doctor.Status.Id);
+                doctor.Gender = _dbCrud.genderDTOs.Find(i => i.Id == doctor.Gender.Id);
+                if (doctor.Area == null) doctor.Area = null;
                 _dbCrud.UpdateDoctor(doctor);
                 await _dbCrud.Save();
             }

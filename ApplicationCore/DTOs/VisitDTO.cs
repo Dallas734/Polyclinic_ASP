@@ -20,27 +20,32 @@ namespace Application.DTOs
         public VisitDTO(Visit v)
         {
             Id = v.Id;
-            PatientId = v.PatientId;
+            //PatientId = v.PatientId;
+            if (v.Patient != null) Patient = new PatientDTO(v.Patient); 
             Diagnosis = v.Diagnosis == null ? null : new DiagnosisDTO(v.Diagnosis);
             Recipe = v.Recipe;
             Procedure = v.Procedure == null ? null : new ProcedureDTO(v.Procedure); ;
             DateT = v.DateT;
             TimeT = v.TimeT;
-            DoctorId = v.DoctorId;
-            VisitStatusId = v.VisitStatusId;
-            if (v.Doctor != null)
+            // DoctorId = v.DoctorId;
+            if (v.Doctor != null) Doctor = new DoctorDTO(v.Doctor);
+            // VisitStatusId = v.VisitStatusId;
+            if (v.VisitStatus != null) VisitStatus = new VisitStatusDTO(v.VisitStatus);
+            /*if (v.Doctor != null)
             {
                 DoctorFullName = v.Doctor.LastName + " " + v.Doctor.FirstName + " " + v.Doctor.Surname;
                 Specialization = new SpecializationDTO(v.Doctor.Specialization);
             }
             if (v.Patient != null)
-                PatientFullName = v.Patient.LastName + " " + v.Patient.FirstName + " " + v.Patient.Surname;
+                PatientFullName = v.Patient.LastName + " " + v.Patient.FirstName + " " + v.Patient.Surname;*/
         }
         public int Id { get; set; }
 
-        public int? PatientId { get; set; }
+        /*public int? PatientId { get; set; }
 
-        public string? PatientFullName { get; set; }
+        public string? PatientFullName { get; set; }*/
+
+        public PatientDTO Patient { get; set; }
 
         public DiagnosisDTO? Diagnosis { get; set; }
 
@@ -52,14 +57,18 @@ namespace Application.DTOs
 
         public TimeOnly? TimeT { get; set; }
 
-        public int? DoctorId { get; set; }
+        /*public int? DoctorId { get; set; }
 
         public SpecializationDTO? Specialization { get; set; }
 
-        public string? DoctorFullName { get; set; }
+        public string? DoctorFullName { get; set; }*/
 
-        public int? VisitStatusId { get; set; }
+        public DoctorDTO Doctor { get; set; }
 
-        public string? VisitStatusName { get; set; }
+        /*public int? VisitStatusId { get; set; }
+
+        public string? VisitStatusName { get; set; }*/
+
+        public VisitStatusDTO VisitStatus { get; set; }
     }
 }

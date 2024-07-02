@@ -24,7 +24,8 @@ namespace Infrastructure.Repositories
                 .Include(d => d.Specialization)
                 .Include(d => d.Status)
                 .Include(d => d.Category)
-                .Include(d => d.Gender);
+                .Include(d => d.Gender)
+                .Include(d => d.Area);
         }
         public Doctor GetItem(int id)
         {

@@ -98,15 +98,15 @@ namespace BLL
             return dbRepos.Doctors.Create(new Doctor()
             {
                 Id = doctorDTO.Id,
-                SpecializationId = doctorDTO.SpecializationId,
+                SpecializationId = doctorDTO.Specialization.Id,
                 LastName = doctorDTO.LastName,
                 FirstName = doctorDTO.FirstName,
                 Surname = doctorDTO.Surname,
                 DateOfBirth = doctorDTO.DateOfBirth,
-                StatusId = doctorDTO.StatusId,
-                AreaId = doctorDTO.AreaId,
-                CategoryId = doctorDTO.CategoryId,
-                GenderId = doctorDTO.GenderId,
+                StatusId = doctorDTO.Status.Id,
+                AreaId = doctorDTO.Area.Id,
+                CategoryId = doctorDTO.Category.Id,
+                GenderId = doctorDTO.Gender.Id,
             });
         }
 
@@ -117,15 +117,15 @@ namespace BLL
         public void UpdateDoctor(DoctorDTO doctorDTO)
         {
             Doctor d = dbRepos.Doctors.GetItem(doctorDTO.Id);
-            d.SpecializationId = doctorDTO.SpecializationId;
-            d.CategoryId = doctorDTO.CategoryId;
-            d.StatusId = doctorDTO.StatusId;
-            d.AreaId = doctorDTO.AreaId;
+            d.SpecializationId = doctorDTO.Specialization.Id;
+            d.CategoryId = doctorDTO.Category.Id;
+            d.StatusId = doctorDTO.Status.Id;
+            d.AreaId = doctorDTO.Area.Id;
             d.LastName = doctorDTO.LastName;
             d.FirstName = doctorDTO.FirstName;
             d.Surname = doctorDTO.Surname;
             d.DateOfBirth = doctorDTO.DateOfBirth;
-            d.GenderId = doctorDTO.GenderId;
+            d.GenderId = doctorDTO.Gender.Id;
 
             dbRepos.Doctors.Update(d);
             //dbRepos.Save();
@@ -146,12 +146,12 @@ namespace BLL
                 LastName = patientDTO.LastName,
                 FirstName = patientDTO.FirstName,
                 Surname = patientDTO.Surname,
-                GenderId = patientDTO.GenderId,
+                GenderId = patientDTO.Gender.Id,
                 DateOfBirth = patientDTO.DateOfBirth,
                 Address = patientDTO.Address,
                 Polis = patientDTO.Polis,
                 WorkPlace = patientDTO.WorkPlace,
-                AreaId = patientDTO.AreaId,
+                AreaId = patientDTO.Area.Id,
             });
         }
 
@@ -161,12 +161,12 @@ namespace BLL
             p.LastName = patientDTO.LastName;
             p.FirstName = patientDTO.FirstName;
             p.Surname = patientDTO.Surname;
-            p.GenderId = patientDTO.GenderId;
+            p.GenderId = patientDTO.Gender.Id;
             p.DateOfBirth = patientDTO.DateOfBirth;
             p.Address = patientDTO.Address;
             p.Polis = patientDTO.Polis;
             p.WorkPlace = patientDTO.WorkPlace;
-            p.AreaId = patientDTO.AreaId;
+            p.AreaId = patientDTO.Area.Id;
 
             dbRepos.Patients.Update(p);
             //dbRepos.Save();
@@ -239,11 +239,11 @@ namespace BLL
             {
                 DateT = visit.DateT,
                 TimeT = visit.TimeT,
-                DoctorId = visit.DoctorId,
-                PatientId = visit.PatientId,
+                DoctorId = visit.Doctor.Id,
+                PatientId = visit.Patient.Id,
                 DiagnosisId = visit.Diagnosis == null ? null : visit.Diagnosis.Id,
                 ProcedureId = visit.Procedure == null ? null : visit.Procedure.Id,
-                VisitStatusId = visit.VisitStatusId
+                VisitStatusId = visit.VisitStatus.Id
             });
         }
         public List<VisitStatusDTO> visitStatusDTOs
@@ -280,11 +280,11 @@ namespace BLL
             v.ProcedureId = visit.Procedure == null || visit.Procedure.Id == 0 ? null : visit.Procedure.Id;
             v.DiagnosisId = visit.Diagnosis == null || visit.Diagnosis.Id == 0 ? null : visit.Diagnosis.Id;
             v.Recipe = visit.Recipe;
-            v.VisitStatusId = visit.VisitStatusId;
+            v.VisitStatusId = visit.VisitStatus.Id;
             v.DateT = visit.DateT;
             v.TimeT = visit.TimeT;
-            v.DoctorId = visit.DoctorId;
-            v.PatientId = visit.PatientId;
+            v.DoctorId = visit.Doctor.Id;
+            v.PatientId = visit.Patient.Id;
 
             dbRepos.Visits.Update(v);
             //dbRepos.Save();

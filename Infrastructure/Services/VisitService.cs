@@ -51,7 +51,7 @@ namespace BLL.Services
                         visit = new VisitDTO(repos.Visits.GetAll().Where(i => i.TimeT == visit.TimeT && i.DateT == date && i.VisitStatusId == 1 && i.DoctorId == doctorId).FirstOrDefault());
                         //visit.TimeT = beginTime;
                         //visit.DateT = date;
-                        visit.VisitStatusName = "Ожидает";
+                        //visit.VisitStatusName = "Ожидает";
                         //visit.DoctorFullName = new DoctorDTO(repos.Doctors.GetAll().Where(i => i.Id == doctorId).FirstOrDefault()).FullName;
                     }
 
