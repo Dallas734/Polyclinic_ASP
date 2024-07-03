@@ -58,8 +58,8 @@ builder.Host.UseSerilog();
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
-    options.Cookie.SameSite = SameSiteMode.Strict;
-    options.Cookie.SecurePolicy = CookieSecurePolicy.None;
+    options.Cookie.SameSite = SameSiteMode.None;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
     options.Cookie.HttpOnly = true;
     options.Cookie.Name = "PolyclinicCookie";
     options.LoginPath = "/";
