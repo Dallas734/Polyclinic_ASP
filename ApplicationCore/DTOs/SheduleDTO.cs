@@ -9,7 +9,7 @@ namespace Application.DTOs
         {
             Id = s.Id;
             Day = new DayDTO(s.Day);
-            DoctorId = s.DoctorId;
+            Doctor = new DoctorDTO(s.Doctor);
             BeginTime = s.BeginTime;
             EndTime = s.EndTime;
         }
@@ -17,7 +17,7 @@ namespace Application.DTOs
 
         public DayDTO Day { get; set; }
 
-        public int DoctorId { get; set; }
+        public DoctorDTO Doctor { get; set; }
 
         public TimeOnly? BeginTime { get; set; }
 

@@ -20,7 +20,13 @@ namespace Infrastructure.Repositories
         public IEnumerable<Shedule> GetAll()
         {
             return dbContext.Shedules
-                .Include(s => s.Day);
+                .Include(s => s.Day)
+                .Include(s => s.Doctor)
+                .Include(s => s.Doctor.Gender)
+                .Include(s => s.Doctor.Specialization)
+                .Include(s => s.Doctor.Status)
+                .Include(s => s.Doctor.Area)
+                .Include(s => s.Doctor.Category);
         }
         public Shedule GetItem(int id)
         {
