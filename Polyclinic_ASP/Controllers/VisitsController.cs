@@ -93,6 +93,40 @@ namespace Polyclinic_ASP.Controllers
             return CreatedAtAction("GetVisit", new { id = visit.Id }, visit);
         }
 
+        [HttpPut("completeVisit/{id}")]
+        [Authorize(Roles = "Registrator, Doctor")]
+        public async Task<IActionResult> CompleteVisit(int id, VisitDTO visit)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState.Values.SelectMany(e => e.Errors.Select(e => e.ErrorMessage)));
+            }
+
+            if (id != visit.Id)
+            {
+                return BadRequest("Mismatched id");
+            }
+
+            try
+            {
+               _visitService.CompleteVisit(visit);
+                await _dbCrud.Save();
+            }
+            catch (Exception e)
+            {
+                if (!_dbCrud.visitDTOs.Any(i => i.Id == id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    BadRequest(e.Message);
+                }
+            }
+
+            return CreatedAtAction("GetVisit", new { id = visit.Id }, visit);
+        }
+
 
         // PUT api/<VisitController>/5
         [HttpPut("{id}")]

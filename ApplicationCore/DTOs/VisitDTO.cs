@@ -45,7 +45,7 @@ namespace Application.DTOs
 
         public string? PatientFullName { get; set; }*/
 
-        public PatientDTO Patient { get; set; }
+        public PatientDTO? Patient { get; set; }
 
         public DiagnosisDTO? Diagnosis { get; set; }
 
@@ -63,12 +63,12 @@ namespace Application.DTOs
 
         public string? DoctorFullName { get; set; }*/
 
-        public DoctorDTO Doctor { get; set; }
+        public DoctorDTO? Doctor { get; set; }
 
         /*public int? VisitStatusId { get; set; }
 
         public string? VisitStatusName { get; set; }*/
 
-        public VisitStatusDTO VisitStatus { get; set; }
+        public VisitStatusDTO? VisitStatus { get; set; }
     }
 }

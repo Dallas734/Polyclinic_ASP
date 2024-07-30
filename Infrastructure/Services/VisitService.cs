@@ -1,6 +1,7 @@
 ﻿using Application.DTOs;
 using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
+using Domain.DomainModels;
 
 namespace BLL.Services
 {
@@ -21,6 +22,24 @@ namespace BLL.Services
         public bool CheckVisitAvailable(VisitDTO visit)
         {
             return true;
+        }
+
+        public void CompleteVisit(VisitDTO visit)
+        {
+            if (visit != null)
+            {
+                Visit v = repos.Visits.GetItem(visit.Id);
+                v.ProcedureId = visit.Procedure == null || visit.Procedure.Id == 0 ? null : visit.Procedure.Id;
+                v.DiagnosisId = visit.Diagnosis == null || visit.Diagnosis.Id == 0 ? null : visit.Diagnosis.Id;
+                v.Recipe = visit.Recipe;
+                v.VisitStatusId = 2;
+                v.DateT = visit.DateT;
+                v.TimeT = visit.TimeT;
+                v.DoctorId = visit.Doctor?.Id;
+                v.PatientId = visit.Patient?.Id;
+
+                repos.Visits.Update(v);
+            }
         }
 
         public List<VisitDTO> GetTalons(int doctorId, DateOnly date)
@@ -46,6 +65,7 @@ namespace BLL.Services
                     VisitDTO visit = new VisitDTO();
                     visit.TimeT = beginTime;
                     visit.DateT = date;
+                    // visit.VisitStatus = new VisitStatusDTO();
                     if (repos.Visits.GetAll().Where(i => i.TimeT == visit.TimeT && i.DateT == date && i.VisitStatusId == 1 && i.DoctorId == doctorId).FirstOrDefault() != null)
                     {
                         visit = new VisitDTO(repos.Visits.GetAll().Where(i => i.TimeT == visit.TimeT && i.DateT == date && i.VisitStatusId == 1 && i.DoctorId == doctorId).FirstOrDefault());

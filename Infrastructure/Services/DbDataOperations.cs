@@ -243,7 +243,7 @@ namespace BLL
                 PatientId = visit.Patient.Id,
                 DiagnosisId = visit.Diagnosis == null ? null : visit.Diagnosis.Id,
                 ProcedureId = visit.Procedure == null ? null : visit.Procedure.Id,
-                VisitStatusId = visit.VisitStatus.Id
+                VisitStatusId = 1
             });
         }
         public List<VisitStatusDTO> visitStatusDTOs
