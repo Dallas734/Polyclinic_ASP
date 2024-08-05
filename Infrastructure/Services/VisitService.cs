@@ -24,6 +24,25 @@ namespace BLL.Services
             return true;
         }
 
+        public int AddVisit(VisitDTO visit)
+        {
+            return repos.Visits.Create(new Visit()
+            {
+                DateT = visit.DateT,
+                TimeT = visit.TimeT,
+                DoctorId = visit.Doctor.Id,
+                PatientId = visit.Patient.Id,
+                DiagnosisId = visit.Diagnosis == null ? null : visit.Diagnosis.Id,
+                ProcedureId = visit.Procedure == null ? null : visit.Procedure.Id,
+                VisitStatusId = 1
+            });
+        }
+
+        public void DeleteVisit(int id)
+        {
+            repos.Visits.Delete(id);
+        }
+
         public void CompleteVisit(VisitDTO visit)
         {
             if (visit != null)

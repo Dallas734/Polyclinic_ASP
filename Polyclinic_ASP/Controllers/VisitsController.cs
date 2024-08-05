@@ -14,10 +14,12 @@ namespace Polyclinic_ASP.Controllers
     {
         private IDbCrud _dbCrud;
         private IVisitService _visitService;
-        public VisitsController(IDbCrud dbCrud, IVisitService visitService)
+        private IPatientService _patientService;
+        public VisitsController(IDbCrud dbCrud, IVisitService visitService, IPatientService patientService)
         {
             _dbCrud = dbCrud;
             _visitService = visitService;
+            _patientService = patientService;
         }
 
         // GET: api/<VisitController>
@@ -67,6 +69,20 @@ namespace Polyclinic_ASP.Controllers
             }
         }
 
+        [HttpGet("card")]
+        [Authorize(Roles = "Doctor")]
+        public async Task<ActionResult<IEnumerable<VisitDTO>>> GetPatientCard(int patientId)
+        {
+            var patientCard = await Task.Run(() => _patientService.GetPatientCard(patientId));
+
+            if (patientCard == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(patientCard);
+        }
+
         // POST api/<VisitController>
         [HttpPost]
         [Authorize(Roles = "Registrator")]
@@ -83,7 +99,7 @@ namespace Polyclinic_ASP.Controllers
                 visit.VisitStatusName = _dbCrud.visitStatusDTOs.Find(i => i.Id == visit.VisitStatusId).Name;
                 visit.PatientFullName = _dbCrud.patientDTOs.Find(i => i.Id == visit.PatientId).FullName;
                 visit.DoctorFullName = _dbCrud.doctorDTOs.Find(i => i.Id == visit.DoctorId).FullName;*/
-                visit.Id = _dbCrud.AddVisit(visit);
+                visit.Id = _visitService.AddVisit(visit);
                 await _dbCrud.Save();
             }
             catch (Exception e)
@@ -174,7 +190,7 @@ namespace Polyclinic_ASP.Controllers
                 return NotFound($"Not found id {id}");
             }
 
-            _dbCrud.DeleteVisit(id);
+            _visitService.DeleteVisit(id);
             await _dbCrud.Save();
 
             return Ok();

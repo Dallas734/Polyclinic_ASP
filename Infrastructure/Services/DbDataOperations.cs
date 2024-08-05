@@ -232,20 +232,6 @@ namespace BLL
                 return dbRepos.Visits.GetAll().Select(i => new VisitDTO(i)).ToList();
             }
         }
-
-        public int AddVisit(VisitDTO visit)
-        {
-            return dbRepos.Visits.Create(new Visit()
-            {
-                DateT = visit.DateT,
-                TimeT = visit.TimeT,
-                DoctorId = visit.Doctor.Id,
-                PatientId = visit.Patient.Id,
-                DiagnosisId = visit.Diagnosis == null ? null : visit.Diagnosis.Id,
-                ProcedureId = visit.Procedure == null ? null : visit.Procedure.Id,
-                VisitStatusId = 1
-            });
-        }
         public List<VisitStatusDTO> visitStatusDTOs
         {
             get
@@ -262,10 +248,6 @@ namespace BLL
             });
         }
 
-        public void DeleteVisit(int id)
-        {
-            dbRepos.Visits.Delete(id);
-        }
         public List<GenderDTO> genderDTOs
         {
             get

@@ -8,6 +8,9 @@ namespace Application.Interfaces.Services
 
         public void CompleteVisit(VisitDTO visit);
 
+        int AddVisit(VisitDTO visitDTO);
+        void DeleteVisit(int id);
+
         List<VisitDTO> GetTalons(int doctorId, DateOnly date);
 
         List<VisitDTO> GetFutureVisitsOnPatientAndDate(PatientDTO patient, DateOnly date);

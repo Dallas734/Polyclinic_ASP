@@ -144,19 +144,5 @@ namespace Polyclinic_ASP.Controllers
 
             return Ok();
         }
-
-        [HttpGet("card")]
-        [Authorize(Roles = "Doctor")]
-        public async Task<ActionResult<IEnumerable<VisitDTO>>> GetPatientCard(int patientId)
-        {
-            var patientCard = await Task.Run(() => _patientService.GetPatientCard(patientId));
-
-            if (patientCard == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(patientCard);
-        }
     }
 }
