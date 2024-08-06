@@ -57,7 +57,7 @@ namespace Application.DTOs
 
         // public int? AreaId { get; set; }
 
-        public AreaDTO Area { get; set; }
+        public AreaDTO? Area { get; set; }
 
         /*public int CategoryId { get; set; }
 

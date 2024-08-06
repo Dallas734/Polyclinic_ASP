@@ -104,7 +104,7 @@ namespace BLL
                 Surname = doctorDTO.Surname,
                 DateOfBirth = doctorDTO.DateOfBirth,
                 StatusId = doctorDTO.Status.Id,
-                AreaId = doctorDTO.Area.Id,
+                AreaId = doctorDTO.Area?.Id,
                 CategoryId = doctorDTO.Category.Id,
                 GenderId = doctorDTO.Gender.Id,
             });

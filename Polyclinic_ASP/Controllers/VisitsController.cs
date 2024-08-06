@@ -88,6 +88,8 @@ namespace Polyclinic_ASP.Controllers
         [Authorize(Roles = "Registrator")]
         public async Task<ActionResult<VisitDTO>> PostVisit(VisitDTO visit)
         {
+            if (visit.Doctor?.Area?.Id == 0) visit.Doctor.Area = null;
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState.Values.SelectMany(e => e.Errors.Select(e => e.ErrorMessage)));
