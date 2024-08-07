@@ -34,6 +34,7 @@ builder.Services.AddTransient<IDoctorService, DoctorService>();
 builder.Services.AddTransient<IPatientService, PatientService>();
 builder.Services.AddTransient<IVisitService, VisitService>();
 builder.Services.AddTransient<ISheduleService, SheduleService>();
+builder.Services.AddTransient<IReportService, ReportService>();
 
 /*string connection = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<PolyclinicKurContext>(options => options.UseSqlServer(connection));

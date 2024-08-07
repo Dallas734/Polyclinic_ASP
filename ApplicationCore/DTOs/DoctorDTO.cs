@@ -43,9 +43,9 @@ namespace Application.DTOs
 
         public DateOnly DateOfBirth { get; set; }
 
-       /* public int SpecializationId { get; set; }
+        /* public int SpecializationId { get; set; }
 
-        public string? SpecializationName { get; set; }*/
+         public string? SpecializationName { get; set; }*/
 
         public SpecializationDTO Specialization { get; set; }
 

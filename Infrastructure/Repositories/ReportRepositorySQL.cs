@@ -1,4 +1,6 @@
 ﻿using Application.Interfaces.Repositories;
+using Domain.DomainModels;
+using Domain.ReportModels;
 
 namespace Infrastructure.Repositories
 {
@@ -9,6 +11,42 @@ namespace Infrastructure.Repositories
         public ReportRepositorySQL(PolyclinicKurContext dbContext)
         {
             this.dbContext = dbContext;
+        }
+
+        public List<WorkloadAreaReportModel> MakeWorkLoadAreaReport(DateOnly begin, DateOnly end)
+        {
+            if (begin > end)
+                throw new Exception("Начальная дата не должна быть больше конечной!");
+
+            double workload = 0.0;
+            List<WorkloadAreaReportModel> report = new List<WorkloadAreaReportModel>();
+
+            List<Area> areas = dbContext.Areas.ToList();
+            int countVisits = dbContext.Visits.Where(v => v.DateT >= begin && v.DateT <= end && v.VisitStatusId == 2).Count();
+            foreach (Area area in areas)
+            {
+                int countAreaVisits = dbContext.Visits
+                    .Where(v => v.Doctor != null ? v.DateT >= begin && v.DateT <= end && v.Doctor.AreaId == area.Id && v.VisitStatusId == 2 : false)
+                    .Count();
+
+                workload = countVisits != 0 ? countAreaVisits / countVisits : 0;
+
+                report.Add(new WorkloadAreaReportModel { Area = area, Workload = workload});
+
+                /*List<Doctor> doctors = dbContext.Doctors
+                    .Where(d => d.AreaId == area.Id)
+                    .ToList();
+
+                foreach (Doctor doctor in doctors)
+                {
+                    int doctorVisits = dbContext.Visits
+                        .Where(v => v.Doctor != null ? v.DoctorId == doctor.Id && v.VisitStatusId == 2 : false )
+                        .Count();
+                    workload += doctorVisits;
+                }*/
+            }
+
+            return report;
         }
 
         /*public List<Report> MakeWorkLoadReport(int area_id, DateTime begin, DateTime end)

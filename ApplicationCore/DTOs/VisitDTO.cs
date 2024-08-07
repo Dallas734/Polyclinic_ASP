@@ -21,7 +21,7 @@ namespace Application.DTOs
         {
             Id = v.Id;
             //PatientId = v.PatientId;
-            if (v.Patient != null) Patient = new PatientDTO(v.Patient); 
+            if (v.Patient != null) Patient = new PatientDTO(v.Patient);
             Diagnosis = v.Diagnosis == null ? null : new DiagnosisDTO(v.Diagnosis);
             Recipe = v.Recipe;
             Procedure = v.Procedure == null ? null : new ProcedureDTO(v.Procedure); ;

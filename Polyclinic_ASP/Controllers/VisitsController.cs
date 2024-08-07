@@ -93,7 +93,7 @@ namespace Polyclinic_ASP.Controllers
             {
                 if (visit.Doctor?.Area?.Id == 0)
                     visit.Doctor.Area = null;
-                else 
+                else
                     return BadRequest(ModelState.Values.SelectMany(e => e.Errors.Select(e => e.ErrorMessage)));
             }
 
@@ -132,7 +132,7 @@ namespace Polyclinic_ASP.Controllers
 
             try
             {
-               _visitService.CompleteVisit(visit);
+                _visitService.CompleteVisit(visit);
                 await _dbCrud.Save();
             }
             catch (Exception e)

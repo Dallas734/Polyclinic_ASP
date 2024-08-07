@@ -1,4 +1,5 @@
-﻿using Application.Interfaces.Repositories;
+﻿using Application.DTOs;
+using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
 
 namespace Infrastructure.Services
@@ -10,6 +11,11 @@ namespace Infrastructure.Services
         public ReportService(IDbRepository repos)
         {
             dbContext = repos;
+        }
+
+        public List<WorkloadAreaReportDTO> MakeWorkLoadAreaReport(DateOnly begin, DateOnly end)
+        {
+            return dbContext.Reports.MakeWorkLoadAreaReport(begin, end).Select(r => new WorkloadAreaReportDTO(r)).ToList();
         }
 
         /*public List<ReportModel> MakeWorkloadReport(int area_id, DateTime begin, DateTime end)
