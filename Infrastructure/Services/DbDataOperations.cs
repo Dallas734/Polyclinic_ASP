@@ -120,7 +120,7 @@ namespace BLL
             d.SpecializationId = doctorDTO.Specialization.Id;
             d.CategoryId = doctorDTO.Category.Id;
             d.StatusId = doctorDTO.Status.Id;
-            d.AreaId = doctorDTO.Area.Id;
+            d.AreaId = doctorDTO.Area?.Id;
             d.LastName = doctorDTO.LastName;
             d.FirstName = doctorDTO.FirstName;
             d.Surname = doctorDTO.Surname;

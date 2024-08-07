@@ -143,7 +143,7 @@ namespace Polyclinic_ASP.Controllers
                 }
                 else
                 {
-                    BadRequest(e.Message);
+                    return BadRequest(e.Message);
                 }
             }
 

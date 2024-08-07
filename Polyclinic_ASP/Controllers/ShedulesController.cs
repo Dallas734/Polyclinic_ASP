@@ -52,7 +52,7 @@ namespace Polyclinic_ASP.Controllers
             }
             catch (Exception e)
             {
-                BadRequest(e.Message);
+                return BadRequest(e.Message);
             }
 
             return Ok();

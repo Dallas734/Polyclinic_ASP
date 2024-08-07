@@ -40,7 +40,7 @@ namespace Polyclinic_ASP.Controllers
                 if (registerDTO.DoctorId != null && dbCrud.doctorDTOs.Find(d => d.Id == registerDTO.DoctorId) == null)
                 {
                     return StatusCode(StatusCodes.Status500InternalServerError,
-                        new { message = "Ошибка", error = "Уникальный код неверен" });
+                        new { message = "Уникальный код неверен", error = "Уникальный код неверен" });
                 }
 
                 if (await roleManager.RoleExistsAsync(registerDTO.Role))
@@ -51,7 +51,7 @@ namespace Polyclinic_ASP.Controllers
                     if (result.Succeeded)
                     {
                         await userManager.AddToRoleAsync(user, registerDTO.Role);
-                        await signInManager.SignInAsync(user, false);
+                        //await signInManager.SignInAsync(user, false);
 
                         return Ok(new { message = "Добавлен новый пользователь: " + user.UserName });
                     }
@@ -75,7 +75,7 @@ namespace Polyclinic_ASP.Controllers
             else
             {
                 var errorMsg = ModelState.Values.SelectMany(e => e.Errors.Select(er => er.ErrorMessage));
-                return Unauthorized(errorMsg);
+                return Unauthorized(new { message = "Ошибка", error = errorMsg });
             }
         }
 
