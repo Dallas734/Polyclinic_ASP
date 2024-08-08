@@ -50,5 +50,21 @@ namespace Polyclinic_ASP.Controllers
             }
         }
 
+        [HttpGet("WorkloadDiagnosisReport")]
+        [Authorize(Roles = "Doctor")]
+        public async Task<ActionResult<IEnumerable<WorkloadDiagnosisReportDTO>>> WorkloadDiagnosisReport(DateOnly begin, DateOnly end, int doctorId)
+        {
+            try
+            {
+                var report = await Task.Run(() => _reportService.MakeWorkloadDiagnosisReport(begin, end, doctorId));
+
+                return Ok(report);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
     }
 }

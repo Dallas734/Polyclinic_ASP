@@ -9,6 +9,8 @@ namespace Application.Interfaces.Services
 
         List<WorkloadDoctorReportDTO> MakeWorkloadDoctorReport(DateOnly begin, DateOnly end, int specId);
 
+        List<WorkloadDiagnosisReportDTO> MakeWorkloadDiagnosisReport(DateOnly begin, DateOnly end, int doctorId);
+
         //List<ReportModel> MakeDiagnosisReport(int doctor_id, DateTime begin, DateTime end);*//*
     }
 }

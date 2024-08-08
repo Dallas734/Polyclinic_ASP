@@ -30,7 +30,7 @@ namespace Infrastructure.Repositories
                     .Where(v => v.Doctor != null ? v.DateT >= begin && v.DateT <= end && v.Doctor.AreaId == area.Id : false)
                     .Count();
 
-                workload = countVisits != 0 ? (double)countAreaVisits / countVisits : 0;
+                workload = countVisits != 0 ? Math.Round((double)countAreaVisits / countVisits, 2) : 0;
 
                 report.Add(new WorkloadAreaReportModel { Area = area, Workload = workload});
 
@@ -77,7 +77,7 @@ namespace Infrastructure.Repositories
             {
                 int countDoctorVisits = visits.Where(v => v.DoctorId == doctor.Id).Count();
 
-                workload = visitCount != 0 ? (double)countDoctorVisits / visitCount : 0;
+                workload = visitCount != 0 ? Math.Round((double)countDoctorVisits / visitCount, 2) : 0;
 
                 report.Add(new WorkloadDoctorReportModel() { Doctor =  doctor, Workload = workload });
             }
@@ -86,71 +86,39 @@ namespace Infrastructure.Repositories
             
         }
 
-        /*public List<Report> MakeWorkLoadReport(int area_id, DateTime begin, DateTime end)
+        public List<WorkloadDiagnosisReportModel> MakeWorkloadDiagnosisReport(DateOnly begin, DateOnly end, int doctorId)
         {
             if (begin > end)
                 throw new Exception("Начальная дата не должна быть больше конечной!");
 
-            double workload;
-            List<Report> report = new List<Report>();
+            double workload = 0.0;
 
-            int count = dbContext.Visits
-                .Where(v => v.DateT >= begin && v.DateT <= end)
-                .Join(dbContext.Doctors, v => v.DoctorId, d => d.Id, (v, d) => d)
-                .Where(d => d.AreaId == area_id)
-                .Count();
+            List<WorkloadDiagnosisReportModel> report = new List<WorkloadDiagnosisReportModel>();
 
-            List<Doctor> doctors = dbContext.Doctors.Where(d => d.AreaId == area_id).ToList();
+            List<Visit> visits = dbContext.Visits.Where(v => v.DateT >= begin && v.DateT <= end && v.DoctorId == doctorId).ToList();
 
-            foreach(Doctor doctor in doctors)
+            int visitCount = visits.Count();
+
+            List<Diagnosis> diagnoses = dbContext.Diagnoses.ToList();
+
+            List<Diagnosis> curDiagnoses = new List<Diagnosis>();
+
+            foreach (Diagnosis diagnosis in diagnoses)
             {
-                int doctorVisitCount = dbContext.Visits
-                    .Where(v => v.DateT >= begin && v.DateT <= end)
-                    .Join(dbContext.Doctors, v => v.DoctorId, d => d.Id, (v, d) => d)
-                    .Where(d => d.Id == doctor.Id)
-                    .Count();
+                if (visits.Any(v => v.DiagnosisId == diagnosis.Id)) curDiagnoses.Add(diagnosis);
+            }
 
-                if (count == 0)
-                    workload = 0;
-                else workload = Math.Round((double)doctorVisitCount / count, 2);
+            foreach (Diagnosis diagnosis in curDiagnoses)
+            {
+                int diagnosisCount = visits.Where(v => v.DiagnosisId == diagnosis.Id).Count();
 
-                report.Add(new Report()
-                {
-                    Name = doctor.LastName + " " + doctor.FirstName + " " + doctor.Surname,
-                    Workload = workload   
-                });
+                workload = visitCount != 0 ? Math.Round((double)diagnosisCount / visitCount, 2) : 0;
+                
+                report.Add(new WorkloadDiagnosisReportModel() { Name = diagnosis.Name, Workload = workload });
             }
 
             return report;
         }
 
-        public List<Report> MakeDiagnosisReport(int doctor_id, DateTime begin, DateTime end)
-        {
-            if (begin > end)
-                throw new Exception("Начальная дата не должна быть больше конечной!");
-
-            double workload;
-            List<Report> report = new List<Report>();
-
-            int count = dbContext.Visits.Where(i => i.DoctorId == doctor_id && i.VisitStatusId == 2 && i.DateT >= begin && i.DateT <= end).Count();
-            List<int> diagnosis_ids = dbContext.Visits.Where(i => i.DoctorId == doctor_id && i.VisitStatusId == 2 && i.DateT >= begin && i.DateT <= end).
-                Select(i => (int)i.DiagnosisId).Distinct().ToList();
-
-            foreach(int id in diagnosis_ids)
-            {
-                int diagnosisCount = dbContext.Visits.Where(i => i.DoctorId == doctor_id && i.VisitStatusId == 2 && i.DiagnosisId == id && i.DateT >= begin && i.DateT <= end).Count();
-                if (count == 0)
-                    workload = 0;
-                else workload = Math.Round((double)diagnosisCount / count, 2);
-
-                report.Add(new Report()
-                {
-                    Name = dbContext.Diagnoses.Where(i => i.Id == id).FirstOrDefault().Name,
-                    Workload = workload
-                });
-            }
-
-            return report;
-        }*/
     }
 }

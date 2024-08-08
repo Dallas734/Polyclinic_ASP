@@ -6,21 +6,26 @@ namespace Infrastructure.Services
 {
     public class ReportService : IReportService
     {
-        IDbRepository dbContext;
+        IDbRepository repos;
 
         public ReportService(IDbRepository repos)
         {
-            dbContext = repos;
+            this.repos = repos;
         }
 
         public List<WorkloadAreaReportDTO> MakeWorkLoadAreaReport(DateOnly begin, DateOnly end)
         {
-            return dbContext.Reports.MakeWorkLoadAreaReport(begin, end).Select(r => new WorkloadAreaReportDTO(r)).ToList();
+            return repos.Reports.MakeWorkLoadAreaReport(begin, end).Select(r => new WorkloadAreaReportDTO(r)).ToList();
         }
 
         public List<WorkloadDoctorReportDTO> MakeWorkloadDoctorReport(DateOnly begin, DateOnly end, int specId)
         {
-            return dbContext.Reports.MakeWorkloadDoctorReport(begin, end, specId).Select(r => new WorkloadDoctorReportDTO(r)).ToList();
+            return repos.Reports.MakeWorkloadDoctorReport(begin, end, specId).Select(r => new WorkloadDoctorReportDTO(r)).ToList();
+        }
+
+        public List<WorkloadDiagnosisReportDTO> MakeWorkloadDiagnosisReport(DateOnly begin, DateOnly end, int doctorId)
+        {
+            return repos.Reports.MakeWorkloadDiagnosisReport(begin, end, doctorId).Select(r => new WorkloadDiagnosisReportDTO(r)).ToList();
         }
 
         /*public List<ReportModel> MakeWorkloadReport(int area_id, DateTime begin, DateTime end)
