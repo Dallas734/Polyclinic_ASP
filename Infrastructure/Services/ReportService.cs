@@ -18,6 +18,11 @@ namespace Infrastructure.Services
             return dbContext.Reports.MakeWorkLoadAreaReport(begin, end).Select(r => new WorkloadAreaReportDTO(r)).ToList();
         }
 
+        public List<WorkloadDoctorReportDTO> MakeWorkloadDoctorReport(DateOnly begin, DateOnly end, int specId)
+        {
+            return dbContext.Reports.MakeWorkloadDoctorReport(begin, end, specId).Select(r => new WorkloadDoctorReportDTO(r)).ToList();
+        }
+
         /*public List<ReportModel> MakeWorkloadReport(int area_id, DateTime begin, DateTime end)
         {
             return dbContext.Reports.MakeWorkLoadReport(area_id, begin, end).Select(i => new ReportModel(i)).ToList();

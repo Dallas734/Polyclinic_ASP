@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces.Repositories;
 using Domain.DomainModels;
 using Domain.ReportModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories
 {
@@ -22,14 +23,14 @@ namespace Infrastructure.Repositories
             List<WorkloadAreaReportModel> report = new List<WorkloadAreaReportModel>();
 
             List<Area> areas = dbContext.Areas.ToList();
-            int countVisits = dbContext.Visits.Where(v => v.DateT >= begin && v.DateT <= end && v.VisitStatusId == 2).Count();
+            int countVisits = dbContext.Visits.Where(v => v.DateT >= begin && v.DateT <= end).Count();
             foreach (Area area in areas)
             {
                 int countAreaVisits = dbContext.Visits
-                    .Where(v => v.Doctor != null ? v.DateT >= begin && v.DateT <= end && v.Doctor.AreaId == area.Id && v.VisitStatusId == 2 : false)
+                    .Where(v => v.Doctor != null ? v.DateT >= begin && v.DateT <= end && v.Doctor.AreaId == area.Id : false)
                     .Count();
 
-                workload = countVisits != 0 ? countAreaVisits / countVisits : 0;
+                workload = countVisits != 0 ? (double)countAreaVisits / countVisits : 0;
 
                 report.Add(new WorkloadAreaReportModel { Area = area, Workload = workload});
 
@@ -47,6 +48,42 @@ namespace Infrastructure.Repositories
             }
 
             return report;
+        }
+
+        public List<WorkloadDoctorReportModel> MakeWorkloadDoctorReport(DateOnly begin, DateOnly end, int specId)
+        {
+            if (begin > end)
+                throw new Exception("Начальная дата не должна быть больше конечной!");
+
+            double workload = 0.0;
+
+            List<WorkloadDoctorReportModel> report = new List<WorkloadDoctorReportModel>();
+
+            List<Visit> visits = dbContext.Visits.Where(v => v.DateT >= begin && v.DateT <= end).ToList();
+
+            int visitCount = visits.Count();
+
+                      
+            List<Doctor> doctors = dbContext.Doctors
+                .Include(d => d.Specialization)
+                .Include(d => d.Gender)
+                .Include(d => d.Status)
+                .Include(d => d.Area)
+                .Include(d => d.Category)
+                .Where(d => d.SpecializationId == specId)
+                .ToList();
+
+            foreach (Doctor doctor in doctors)
+            {
+                int countDoctorVisits = visits.Where(v => v.DoctorId == doctor.Id).Count();
+
+                workload = visitCount != 0 ? (double)countDoctorVisits / visitCount : 0;
+
+                report.Add(new WorkloadDoctorReportModel() { Doctor =  doctor, Workload = workload });
+            }
+
+            return report;
+            
         }
 
         /*public List<Report> MakeWorkLoadReport(int area_id, DateTime begin, DateTime end)
