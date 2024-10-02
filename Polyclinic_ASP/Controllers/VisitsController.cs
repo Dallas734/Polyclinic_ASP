@@ -89,16 +89,15 @@ namespace Polyclinic_ASP.Controllers
         public async Task<ActionResult<VisitDTO>> PostVisit(VisitDTO visit)
         {
 
-            if (!ModelState.IsValid)
-            {
-                if (visit.Doctor?.Area?.Id == 0)
-                    visit.Doctor.Area = null;
-                else
-                    return BadRequest(ModelState.Values.SelectMany(e => e.Errors.Select(e => e.ErrorMessage)));
-            }
-
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    if ( visit != null && visit.Doctor?.Area?.Id == 0)
+                        visit.Doctor.Area = null;
+                    else
+                        return BadRequest(ModelState.Values.SelectMany(e => e.Errors.Select(e => e.ErrorMessage)));
+                }
                 /*visit.VisitStatusId = 1;
                 visit.VisitStatusName = _dbCrud.visitStatusDTOs.Find(i => i.Id == visit.VisitStatusId).Name;
                 visit.PatientFullName = _dbCrud.patientDTOs.Find(i => i.Id == visit.PatientId).FullName;
@@ -117,9 +116,11 @@ namespace Polyclinic_ASP.Controllers
         [Authorize(Roles = "Registrator, Doctor")]
         public async Task<IActionResult> CompleteVisit(int id, VisitDTO visit)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                if (visit.Doctor?.Area?.Id == 0)
+                if (!ModelState.IsValid)
+            {
+                if (visit != null && visit.Doctor?.Area?.Id == 0)
                     visit.Doctor.Area = null;
                 else
                     return BadRequest(ModelState.Values.SelectMany(e => e.Errors.Select(e => e.ErrorMessage)));
@@ -129,9 +130,6 @@ namespace Polyclinic_ASP.Controllers
             {
                 return BadRequest("Mismatched id");
             }
-
-            try
-            {
                 _visitService.CompleteVisit(visit);
                 await _dbCrud.Save();
             }
