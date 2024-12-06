@@ -3,7 +3,7 @@ using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
 using Domain.DomainModels;
 
-namespace BLL
+namespace Infrastructure
 {
     public class DbDataOperations : IDbCrud
     {
