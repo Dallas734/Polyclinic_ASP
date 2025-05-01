@@ -81,9 +81,9 @@ namespace Infrastructure
             });
         }
 
-        public void DeleteDiagnosis(DiagnosisDTO diagnosisDTO)
+        public void DeleteDiagnosis(int id)
         {
-            dbRepos.Diagnosises.Delete(diagnosisDTO.Id);
+            dbRepos.Diagnosises.Delete(id);
         }
 
         public List<DoctorDTO> doctorDTOs

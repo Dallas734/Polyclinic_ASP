@@ -4,8 +4,6 @@ namespace Application.Interfaces.Services
 {
     public interface IVisitService
     {
-        bool CheckVisitAvailable(VisitDTO visit);
-
         public void CompleteVisit(VisitDTO visit);
 
         int AddVisit(VisitDTO visitDTO);

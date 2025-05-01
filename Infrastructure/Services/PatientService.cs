@@ -13,10 +13,6 @@ namespace Infrastructure.Services
             repos = repository;
         }
 
-        public int GetPatientArea(int patient_id)
-        {
-            return 1;
-        }
         public List<PatientDTO> GetPatientsOnArea(int area_id)
         {
             return repos.Patients.GetAll()

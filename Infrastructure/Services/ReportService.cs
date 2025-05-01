@@ -27,15 +27,5 @@ namespace Infrastructure.Services
         {
             return repos.Reports.MakeWorkloadDiagnosisReport(begin, end, doctorId).Select(r => new WorkloadDiagnosisReportDTO(r)).ToList();
         }
-
-        /*public List<ReportModel> MakeWorkloadReport(int area_id, DateTime begin, DateTime end)
-        {
-            return dbContext.Reports.MakeWorkLoadReport(area_id, begin, end).Select(i => new ReportModel(i)).ToList();
-        }
-
-        public List<ReportModel> MakeDiagnosisReport(int doctor_id, DateTime begin, DateTime end)
-        {
-            return dbContext.Reports.MakeDiagnosisReport(doctor_id, begin, end).Select(i => new ReportModel(i)).ToList();
-        }*/
     }
 }

@@ -17,7 +17,7 @@ namespace Application.Interfaces.Services
 
         List<DiagnosisDTO> diagnosisDTOs { get; }
         void AddDiagnosis(DiagnosisDTO diagnosisDTO);
-        void DeleteDiagnosis(DiagnosisDTO diagnosisDTO);
+        void DeleteDiagnosis(int id);
 
         List<DoctorDTO> doctorDTOs { get; }
         int AddDoctor(DoctorDTO doctorDTO);

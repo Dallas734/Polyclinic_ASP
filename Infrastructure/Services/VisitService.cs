@@ -7,21 +7,11 @@ namespace BLL.Services
 {
     public class VisitService : IVisitService
     {
-        enum Days
-        {
-
-        }
-
         IDbRepository repos;
 
         public VisitService(IDbRepository repository)
         {
             repos = repository;
-        }
-
-        public bool CheckVisitAvailable(VisitDTO visit)
-        {
-            return true;
         }
 
         public int AddVisit(VisitDTO visit)
@@ -84,14 +74,9 @@ namespace BLL.Services
                     VisitDTO visit = new VisitDTO();
                     visit.TimeT = beginTime;
                     visit.DateT = date;
-                    // visit.VisitStatus = new VisitStatusDTO();
                     if (repos.Visits.GetAll().Where(i => i.TimeT == visit.TimeT && i.DateT == date && i.VisitStatusId == 1 && i.DoctorId == doctorId).FirstOrDefault() != null)
                     {
                         visit = new VisitDTO(repos.Visits.GetAll().Where(i => i.TimeT == visit.TimeT && i.DateT == date && i.VisitStatusId == 1 && i.DoctorId == doctorId).FirstOrDefault());
-                        //visit.TimeT = beginTime;
-                        //visit.DateT = date;
-                        //visit.VisitStatusName = "Ожидает";
-                        //visit.DoctorFullName = new DoctorDTO(repos.Doctors.GetAll().Where(i => i.Id == doctorId).FirstOrDefault()).FullName;
                     }
 
                     talons.Add(visit);
