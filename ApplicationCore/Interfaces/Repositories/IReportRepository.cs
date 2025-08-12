@@ -8,6 +8,5 @@ namespace Application.Interfaces.Repositories
         List<WorkloadAreaReportModel> MakeWorkLoadAreaReport(DateOnly begin, DateOnly end);
         List<WorkloadDoctorReportModel> MakeWorkloadDoctorReport(DateOnly begin, DateOnly end, int specId);
         List<WorkloadDiagnosisReportModel> MakeWorkloadDiagnosisReport(DateOnly begin, DateOnly end, int doctorId);
-        // List<Report> MakeDiagnosisReport(int doctor_id, DateTime begin, DateTime end);
     }
 }

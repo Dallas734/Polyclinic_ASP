@@ -33,18 +33,6 @@ namespace Infrastructure.Repositories
                 workload = countVisits != 0 ? Math.Round((double)countAreaVisits / countVisits, 2) : 0;
 
                 report.Add(new WorkloadAreaReportModel { Area = area, Workload = workload});
-
-                /*List<Doctor> doctors = dbContext.Doctors
-                    .Where(d => d.AreaId == area.Id)
-                    .ToList();
-
-                foreach (Doctor doctor in doctors)
-                {
-                    int doctorVisits = dbContext.Visits
-                        .Where(v => v.Doctor != null ? v.DoctorId == doctor.Id && v.VisitStatusId == 2 : false )
-                        .Count();
-                    workload += doctorVisits;
-                }*/
             }
 
             return report;

@@ -13,6 +13,7 @@ public partial class PolyclinicKurContext : IdentityDbContext<User>
     public PolyclinicKurContext(DbContextOptions<PolyclinicKurContext> options)
         : base(options)
     {
+        Database.EnsureCreated();
     }
 
     public virtual DbSet<Area> Areas { get; set; }
